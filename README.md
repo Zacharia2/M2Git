@@ -1,6 +1,7 @@
 # MGit
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Zacharia2/MGit/total)
 
-MGit是一款Git客户端安卓应用。（Version ≥ Android 12）。拥有常用的拉取、推送、提交、合并、克隆、比较、衍合、择取、创建新的分支、添加本地仓库、重置更改等等功能。
+MGit是一款Git客户端安卓应用。（Version ≥ Android 12）。拥有常用的拉取、推送、提交、合并、克隆、比较、衍合、择取、创建新的分支、添加本地仓库、重置更改等等功能。当前维护者为 maks/MGit，此分支的设计意义和目标是填补Android平台上对Git知识库同步功能的空白。
 
 ## 快速开始
 
@@ -23,6 +24,7 @@ MGit+Gitee用来同步obsidian、logseq等笔记库非常迅速且附加历史�
 5. 如果需要，系统会提示您输入连接到远程仓库的凭据。MGit会将仓库（所有分支）下载到您的设备上
 
 ### 创建本地仓库
+
 1. 点击`+`图标添加新仓库
 2. 点击`Init Local`创建本地仓库
 3. 当提示时，输入该仓库的名称
@@ -43,3 +45,4 @@ MGit+Gitee用来同步obsidian、logseq等笔记库非常迅速且附加历史�
 # 许可证
 
 请参阅 [GPLv3](./LICENSE) 由`maks@manichord.com`编写的所有代码，您可以选择也可以在[MIT许可证](https://en.wikipedia.org/wiki/MIT_License)下使用。
+
