@@ -75,7 +75,8 @@ public class Repo implements Comparable<Repo>, Serializable {
     private Git mGit;
     private StoredConfig mStoredConfig;
 
-    // Git LFS
+    // SMUDGE_NAME: jgit://builtin/lfs/smudge
+    // CLEAN_NAME: jgit://builtin/lfs/clean
     private static final String SMUDGE_NAME = Constants.BUILTIN_FILTER_PREFIX
         + org.eclipse.jgit.lfs.lib.Constants.ATTR_FILTER_DRIVER_PREFIX
         + Constants.ATTR_FILTER_TYPE_SMUDGE;
@@ -109,9 +110,21 @@ public class Repo implements Comparable<Repo>, Serializable {
         FilterCommandRegistry.register(CLEAN_NAME, CleanFilter.FACTORY);
     }
 
-    public static void removeLfs() {
-        FilterCommandRegistry.unregister(SMUDGE_NAME);
-        FilterCommandRegistry.unregister(CLEAN_NAME);
+    // 1. 注册过滤器（全局相当于安装Lfs软件）
+    // 2. 配置仓库（全部设置，只要没有gitattributes就不会执行）
+    //    仓库根目录下的 .git/config 文件
+    //    [filter "lfs"]
+    //        clean = jgit://builtin/lfs/clean
+    //        smudge = jgit://builtin/lfs/smudge
+    // 3. 设置 .gitattributes（"*.txt filter=lfs"）
+    public void applyLfs() {
+        mStoredConfig.setString("filter", "lfs", "clean", CLEAN_NAME);
+        mStoredConfig.setString("filter", "lfs", "smudge", SMUDGE_NAME);
+        try {
+            mStoredConfig.save();
+        } catch (IOException e) {
+            e.fillInStackTrace();
+        }
     }
 
     public static Repo getRepoById(long id) {
@@ -460,7 +473,8 @@ public class Repo implements Comparable<Repo>, Serializable {
             return remoteBranchNames;
         } catch (IOException | StopTaskException e) {
             Timber.e(e, "error getting remote branch name");
-        } return new ArrayList<>();
+        }
+        return new ArrayList<>();
     }
 
     public String[] getBranches() {
