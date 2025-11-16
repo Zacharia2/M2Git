@@ -89,10 +89,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.9.0'  // max
 
     // Jgit
-    //implementation 'org.eclipse.jgit:org.eclipse.jgit:6.10.0.202406032230-r'
-    implementation files('libs/org.eclipse.jgit-6.10.0.202406032230-r.jar')
-    implementation 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.10.0.202406032230-r'
-    implementation 'org.eclipse.jgit:org.eclipse.jgit.lfs:6.10.0.202406032230-r'
+    //implementation 'org.eclipse.jgit:org.eclipse.jgit:6.10.1.202505221210-r'
+    implementation files('libs/org.eclipse.jgit-6.10.1.202505221210-r.jar')
+    implementation 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.10.1.202505221210-r'
+    implementation 'org.eclipse.jgit:org.eclipse.jgit.lfs:6.10.1.202505221210-r'
 
     // ViewModel and LiveData
     runtimeOnly 'androidx.lifecycle:lifecycle-extensions:2.2.0'
