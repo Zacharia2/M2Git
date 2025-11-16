@@ -26,6 +26,7 @@ public class InitLocalTask extends RepoOpTask {
         if (isSuccess) {
             mRepo.updateLatestCommitInfo();
             mRepo.updateStatus(RepoContract.REPO_STATUS_NULL);
+            mRepo.applyLfs();
         }
     }
 

@@ -171,28 +171,26 @@ public class RepoListActivity extends SheimiFragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK) return;
-        switch (requestCode) {
-            case REQUEST_IMPORT_REPO:
-                final String path = data.getExtras().getString(ExploreFileActivity.RESULT_PATH);
-                File file = new File(path);
-                File dotGit = new File(file, Repo.DOT_GIT_DIR);
-                if (!dotGit.exists()) {
-                    showToastMessage(getString(R.string.error_no_repository));
-                    return;
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.dialog_comfirm_import_repo_title);
-                builder.setMessage(R.string.dialog_comfirm_import_repo_msg);
-                builder.setNegativeButton(R.string.label_cancel, new DummyDialogListener());
-                builder.setPositiveButton(R.string.label_import, (dialogInterface, i) -> {
-                    Bundle args = new Bundle();
-                    args.putString(ImportLocalRepoDialog.FROM_PATH, path);
-                    ImportLocalRepoDialog rld = new ImportLocalRepoDialog();
-                    rld.setArguments(args);
-                    rld.show(getSupportFragmentManager(), "import-local-dialog");
-                });
-                builder.show();
-                break;
+        if (requestCode == REQUEST_IMPORT_REPO) {
+            final String path = data.getExtras().getString(ExploreFileActivity.RESULT_PATH);
+            File file = new File(path);
+            File dotGit = new File(file, Repo.DOT_GIT_DIR);
+            if (!dotGit.exists()) {
+                showToastMessage(getString(R.string.error_no_repository));
+                return;
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.dialog_comfirm_import_repo_title);
+            builder.setMessage(R.string.dialog_comfirm_import_repo_msg);
+            builder.setNegativeButton(R.string.label_cancel, new DummyDialogListener());
+            builder.setPositiveButton(R.string.label_import, (dialogInterface, i) -> {
+                Bundle args = new Bundle();
+                args.putString(ImportLocalRepoDialog.FROM_PATH, path);
+                ImportLocalRepoDialog rld = new ImportLocalRepoDialog();
+                rld.setArguments(args);
+                rld.show(getSupportFragmentManager(), "import-local-dialog");
+            });
+            builder.show();
         }
     }
 

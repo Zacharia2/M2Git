@@ -55,6 +55,7 @@ public class CloneTask extends RepoRemoteOpTask {
         if (isSuccess) {
             mRepo.updateLatestCommitInfo();
             mRepo.updateStatus(RepoContract.REPO_STATUS_NULL);
+            mRepo.applyLfs();
         }
     }
 

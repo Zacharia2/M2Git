@@ -1,13 +1,11 @@
 package xyz.realms.mgit.ui.explorer;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.AdapterView;
 
 import java.io.File;
@@ -26,12 +24,7 @@ public class ImportRepositoryActivity extends FileExplorerActivity {
 
     @Override
     protected FileFilter getExplorerFileFilter() {
-        return new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.isDirectory();
-            }
-        };
+        return File::isDirectory;
     }
 
     @Override
@@ -53,14 +46,7 @@ public class ImportRepositoryActivity extends FileExplorerActivity {
             showMessageDialog(R.string.dialog_create_external_title,
                 R.string.dialog_create_external_msg,
                 R.string.dialog_create_external_positive_label,
-                new OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        createExternalGitRepo();
-                    }
-                });
+                (OnClickListener) (dialog, which) -> createExternalGitRepo());
             return true;
         } else if (item.getItemId() == R.id.action_import_external) {
             Intent intent = new Intent();
@@ -74,14 +60,10 @@ public class ImportRepositoryActivity extends FileExplorerActivity {
 
     @Override
     protected AdapterView.OnItemClickListener getOnListItemClickListener() {
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view,
-                                    int position, long id) {
-                File file = mFilesListAdapter.getItem(position);
-                if (file.isDirectory()) {
-                    setCurrentDir(file);
-                }
+        return (adapterView, view, position, id) -> {
+            File file = mFilesListAdapter.getItem(position);
+            if (file.isDirectory()) {
+                setCurrentDir(file);
             }
         };
     }
