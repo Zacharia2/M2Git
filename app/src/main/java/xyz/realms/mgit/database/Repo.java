@@ -118,12 +118,15 @@ public class Repo implements Comparable<Repo>, Serializable {
     //        smudge = jgit://builtin/lfs/smudge
     // 3. 设置 .gitattributes（"*.txt filter=lfs"）
     public void applyLfs() {
-        mStoredConfig.setString("filter", "lfs", "clean", CLEAN_NAME);
-        mStoredConfig.setString("filter", "lfs", "smudge", SMUDGE_NAME);
         try {
-            mStoredConfig.save();
+            StoredConfig config = getStoredConfig();
+            config.setString("filter", "lfs", "clean", CLEAN_NAME);
+            config.setString("filter", "lfs", "smudge", SMUDGE_NAME);
+            config.save();
         } catch (IOException e) {
-            e.fillInStackTrace();
+            Timber.e(e);
+        } catch (StopTaskException e) {
+            Timber.e(e);
         }
     }
 
