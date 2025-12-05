@@ -94,6 +94,9 @@ dependencies {
     implementation 'org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.10.1.202505221210-r'
     implementation 'org.eclipse.jgit:org.eclipse.jgit.lfs:6.10.1.202505221210-r'
 
+    // mws
+//    implementation("io.milton:milton-server-ent:4.0.5.2500")
+
     // ViewModel and LiveData
     runtimeOnly 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     runtimeOnly 'androidx.lifecycle:lifecycle-common:2.6.2' // max
