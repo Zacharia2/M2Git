@@ -26,7 +26,6 @@ public class FsUtils {
     public static final SimpleDateFormat TIMESTAMP_FORMATTER = new SimpleDateFormat(
         "yyyyMMdd_HHmmss", Locale.getDefault());
 
-    public static final String PROVIDER_AUTHORITY = "xyz.realms.mgit.fileprovider";
     public static final String TEMP_DIR = "temp";
 
     private FsUtils() {
@@ -120,7 +119,7 @@ public class FsUtils {
     }
 
     public static void openFile(SheimiFragmentActivity activity, File file) {
-        Uri uri = FileProvider.getUriForFile(activity, PROVIDER_AUTHORITY, file);
+        Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", file);
         String mimeType = FsUtils.getMimeType(uri.toString());
         Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.setDataAndType(uri, mimeType);

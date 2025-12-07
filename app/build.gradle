@@ -33,27 +33,14 @@ android {
         abortOnError false
     }
 
-    signingConfigs {
-        if (project.hasProperty('special')) {
-            release {
-                keyAlias alias
-                keyPassword password
-                storeFile file(keystore)
-                storePassword password
-            }
-        } else {
-            release {
-                keyAlias ''
-                keyPassword ''
-                storeFile file('/empty')
-                storePassword ''
-            }
-        }
-    }
-
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
         }
     }
 

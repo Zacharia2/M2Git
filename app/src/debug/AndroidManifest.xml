@@ -99,7 +99,8 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="xyz.realms.mgit.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
+            tools:replace="android:authorities"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
