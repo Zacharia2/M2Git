@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * Created by sheimi on 8/6/13.
+ * 数据库常量类
  */
 public final class RepoContract {
 
@@ -35,7 +36,7 @@ public final class RepoContract {
             + RepoCredential._ID + PRIMARY_KEY_TYPE + COMMA_SEP
             + RepoCredential.COLUMN_TOKEN_ACCOUNT + TEXT_TYPE + COMMA_SEP
             + RepoCredential.COLUMN_TOKEN_SECRET + TEXT_TYPE + COMMA_SEP
-            + RepoCredential.COLUMN_REL_REPO + TEXT_TYPE + COMMA_SEP
+            + RepoCredential.COLUMN_REL_REPO + TEXT_TYPE
         + ")";
 
     public RepoContract() {
@@ -148,7 +149,7 @@ public final class RepoContract {
         public static final String TABLE_NAME = "credentials";
         public static final String COLUMN_TOKEN_ACCOUNT = "token_account";
         public static final String COLUMN_TOKEN_SECRET = "token_secret";
-        public static final String COLUMN_REL_REPO = "rel_repo"; //将多个值用逗号隔开，存储为一个字符串，例如："值1,值2,值3"。
+        public static final String COLUMN_REL_REPO = "rel_repo"; //COLUMN_REL_REPO使用列表文本存储例如："值1,值2,值3"。
         public static final String[] ALL_COLUMNS = {
             _ID,
             COLUMN_TOKEN_ACCOUNT,
