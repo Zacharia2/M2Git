@@ -5,7 +5,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import ts.realms.m2git.common.constants.RepoContract;
+import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.local.database.RepoDbManager;
 
 public class Credential {

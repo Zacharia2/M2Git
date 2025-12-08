@@ -13,7 +13,7 @@ import java.io.File;
 
 import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
-import ts.realms.m2git.common.constants.RepoContract;
+import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.PreferenceHelper;
 import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;

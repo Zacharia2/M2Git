@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.StringCharacterIterator;
 
-import ts.realms.m2git.common.constants.RepoContract;
-
 /**
  * Created by sheimi on 8/6/13.
  * Modify by 霆枢 on 2025/12/04

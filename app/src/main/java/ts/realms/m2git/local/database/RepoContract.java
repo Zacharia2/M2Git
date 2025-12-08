@@ -1,4 +1,4 @@
-package ts.realms.m2git.common.constants;
+package ts.realms.m2git.local.database;
 
 import android.database.Cursor;
 import android.provider.BaseColumns;

@@ -2,7 +2,7 @@ package ts.realms.m2git.core.git.tasks;
 
 import org.eclipse.jgit.api.Git;
 
-import ts.realms.m2git.common.constants.RepoContract;
+import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.core.models.Repo;
 
 public class InitLocalTask extends RepoOpTask {
