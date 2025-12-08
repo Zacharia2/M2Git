@@ -8,17 +8,15 @@
 
         <import type="android.view.View" />
 
-        <import type="xyz.realms.mgit.ui.RepoListActivity.ClickActions" />
-
-        <import type="xyz.realms.mgit.ui.RepoListActivity" />
+        <import type="ts.realms.m2git.ui.screens.main.RepoListActivity.ClickActions" />
 
         <variable
             name="viewModel"
-            type="xyz.realms.mgit.ui.vmodel.CloneViewModel" />
+            type="ts.realms.m2git.ui.screens.fragments.CloneViewModel" />
 
         <variable
             name="clickHandler"
-            type="xyz.realms.mgit.ui.common.OnActionClickListener" />
+            type="ts.realms.m2git.common.interfaces.OnActionClickListener" />
 
     </data>
 

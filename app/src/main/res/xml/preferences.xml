@@ -5,22 +5,21 @@
         android:key="pref_key_storage_root_location"
         android:title="@string/pref_category_title_general">
 
-        <xyz.realms.mgit.ui.preference.Preference
+        <ts.realms.m2git.local.preference.Preference
             android:title="@string/preference_repo_location"
             android:key="@string/pref_key_repo_root_location"
             android:summary="%s"
             android:persistent="true">
             <intent
-                android:targetClass="xyz.realms.mgit.ui.explorer.ExploreRootDirActivity"
-                android:targetPackage="xyz.realms.mgit" />
-        </xyz.realms.mgit.ui.preference.Preference>
+                android:targetClass="ts.realms.m2git.ui.screens.fragments.ExploreRootDirActivity"
+                android:targetPackage="ts.realms.m2git" />
+        </ts.realms.m2git.local.preference.Preference>
         <ListPreference
             android:title="@string/preference_use_theme"
             android:key="@string/pref_key_use_theme_id"
             android:entries="@array/theme_names"
             android:entryValues="@array/theme_ids"
-            android:persistent="true">
-        </ListPreference>
+            android:persistent="true" />
 
 
         <SwitchPreference
@@ -28,8 +27,7 @@
             android:summary="@string/preference_eng_lang_summary"
             android:key="@string/pref_key_use_english"
             android:defaultValue="false"
-            android:persistent="true">
-        </SwitchPreference>
+            android:persistent="true" />
 
     </PreferenceCategory>
 
@@ -37,45 +35,36 @@
         android:key="pref_key_storage_root_location"
         android:title="@string/pref_category_title_git_profile">
 
-        <xyz.realms.mgit.ui.preference.EditTextPreference
+        <ts.realms.m2git.local.preference.EditTextPreference
             android:title="@string/preference_git_user_name"
             android:key="@string/pref_key_git_user_name"
             android:summary="%s"
-            android:persistent="true">
-        </xyz.realms.mgit.ui.preference.EditTextPreference>
+            android:persistent="true" />
 
-        <xyz.realms.mgit.ui.preference.EditTextPreference
+        <ts.realms.m2git.local.preference.EditTextPreference
             android:title="@string/preference_git_user_email"
             android:key="@string/pref_key_git_user_email"
             android:summary="%s"
             android:persistent="true"
-            android:inputType="textEmailAddress">
-        </xyz.realms.mgit.ui.preference.EditTextPreference>
+            android:inputType="textEmailAddress" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_title_security">
-        <!-- TODO: personal_access_tokens-->
-        <xyz.realms.mgit.ui.preference.EditTextPreference
-            android:title="@string/preference_personal_access_tokens_account"
-            android:key="@string/pref_key_personal_access_tokens_account"
-            android:summary="%s"
-            android:persistent="true">
-        </xyz.realms.mgit.ui.preference.EditTextPreference>
+        <Preference
+            android:title="凭证管理器"
+            android:summary="凭证管理器"
+            android:persistent="true"
+            android:fragment="ts.realms.m2git.ui.screens.fragments.CredentialFragment">
 
-        <xyz.realms.mgit.ui.preference.EditTextPreference
-            android:title="@string/preference_personal_access_tokens_secret_key"
-            android:key="@string/pref_key_personal_access_tokens_secret_key"
-            android:summary="%s"
-            android:persistent="true">
-        </xyz.realms.mgit.ui.preference.EditTextPreference>
+        </Preference>
 
         <Preference
             android:title="@string/preference_manage_ssh_keys"
             android:summary="@string/preference_manage_ssh_keys_summary"
             android:persistent="true">
             <intent
-                android:targetClass="xyz.realms.mgit.ui.explorer.PrivateKeyManageActivity"
-                android:targetPackage="xyz.realms.mgit" />
+                android:targetClass="ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity"
+                android:targetPackage="ts.realms.m2git" />
         </Preference>
 
         <SwitchPreference
@@ -83,21 +72,37 @@
             android:summary="@string/preference_use_gravatar_summary"
             android:key="@string/pref_key_use_gravatar"
             android:defaultValue="true"
-            android:persistent="true">
-        </SwitchPreference>
+            android:persistent="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="webdav">
+        <SwitchPreference
+            android:title="启用webdav"
+            android:summary="本地webdav服务器"
+            android:key="webdav server"
+            android:defaultValue="false"
+            android:persistent="true" />
+        <ts.realms.m2git.local.preference.EditTextPreference
+            android:title="port"
+            android:summary="port"
+            android:persistent="true" />
+        <ts.realms.m2git.local.preference.EditTextPreference
+            android:title="homeFolder"
+            android:summary="homeFolder"
+            android:persistent="true" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_title_about">
 
-        <xyz.realms.mgit.ui.preference.Preference
+        <ts.realms.m2git.local.preference.Preference
             android:title="@string/preference_send_feedback"
             android:summary="@string/preference_send_feedback_summary">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/feedback_url" />
-        </xyz.realms.mgit.ui.preference.Preference>
+        </ts.realms.m2git.local.preference.Preference>
 
-        <xyz.realms.mgit.ui.preference.Preference
+        <ts.realms.m2git.local.preference.Preference
             android:key="@string/preference_key_app_version"
             android:title="@string/preference_app_version"
             android:selectable="false"

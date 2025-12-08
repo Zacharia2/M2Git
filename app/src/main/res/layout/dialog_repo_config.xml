@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="xyz.realms.mgit.database.GitConfig" />
+            type="ts.realms.m2git.ui.viewmodels.GitConfig" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
