@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'xyz.realms.mgit'
+    namespace 'ts.realms.m2git'
     compileSdk 33
     defaultConfig {
-        applicationId "xyz.realms.mgit"
+        applicationId "ts.realms.m2git"
         minSdk 31
         //noinspection ExpiredTargetSdkVersion
         targetSdk 31
