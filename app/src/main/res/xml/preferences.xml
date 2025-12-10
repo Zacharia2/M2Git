@@ -66,12 +66,12 @@
             android:summary="本地webdav服务器"
             android:title="启用webdav" />
         <EditTextPreference
-            android:key="port"
+            android:key="@string/pref_key_webdav_port"
             android:persistent="true"
             android:summary="%s"
             android:title="port" />
         <EditTextPreference
-            android:key="homeFolder"
+            android:key="@string/pref_key_webdav_home_dir"
             android:persistent="true"
             android:summary="%s"
             android:title="homeFolder" />

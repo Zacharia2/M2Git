@@ -191,6 +191,8 @@
     <string name="pref_key_credential_manager" translatable="false">credential_manager</string>
     <string name="preference_credential_manager_summary" >CredentialManager</string>
     <string name="title_activity_credential_manager">CredentialManager</string>
+    <string name="pref_key_webdav_port" translatable="false">webdav_port</string>
+    <string name="pref_key_webdav_home_dir" translatable="false">webdav_home_dir</string>
 
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit error - gathering data to email a crash report</string>
