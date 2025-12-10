@@ -27,7 +27,7 @@
     <string name="error_couldnt_display_all_files_permission">Could not display All Files permission.</string>
     <string name="alert_too_short_key_size">密钥长度过小（对于 RSA 与 DSA，至少应为 1024 位）</string>
     <string name="alert_too_long_key_size">密钥长度过大</string>
-    <string name="alert_key_exists">Key already exists</string>
+    <string name="alert_key_exists">Key 已经存在</string>
     <string name="alert_field_not_empty">字段不能为空</string>
     <string name="alert_remoteurl_required">必须输入远程仓库地址</string>
     <string name="alert_localpath_required">必须输入仓库名</string>

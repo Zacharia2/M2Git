@@ -188,6 +188,9 @@
     <string name="pref_key_personal_access_tokens_secret_key" translatable="false">token_secret_key</string>
     <string name="pref_key_manage_ssh_keys" translatable="false">manage_ssh_keys</string>
     <string name="pref_key_send_feedback" translatable="false">send_feedback</string>
+    <string name="pref_key_credential_manager" translatable="false">credential_manager</string>
+    <string name="preference_credential_manager_summary" >CredentialManager</string>
+    <string name="title_activity_credential_manager">CredentialManager</string>
 
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit error - gathering data to email a crash report</string>

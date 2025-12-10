@@ -175,6 +175,8 @@
     <string name="action_add_private_key">添加私钥</string>
     <string name="preference_personal_access_tokens_account">Token 账户</string>
     <string name="preference_personal_access_tokens_secret_key">Token 密钥</string>
+    <string name="preference_credential_manager_summary">凭证管理器</string>
+    <string name="title_activity_credential_manager">凭证管理器</string>
 
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit 发生错误 - 正在获取用于崩溃报告的数据</string>
@@ -185,12 +187,12 @@
     <string name="clone_with_mgit">使用 MGit 克隆</string>
     <string name="invalid_url">链接无效！</string>
     <string name="initialising">正在初始化…</string>
-    <string name="repository_already_present">repo 已存在！</string>
+    <string name="repository_already_present">仓库已存在！</string>
     <string name="preference_eng_lang">英语</string>
     <string name="preference_eng_lang_summary">使用英语代替默认语言</string>
-    <string name="error_no_worktree">This is a bare repository!</string>
-    <string name="error_invalid_index">The Git index is invalid!</string>
-    <string name="error_file_not_found">File not found!</string>
+    <string name="error_no_worktree">这是一个 bare裸 仓库！</string>
+    <string name="error_invalid_index">无效 Git index</string>
+    <string name="error_file_not_found">文件未找到！</string>
     <string name="dialog_access_all_files_title">所有文件的访问</string>
     <string name="dialog_access_all_files_msg">请允许访问所有文件以从外部存储读取/写入存储库。</string>
 

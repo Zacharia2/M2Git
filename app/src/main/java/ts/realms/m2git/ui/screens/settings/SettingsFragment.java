@@ -79,20 +79,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             processPreference(pref);
         }
 
-        final Preference sshPreference = findPreference(getString(R.string.pref_key_manage_ssh_keys));
-        final Preference feedbackPreference = findPreference(getString(R.string.pref_key_send_feedback));
-        final Preference repoPreference = findPreference(getString(R.string.pref_key_repo_root_location));
-
-        if (sshPreference != null) {
-            sshPreference.setOnPreferenceClickListener(this);
-        }
-        if (feedbackPreference != null) {
-            feedbackPreference.setOnPreferenceClickListener(this);
-        }
-        if (repoPreference != null) {
-            repoPreference.setOnPreferenceClickListener(this);
-        }
+        registerOnPreferenceClickListener();
     }
+
 
     private void processPreference(Preference pref) {
         if (pref instanceof PreferenceGroup) {
@@ -184,6 +173,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         Context context = preference.getContext();
         String key = preference.getKey();
         if (key != null) {
+            // 需要注册监听器
             if (key.equals(getString(R.string.pref_key_repo_root_location))) {
                 Intent exploreRootDirIntent = new Intent(context, ExploreRootDirActivity.class);
                 context.startActivity(exploreRootDirIntent);
@@ -191,6 +181,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             } else if (key.equals(getString(R.string.pref_key_manage_ssh_keys))) {
                 Intent privateKeyManageActivityIntent = new Intent(context, PrivateKeyManageActivity.class);
                 context.startActivity(privateKeyManageActivityIntent);
+                return true;
+            } else if (key.equals(getString(R.string.pref_key_credential_manager))) {
+                Intent credentialActivityIntent = new Intent(context, CredentialActivity.class);
+                context.startActivity(credentialActivityIntent);
                 return true;
             } else if (key.equals(getString(R.string.pref_key_send_feedback))) {
                 String feedbackUrl = context.getString(R.string.feedback_url);
@@ -206,6 +200,31 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         }
         return false;
     }
-    //        return false;
+
+    private void registerOnPreferenceClickListener() {
+        final Preference sshPreference = findPreference(getString(R.string.pref_key_manage_ssh_keys));
+        final Preference feedbackPreference = findPreference(getString(R.string.pref_key_send_feedback));
+        final Preference repoPreference = findPreference(getString(R.string.pref_key_repo_root_location));
+        final Preference credentialPreference = findPreference(getString(R.string.pref_key_credential_manager));
+
+        if (sshPreference != null) {
+            sshPreference.setOnPreferenceClickListener(this);
+        }
+        if (feedbackPreference != null) {
+            feedbackPreference.setOnPreferenceClickListener(this);
+        }
+        if (repoPreference != null) {
+            repoPreference.setOnPreferenceClickListener(this);
+        }
+        if (sshPreference != null) {
+            sshPreference.setOnPreferenceClickListener(this);
+        }
+        if (feedbackPreference != null) {
+            feedbackPreference.setOnPreferenceClickListener(this);
+        }
+        if (credentialPreference != null) {
+            credentialPreference.setOnPreferenceClickListener(this);
+        }
+    }
 
 }
