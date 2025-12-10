@@ -13,13 +13,12 @@ import java.io.File;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.network.ssh.PrivateKeyUtils;
 import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
 
 /**
  * Created by sheimi on 8/24/13.
  */
 
-public class RenameKeyDialog extends SheimiDialogFragment implements
+public class RenameKeyDialog extends BaseDialogFragment implements
     View.OnClickListener, DialogInterface.OnClickListener {
 
     public static final String FROM_PATH = "from path";

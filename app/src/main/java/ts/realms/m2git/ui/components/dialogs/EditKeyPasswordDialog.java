@@ -10,17 +10,15 @@ import android.widget.EditText;
 
 import java.io.File;
 
-import timber.log.Timber;
-import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
+import ts.realms.m2git.local.preference.SecurePrefsHelper;
 import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
 
 /**
  * Allowing editing password for a stored private key
  */
 
-public class EditKeyPasswordDialog extends SheimiDialogFragment implements
+public class EditKeyPasswordDialog extends BaseDialogFragment implements
     View.OnClickListener, DialogInterface.OnClickListener {
 
     public static final String KEY_FILE_EXTRA = "extra_key_file";
@@ -74,12 +72,7 @@ public class EditKeyPasswordDialog extends SheimiDialogFragment implements
     @Override
     public void onClick(View view) {
         String newPassword = mPassword.getText().toString().trim();
-        try {
-            ((MainApplication) getActivity().getApplicationContext()).getSecurePrefsHelper().
-                set(mKeyFile.getName(), newPassword);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
+        SecurePrefsHelper.getInstance(this.getContext()).set(mKeyFile.getName(), newPassword);
         mActivity.refreshList();
         dismiss();
     }

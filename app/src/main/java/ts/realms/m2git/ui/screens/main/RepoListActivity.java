@@ -31,6 +31,7 @@ import ts.realms.m2git.core.network.ssh.PrivateKeyUtils;
 import ts.realms.m2git.core.network.transport.MGitHttpConnectionFactory;
 import ts.realms.m2git.databinding.ActivityMainBinding;
 import ts.realms.m2git.local.database.RepoDbManager;
+import ts.realms.m2git.local.preference.PreferenceHelper;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
 import ts.realms.m2git.ui.components.dialogs.ImportLocalRepoDialog;
 import ts.realms.m2git.ui.components.lists.RepoListAdapter;
@@ -38,10 +39,9 @@ import ts.realms.m2git.ui.screens.fragments.CloneViewModel;
 import ts.realms.m2git.ui.screens.fragments.ExploreFileActivity;
 import ts.realms.m2git.ui.screens.fragments.ImportRepositoryActivity;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity;
 import ts.realms.m2git.ui.screens.settings.UserSettingsActivity;
 
-public class RepoListActivity extends SheimiFragmentActivity {
+public class RepoListActivity extends BaseCompatActivity {
 
     private static final int REQUEST_IMPORT_REPO = 0;
     private Context mContext;
@@ -66,6 +66,9 @@ public class RepoListActivity extends SheimiFragmentActivity {
                 hideCloneView();
             }
         });
+
+        // 必须在setContentView调用
+        setSupportActionBar(findViewById(R.id.main_activity_top_app_bar));
 
         PrivateKeyUtils.migratePrivateKeys();
         initUpdatedSSL();
@@ -108,7 +111,7 @@ public class RepoListActivity extends SheimiFragmentActivity {
                     Intent intent = new Intent(mContext, RepoDetailActivity.class);
                     intent.putExtra(Repo.TAG, repositoriesWithSameRemote.get(0));
                     startActivity(intent);
-                } else if (Repo.getDir(((MainApplication) getApplicationContext()).getPreferenceHelper(), repoName).exists()) {
+                } else if (Repo.getDir(PreferenceHelper.getInstance(MainApplication.getContext()), repoName).exists()) {
                     // Repository with name end already exists, see https://github.com/maks/MGit/issues/289
                     cloneViewModel.setRemoteUrl(repoUrlBuilder.toString());
                     showCloneView();

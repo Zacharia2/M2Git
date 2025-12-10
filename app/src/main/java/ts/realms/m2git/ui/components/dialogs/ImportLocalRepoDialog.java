@@ -11,19 +11,17 @@ import android.widget.EditText;
 
 import java.io.File;
 
-import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
 import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.PreferenceHelper;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
 import ts.realms.m2git.utils.FsUtils;
 
 /**
  * Created by sheimi on 8/24/13.
  */
 
-public class ImportLocalRepoDialog extends SheimiDialogFragment implements
+public class ImportLocalRepoDialog extends BaseDialogFragment implements
     View.OnClickListener {
 
     public static final String FROM_PATH = "from path";
@@ -40,7 +38,7 @@ public class ImportLocalRepoDialog extends SheimiDialogFragment implements
 
         mActivity = getActivity();
 
-        mPrefsHelper = ((MainApplication) mActivity.getApplicationContext()).getPreferenceHelper();
+        mPrefsHelper = PreferenceHelper.getInstance(this.getContext());
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(FROM_PATH)) {

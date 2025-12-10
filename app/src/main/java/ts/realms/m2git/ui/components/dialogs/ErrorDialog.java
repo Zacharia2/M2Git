@@ -14,9 +14,8 @@ import org.conscrypt.BuildConfig;
 import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.databinding.DialogErrorBinding;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
 
-public class ErrorDialog extends SheimiDialogFragment {
+public class ErrorDialog extends BaseDialogFragment {
     private Throwable mThrowable = null;
 
     @StringRes

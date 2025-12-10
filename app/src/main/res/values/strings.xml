@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">MGit</string>
+    <string name="app_name" translatable="false">M2Git</string>
     <string name="default_text">Default Text</string>
     <string name="title_clone_repo">Clone Repository</string>
     <string name="preference_file_key" translatable="false">ts.realms.m2git</string>
@@ -186,6 +186,8 @@
     <string name="preference_personal_access_tokens_secret_key">Token Secret</string>
     <string name="pref_key_personal_access_tokens_account" translatable="false">token_account</string>
     <string name="pref_key_personal_access_tokens_secret_key" translatable="false">token_secret_key</string>
+    <string name="pref_key_manage_ssh_keys" translatable="false">manage_ssh_keys</string>
+    <string name="pref_key_send_feedback" translatable="false">send_feedback</string>
 
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit error - gathering data to email a crash report</string>
@@ -216,4 +218,5 @@
     <string name="pref_key_use_english" translatable="false">use.english</string>
     <string name="dialog_access_all_files_title">Access MGit to access all files</string>
     <string name="dialog_access_all_files_msg">To function correctly and be able to do things like finding modified files in your git working directory MGit needs permission to access all files.\n\nGrant permission?</string>
+
 </resources>

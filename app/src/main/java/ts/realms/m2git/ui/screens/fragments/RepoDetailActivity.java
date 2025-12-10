@@ -28,9 +28,10 @@ import ts.realms.m2git.core.git.RepoOperationDelegate;
 import ts.realms.m2git.core.git.SheimiAsyncTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.lists.RepoOperationsAdapter;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.ui.viewmodels.BaseFragment;
 
-public class RepoDetailActivity extends SheimiFragmentActivity {
+public class RepoDetailActivity extends BaseCompatActivity {
 
     private static final int FILES_FRAGMENT_INDEX = 0;
     private static final int COMMITS_FRAGMENT_INDEX = 1;
@@ -142,6 +143,7 @@ public class RepoDetailActivity extends SheimiFragmentActivity {
     }
 
     private void setupActionBar() {
+        setSupportActionBar(findViewById(R.id.repo_detail_activity_top_app_bar));
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);

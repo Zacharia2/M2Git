@@ -7,14 +7,13 @@ import android.os.Bundle;
 import java.util.List;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
 import ts.realms.m2git.ui.screens.fragments.ViewFileActivity;
 import ts.realms.m2git.utils.CodeGuesser;
 
 /**
  * Created by sheimi on 8/16/13.
  */
-public class ChooseLanguageDialog extends SheimiDialogFragment {
+public class ChooseLanguageDialog extends BaseDialogFragment {
 
     private ViewFileActivity mActivity;
 

@@ -8,7 +8,7 @@ import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.SheimiAsyncTask;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity.OnPasswordEntered;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnPasswordEntered;
 import ts.realms.m2git.utils.BasicFunctions;
 
 public abstract class RepoOpTask extends SheimiAsyncTask<Void, String, Boolean> {

@@ -17,7 +17,7 @@ import ts.realms.m2git.core.git.tasks.PullTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
+import ts.realms.m2git.ui.components.dialogs.BaseDialogFragment;
 
 public class PullAction extends RepoAction {
 
@@ -46,7 +46,7 @@ public class PullAction extends RepoAction {
         mActivity.closeOperationDrawer();
     }
 
-    public static class PullDialog extends SheimiDialogFragment {
+    public static class PullDialog extends BaseDialogFragment {
 
         private Repo mRepo;
         private RepoDetailActivity mActivity;

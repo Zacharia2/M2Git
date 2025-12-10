@@ -1,4 +1,4 @@
-package ts.realms.m2git.ui.screens.fragments;
+package ts.realms.m2git.ui.screens.main;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -44,7 +44,7 @@ import ts.realms.m2git.ui.viewmodels.PermissionsHelper;
 import ts.realms.m2git.utils.AvatarDownloader;
 import ts.realms.m2git.utils.BasicFunctions;
 
-public class SheimiFragmentActivity extends AppCompatActivity {
+public class BaseCompatActivity extends AppCompatActivity {
 
     private static final int MGIT_PERMISSIONS_REQUEST = 123;
     private static final int SIZE = 100 << 20;
@@ -142,7 +142,7 @@ public class SheimiFragmentActivity extends AppCompatActivity {
                                 new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
                             startActivity(permissionAllowIntent);
                         } catch (ActivityNotFoundException e) {
-                            Timber.tag("SheimiFragmentActivity").e("could not start activity to " +
+                            Timber.tag("BaseCompatActivity").e("could not start activity to " +
                                 "request all " + "files permission");
                             showMessageDialog(R.string.dialog_error_title,
                                 getString(R.string.error_couldnt_display_all_files_permission));
@@ -167,7 +167,7 @@ public class SheimiFragmentActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(SheimiFragmentActivity.this, msg, Toast.LENGTH_LONG).show();
+                Toast.makeText(BaseCompatActivity.this, msg, Toast.LENGTH_LONG).show();
             }
         });
     }

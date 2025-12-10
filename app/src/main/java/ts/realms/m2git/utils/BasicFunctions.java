@@ -14,14 +14,14 @@ import java.security.NoSuchAlgorithmException;
 
 import timber.log.Timber;
 import ts.realms.m2git.ui.components.dialogs.ErrorDialog;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 
 /**
  * Created by sheimi on 8/19/13.
  */
 public class BasicFunctions {
 
-    private static SheimiFragmentActivity mActiveActivity;
+    private static BaseCompatActivity mActiveActivity;
 
     public static String md5(final String s) {
         try {
@@ -56,11 +56,11 @@ public class BasicFunctions {
         im.displayImage(avatarUri, imageView);
     }
 
-    public static SheimiFragmentActivity getActiveActivity() {
+    public static BaseCompatActivity getActiveActivity() {
         return mActiveActivity;
     }
 
-    public static void setActiveActivity(SheimiFragmentActivity activity) {
+    public static void setActiveActivity(BaseCompatActivity activity) {
         mActiveActivity = activity;
     }
 
@@ -68,14 +68,14 @@ public class BasicFunctions {
         return getActiveActivity().getImageLoader();
     }
 
-    public static void showError(@NonNull @NotNull SheimiFragmentActivity activity, @StringRes final int errorTitleRes, @StringRes final int errorRes) {
+    public static void showError(@NonNull @NotNull BaseCompatActivity activity, @StringRes final int errorTitleRes, @StringRes final int errorRes) {
         ErrorDialog errorDialog = new ErrorDialog();
         errorDialog.setErrorRes(errorRes);
         errorDialog.setErrorTitleRes(errorTitleRes);
         errorDialog.show(activity.getSupportFragmentManager(), "error-dialog");
     }
 
-    public static void showException(@NonNull @NotNull SheimiFragmentActivity activity, Throwable throwable, @StringRes final int errorTitleRes, @StringRes final int errorRes) {
+    public static void showException(@NonNull @NotNull BaseCompatActivity activity, Throwable throwable, @StringRes final int errorTitleRes, @StringRes final int errorRes) {
         ErrorDialog errorDialog = new ErrorDialog();
         errorDialog.setThrowable(throwable);
         errorDialog.setErrorRes(errorRes);
@@ -84,11 +84,11 @@ public class BasicFunctions {
     }
 
 
-    public static void showException(@NonNull @NotNull SheimiFragmentActivity activity, @NonNull Throwable throwable, @StringRes final int errorRes) {
+    public static void showException(@NonNull @NotNull BaseCompatActivity activity, @NonNull Throwable throwable, @StringRes final int errorRes) {
         showException(activity, throwable, 0, errorRes);
     }
 
-    public static void showException(@NonNull @NotNull SheimiFragmentActivity activity, @NonNull Throwable throwable) {
+    public static void showException(@NonNull @NotNull BaseCompatActivity activity, @NonNull Throwable throwable) {
         showException(activity, throwable, 0);
     }
 }

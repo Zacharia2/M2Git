@@ -4,111 +4,90 @@
     <PreferenceCategory
         android:key="pref_key_storage_root_location"
         android:title="@string/pref_category_title_general">
-
-        <ts.realms.m2git.local.preference.Preference
-            android:title="@string/preference_repo_location"
+        <Preference
             android:key="@string/pref_key_repo_root_location"
+            android:persistent="true"
             android:summary="%s"
-            android:persistent="true">
-            <intent
-                android:targetClass="ts.realms.m2git.ui.screens.fragments.ExploreRootDirActivity"
-                android:targetPackage="ts.realms.m2git" />
-        </ts.realms.m2git.local.preference.Preference>
+            android:title="@string/preference_repo_location" />
         <ListPreference
-            android:title="@string/preference_use_theme"
-            android:key="@string/pref_key_use_theme_id"
             android:entries="@array/theme_names"
             android:entryValues="@array/theme_ids"
-            android:persistent="true" />
-
-
-        <SwitchPreference
-            android:title="@string/preference_eng_lang"
-            android:summary="@string/preference_eng_lang_summary"
-            android:key="@string/pref_key_use_english"
+            android:key="@string/pref_key_use_theme_id"
+            android:persistent="true"
+            android:title="@string/preference_use_theme" />
+        <SwitchPreferenceCompat
             android:defaultValue="false"
-            android:persistent="true" />
-
+            android:key="@string/pref_key_use_english"
+            android:persistent="true"
+            android:summary="@string/preference_eng_lang_summary"
+            android:title="@string/preference_eng_lang" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="pref_key_storage_root_location"
         android:title="@string/pref_category_title_git_profile">
-
-        <ts.realms.m2git.local.preference.EditTextPreference
-            android:title="@string/preference_git_user_name"
+        <EditTextPreference
             android:key="@string/pref_key_git_user_name"
-            android:summary="%s"
-            android:persistent="true" />
-
-        <ts.realms.m2git.local.preference.EditTextPreference
-            android:title="@string/preference_git_user_email"
-            android:key="@string/pref_key_git_user_email"
-            android:summary="%s"
             android:persistent="true"
-            android:inputType="textEmailAddress" />
+            android:summary="%s"
+            android:title="@string/preference_git_user_name" />
+        <EditTextPreference
+            android:inputType="textEmailAddress"
+            android:key="@string/pref_key_git_user_email"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="@string/preference_git_user_email" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_title_security">
         <Preference
-            android:title="凭证管理器"
-            android:summary="凭证管理器"
+            android:fragment="ts.realms.m2git.ui.screens.fragments.CredentialFragment"
             android:persistent="true"
-            android:fragment="ts.realms.m2git.ui.screens.fragments.CredentialFragment">
-
-        </Preference>
-
+            android:summary="凭证管理器"
+            android:title="凭证管理器" />
         <Preference
-            android:title="@string/preference_manage_ssh_keys"
+            android:key="@string/pref_key_manage_ssh_keys"
+            android:persistent="true"
             android:summary="@string/preference_manage_ssh_keys_summary"
-            android:persistent="true">
-            <intent
-                android:targetClass="ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity"
-                android:targetPackage="ts.realms.m2git" />
-        </Preference>
-
-        <SwitchPreference
-            android:title="@string/preference_use_gravatar"
-            android:summary="@string/preference_use_gravatar_summary"
-            android:key="@string/pref_key_use_gravatar"
+            android:title="@string/preference_manage_ssh_keys" />
+        <SwitchPreferenceCompat
             android:defaultValue="true"
-            android:persistent="true" />
+            android:key="@string/pref_key_use_gravatar"
+            android:persistent="true"
+            android:summary="@string/preference_use_gravatar_summary"
+            android:title="@string/preference_use_gravatar" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="webdav">
-        <SwitchPreference
-            android:title="启用webdav"
-            android:summary="本地webdav服务器"
-            android:key="webdav server"
+        <SwitchPreferenceCompat
             android:defaultValue="false"
-            android:persistent="true" />
-        <ts.realms.m2git.local.preference.EditTextPreference
-            android:title="port"
-            android:summary="port"
-            android:persistent="true" />
-        <ts.realms.m2git.local.preference.EditTextPreference
-            android:title="homeFolder"
-            android:summary="homeFolder"
-            android:persistent="true" />
+            android:key="webdav server"
+            android:persistent="true"
+            android:summary="本地webdav服务器"
+            android:title="启用webdav" />
+        <EditTextPreference
+            android:key="port"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="port" />
+        <EditTextPreference
+            android:key="homeFolder"
+            android:persistent="true"
+            android:summary="%s"
+            android:title="homeFolder" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_title_about">
-
-        <ts.realms.m2git.local.preference.Preference
-            android:title="@string/preference_send_feedback"
-            android:summary="@string/preference_send_feedback_summary">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="@string/feedback_url" />
-        </ts.realms.m2git.local.preference.Preference>
-
-        <ts.realms.m2git.local.preference.Preference
+        <Preference
+            android:key="@string/pref_key_send_feedback"
+            android:summary="@string/preference_send_feedback_summary"
+            android:title="@string/preference_send_feedback" />
+        <Preference
             android:key="@string/preference_key_app_version"
-            android:title="@string/preference_app_version"
+            android:persistent="true"
             android:selectable="false"
             android:summary="%s"
-            android:persistent="true" />
-
+            android:title="@string/preference_app_version" />
     </PreferenceCategory>
 
 </PreferenceScreen>
