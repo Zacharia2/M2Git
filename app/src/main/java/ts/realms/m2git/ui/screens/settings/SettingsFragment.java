@@ -32,8 +32,7 @@ import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
 import ts.realms.m2git.ui.screens.main.RepoListActivity;
 import ts.realms.m2git.utils.BasicFunctions;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements
-    Preference.OnPreferenceClickListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener {
     private SharedPreferences.OnSharedPreferenceChangeListener mListener;
 
     @Override
@@ -102,8 +101,22 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         // EditTextPreference
         if (pref.getClass() == EditTextPreference.class && pref.getSummary() != null) {
             CharSequence summary = pref.getSummary();
+            // 已经设置持久化，所以框架会自己存储到文件中。
             pref.setSummaryProvider((Preference.SummaryProvider<EditTextPreference>) preference -> {
                 if (summary != null) {
+                    // 特殊情况，为webdav设置默认值
+                    if (preference.getKey().equals(getString(R.string.pref_key_webdav_home_dir)) && preference.getText() == null) {
+                        String defaultHome = Environment.getExternalStorageDirectory().toString();
+                        PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(getContext());
+                        preferenceHelper.setWebdavHomeDir(defaultHome);
+                        return defaultHome;
+                    } else if (preference.getKey().equals(getString(R.string.pref_key_webdav_port)) && preference.getText() == null) {
+                        String defaultPort = "80";
+                        PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(getContext());
+                        preferenceHelper.setWebdavPort(defaultPort);
+                        return defaultPort;
+                    }
+                    // 正常情况下
                     return String.format(summary.toString(), preference.getText());
                 } else {
                     return null;
@@ -117,8 +130,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             pref.setSummaryProvider((Preference.SummaryProvider<Preference>) preference -> {
                 if (summary != null) {
                     String preference_file_key = getContext().getString(R.string.preference_file_key);
-                    SharedPreferences sharedPreference = getContext().getSharedPreferences(
-                        preference_file_key, Context.MODE_PRIVATE);
+                    SharedPreferences sharedPreference = getContext().getSharedPreferences(preference_file_key, Context.MODE_PRIVATE);
                     String key = preference.getKey();
                     String value = sharedPreference.getString(key, "");
                     return String.format(summary.toString(), value);
@@ -157,11 +169,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             actionBarSize = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
         } else {
             // 如果无法解析主题属性，回退到一个常见的默认高度（如56dp）
-            actionBarSize = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                56f,
-                getResources().getDisplayMetrics()
-            );
+            actionBarSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56f, getResources().getDisplayMetrics());
         }
         recyclerView.setPadding(0, actionBarSize, 0, 0);
         recyclerView.setClipToPadding(false);
