@@ -71,7 +71,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorSurface">@android:color/background_dark</item>
-        <item name="colorPrimary">#1e293d</item>
+        <item name="colorPrimary">#474747</item>
         <item name="colorPrimaryDark">@android:color/background_dark</item>
         <item name="colorOnPrimary">@android:color/white</item>
         <!-- 以前的设置 -->

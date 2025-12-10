@@ -20,7 +20,7 @@
     <color name="pressed_sgit">#CC33B5E5</color>
     <color name="branch_name_text">#FFF</color>
     <color name="branch_name_bg">#6e8d9b</color>
-    <color name="branch_name_bg_dark">#2b3b57</color>
+    <color name="branch_name_bg_dark">#141414</color>
     <color name="branch_name_bg_pressed">#33b5e5</color>
 
     <color name="general_gray_text_color">#999</color>
