@@ -41,10 +41,10 @@
 
     <PreferenceCategory android:title="@string/pref_category_title_security">
         <Preference
-            android:fragment="ts.realms.m2git.ui.screens.fragments.CredentialFragment"
+            android:key="@string/pref_key_credential_manager"
             android:persistent="true"
-            android:summary="凭证管理器"
-            android:title="凭证管理器" />
+            android:summary="@string/preference_credential_manager_summary"
+            android:title="@string/title_activity_credential_manager" />
         <Preference
             android:key="@string/pref_key_manage_ssh_keys"
             android:persistent="true"

@@ -128,6 +128,14 @@
                 android:value="ts.realms.m2git.ui.screens.main.RepoListActivity" />
         </activity>
         <activity
+            android:name="ts.realms.m2git.ui.screens.settings.CredentialActivity"
+            android:label="@string/title_activity_credential_manager"
+            android:parentActivityName="ts.realms.m2git.ui.screens.settings.UserSettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ts.realms.m2git.ui.screens.settings.UserSettingsActivity" />
+        </activity>
+        <activity
             android:name="ts.realms.m2git.ui.screens.fragments.ExploreRootDirActivity"
             android:label="@string/title_activity_explore_file"
             android:parentActivityName="ts.realms.m2git.ui.screens.settings.UserSettingsActivity">
