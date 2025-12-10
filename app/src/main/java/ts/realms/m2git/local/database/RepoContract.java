@@ -97,22 +97,34 @@ public final class RepoContract {
         return cursor.getString(columnIndex);
     }
 
-    public static int getCredentialId(Cursor cursor) {
+    public static int getOneCredentialId(Cursor cursor) {
+        if (cursor.isBeforeFirst()) {
+            cursor.moveToFirst();
+        }
         int columnIndex = cursor.getColumnIndex(RepoContract.RepoCredential._ID);
         return cursor.getInt(columnIndex);
     }
 
-    public static String getTokenAccount(Cursor cursor) {
+    public static String getOneTokenAccount(Cursor cursor) {
+        if (cursor.isBeforeFirst()) {
+            cursor.moveToFirst();
+        }
         int columnIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT);
         return cursor.getString(columnIndex);
     }
 
-    public static String getTokenSecret(Cursor cursor) {
+    public static String getOneTokenSecret(Cursor cursor) {
+        if (cursor.isBeforeFirst()) {
+            cursor.moveToFirst();
+        }
         int columnIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET);
         return cursor.getString(columnIndex);
     }
 
-    public static String[] getRelReop(Cursor cursor) {
+    public static String[] getOneRelReop(Cursor cursor) {
+        if (cursor.isBeforeFirst()) {
+            cursor.moveToFirst();
+        }
         int columnIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
         String relRepoString = cursor.getString(columnIndex);
         if (relRepoString == null) return null;
@@ -135,13 +147,13 @@ public final class RepoContract {
             _ID,
             COLUMN_NAME_LOCAL_PATH,
             COLUMN_NAME_REMOTE_URL,
+            COLUMN_NAME_USERNAME,
+            COLUMN_NAME_PASSWORD,
             COLUMN_NAME_REPO_STATUS,
             COLUMN_NAME_LATEST_COMMITTER_UNAME,
             COLUMN_NAME_LATEST_COMMITTER_EMAIL,
             COLUMN_NAME_LATEST_COMMIT_DATE,
             COLUMN_NAME_LATEST_COMMIT_MSG,
-            COLUMN_NAME_USERNAME,
-            COLUMN_NAME_PASSWORD
         };
     }
 

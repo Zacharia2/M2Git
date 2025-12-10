@@ -146,26 +146,30 @@ public class RepoDbManager {
                     .mWritableDB
                     .insert(RepoContract.RepoCredential.TABLE_NAME, null, values);
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.fillInStackTrace();
         }
         return credentialId;
     }
 
-    public static void relateRepoWithCredential(long id, String repo) {
-        Cursor credential = getCredentialById(id);
+    public static void relateRepoWithCredential(long credentialId, String repo) {
+        Cursor credential = getCredentialById(credentialId);
         if (credential == null || !credential.moveToFirst()) {
             return; // Credential not found or cursor is empty
         }
         int columnIndex = credential.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
         String relRepoString = credential.getString(columnIndex);
-        if (relRepoString == null) return;
-        String[] in_db_rel = relRepoString.split(",");
-        HashSet<String> rel_list = new HashSet<>(Arrays.asList(in_db_rel));
-        rel_list.add(repo);
-        String new_rel = String.join(",", rel_list);
+        String new_rel;
         ContentValues values = new ContentValues();
+        if (relRepoString == null || relRepoString.isEmpty()) {
+            new_rel = repo;
+        } else{
+            HashSet<String> rel_list = new HashSet<>(Arrays.asList(relRepoString.split(",")));
+            rel_list.add(repo);
+            new_rel = String.join(",", rel_list);
+        }
         values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, new_rel);
-        updateCredential(id, values);
+        updateCredential(credentialId, values);
     }
 
     public static void unrelateRepoWithCredential(long id, String repo) {
@@ -176,8 +180,7 @@ public class RepoDbManager {
         int columnIndex = credential.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
         String relRepoString = credential.getString(columnIndex);
         if (relRepoString == null) return;
-        String[] in_db_rel = relRepoString.split(",");
-        HashSet<String> rel_list = new HashSet<>(Arrays.asList(in_db_rel));
+        HashSet<String> rel_list = new HashSet<>(Arrays.asList(relRepoString.split(",")));
         if (!rel_list.contains(repo)) return;
         rel_list.remove(repo);
         String new_rel = String.join(",", rel_list);
@@ -205,19 +208,19 @@ public class RepoDbManager {
         getInstance()._deleteCredential(id);
     }
 
-    public static Map<String, String> queryRepoCredential(String repo_id) {
-        Map<String, String> queryResult = Collections.emptyMap();
+    public static Map<String, String> queryCredentialByRepoId(String repo_id) {
         try (Cursor cursor = RepoDbManager.queryAllCredential()) {
+            Map<String, String> queryResult = Collections.emptyMap();
             if (cursor != null && cursor.moveToFirst()) {
                 // 循环遍历所有行
-                int rel_repoIndex = cursor.getColumnIndex("rel_repo");
+                int rel_repoIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
                 do {
                     String rel_repo = cursor.getString(rel_repoIndex);
                     String[] rel_repo_list = rel_repo.split(",");
                     if (Arrays.asList(rel_repo_list).contains(repo_id)) {
                         queryResult = Map.of(
-                            "token_secret", cursor.getString(cursor.getColumnIndex("token_secret")),
-                            "token_account", cursor.getString(cursor.getColumnIndex("token_account"))
+                            RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, cursor.getString(cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET)),
+                            RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, cursor.getString(cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT))
                         );
                         break;
                     }
@@ -282,7 +285,7 @@ public class RepoDbManager {
 
     private Cursor _queryAllCredential() {
         return mReadableDB.query(true, RepoContract.RepoCredential.TABLE_NAME,
-            RepoContract.RepoEntry.ALL_COLUMNS, null, null, null, null, null, null);
+            RepoContract.RepoCredential.ALL_COLUMNS, null, null, null, null, null, null);
     }
 
     private void _deleteCredential(long id) {
