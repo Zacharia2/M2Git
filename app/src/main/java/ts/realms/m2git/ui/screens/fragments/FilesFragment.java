@@ -17,7 +17,8 @@ import ts.realms.m2git.R;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.RepoFileOperationDialog;
 import ts.realms.m2git.ui.components.lists.FilesListAdapter;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity.OnBackClickListener;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnBackClickListener;
 import ts.realms.m2git.utils.FsUtils;
 
 /**
@@ -89,10 +90,10 @@ public class FilesFragment extends RepoDetailFragment {
                     return;
                 }
                 try {
-                    FsUtils.openFile(((SheimiFragmentActivity) getActivity()), file);
+                    FsUtils.openFile(((BaseCompatActivity) getActivity()), file);
                 } catch (ActivityNotFoundException e) {
                     Timber.e(e);
-                    ((SheimiFragmentActivity) getActivity()).showMessageDialog(R.string.dialog_error_title,
+                    ((BaseCompatActivity) getActivity()).showMessageDialog(R.string.dialog_error_title,
                         getString(R.string.error_can_not_open_file));
                 }
             });

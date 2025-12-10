@@ -14,17 +14,14 @@ import timber.log.Timber
 import ts.realms.m2git.common.errors.SecurePrefsException
 import ts.realms.m2git.core.network.transport.AndroidJschCredentialsProvider
 import ts.realms.m2git.core.network.transport.MGitHttpConnectionFactory
-import ts.realms.m2git.local.preference.PreferenceHelper
 import ts.realms.m2git.local.preference.SecurePrefsHelper
 import java.security.Security
+import androidx.core.content.edit
 
 /**
  * Custom Application Singleton
  */
 open class MainApplication : Application() {
-    var securePrefsHelper: SecurePrefsHelper? = null
-    var preferenceHelper: PreferenceHelper? = null
-
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -60,12 +57,10 @@ open class MainApplication : Application() {
         }
         mContext = applicationContext
         setAppVersionPref()
-        preferenceHelper = PreferenceHelper(this)
 
         try {
-            securePrefsHelper =
-                SecurePrefsHelper(this)
-            mCredentialsProvider = AndroidJschCredentialsProvider(securePrefsHelper)
+            mCredentialsProvider =
+                AndroidJschCredentialsProvider(SecurePrefsHelper.getInstance(this))
         } catch (e: SecurePrefsException) {
             Timber.e(e)
         }
@@ -94,7 +89,8 @@ open class MainApplication : Application() {
             getString(R.string.preference_file_key), MODE_PRIVATE
         )
         val version = BuildConfig.VERSION_NAME
-        sharedPreference.edit().putString(getString(R.string.preference_key_app_version), version)
-            .apply()
+        sharedPreference.edit {
+            putString(getString(R.string.preference_key_app_version), version)
+        }
     }
 }

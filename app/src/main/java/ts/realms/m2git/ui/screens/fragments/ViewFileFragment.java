@@ -22,6 +22,7 @@ import java.io.IOException;
 import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.local.preference.Profile;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.ui.viewmodels.BaseFragment;
 import ts.realms.m2git.utils.CodeGuesser;
 
@@ -101,8 +102,8 @@ public class ViewFileFragment extends BaseFragment {
     }
 
     @Override
-    public SheimiFragmentActivity.OnBackClickListener getOnBackClickListener() {
-        return new SheimiFragmentActivity.OnBackClickListener() {
+    public BaseCompatActivity.OnBackClickListener getOnBackClickListener() {
+        return new BaseCompatActivity.OnBackClickListener() {
             @Override
             public boolean onClick() {
                 return false;
@@ -112,7 +113,7 @@ public class ViewFileFragment extends BaseFragment {
 
     private void showUserError(Throwable e, final int errorMessageId) {
         Timber.e(e);
-        getActivity().runOnUiThread(() -> ((SheimiFragmentActivity) getActivity()).
+        getActivity().runOnUiThread(() -> ((BaseCompatActivity) getActivity()).
             showMessageDialog(R.string.dialog_error_title, getString(errorMessageId)));
     }
 

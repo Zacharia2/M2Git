@@ -1,4 +1,4 @@
-package ts.realms.m2git.ui.screens.fragments;
+package ts.realms.m2git.ui.components.dialogs;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -6,20 +6,22 @@ import android.content.DialogInterface;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-public class SheimiDialogFragment extends DialogFragment {
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
+
+public class BaseDialogFragment extends DialogFragment {
 
     // It's safe to assume onAttach is called before other code.
     @NonNull
-    private SheimiFragmentActivity mActivity;
+    private BaseCompatActivity mActivity;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (SheimiFragmentActivity) context;
+        mActivity = (BaseCompatActivity) context;
     }
 
     @NonNull
-    public SheimiFragmentActivity getRawActivity() {
+    public BaseCompatActivity getRawActivity() {
         return mActivity;
     }
 
@@ -43,12 +45,12 @@ public class SheimiDialogFragment extends DialogFragment {
         getRawActivity().showToastMessage(msg);
     }
 
-    public void promptForPassword(SheimiFragmentActivity.OnPasswordEntered onPasswordEntered,
+    public void promptForPassword(BaseCompatActivity.OnPasswordEntered onPasswordEntered,
                                   int errorId) {
         getRawActivity().promptForPassword(onPasswordEntered, errorId);
     }
 
-    public void promptForPassword(SheimiFragmentActivity.OnPasswordEntered onPasswordEntered) {
+    public void promptForPassword(BaseCompatActivity.OnPasswordEntered onPasswordEntered) {
         getRawActivity().promptForPassword(onPasswordEntered, null);
     }
 }

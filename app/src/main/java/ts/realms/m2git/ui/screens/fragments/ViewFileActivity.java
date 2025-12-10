@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -17,10 +18,11 @@ import java.io.File;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.ChooseLanguageDialog;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.ui.viewmodels.BaseFragment;
 import ts.realms.m2git.utils.FsUtils;
 
-public class ViewFileActivity extends SheimiFragmentActivity {
+public class ViewFileActivity extends BaseCompatActivity {
 
     private static final int FILE_FRAGMENT_INDEX = 0;
     private static final int COMMITS_FRAGMENT_INDEX = 1;
@@ -62,6 +64,7 @@ public class ViewFileActivity extends SheimiFragmentActivity {
         mFileFragment.setArguments(b);
         mActivityMode = extras.getShort(TAG_MODE, TAG_MODE_NORMAL);
         b.putShort(TAG_MODE, mActivityMode);
+        setSupportActionBar(findViewById(R.id.view_file_activity_top_app_bar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(new File(fileName).getName());
     }
@@ -133,6 +136,7 @@ public class ViewFileActivity extends SheimiFragmentActivity {
             super(fm);
         }
 
+        @NonNull
         @Override
         public BaseFragment getItem(int position) {
             switch (position) {
@@ -175,20 +179,16 @@ public class ViewFileActivity extends SheimiFragmentActivity {
 
         @Override
         public boolean onQueryTextSubmit(String query) {
-            switch (mViewPager.getCurrentItem()) {
-                case COMMITS_FRAGMENT_INDEX:
-                    mCommitsFragment.setFilter(query);
-                    break;
+            if (mViewPager.getCurrentItem() == COMMITS_FRAGMENT_INDEX) {
+                mCommitsFragment.setFilter(query);
             }
             return true;
         }
 
         @Override
         public boolean onQueryTextChange(String query) {
-            switch (mViewPager.getCurrentItem()) {
-                case COMMITS_FRAGMENT_INDEX:
-                    mCommitsFragment.setFilter(query);
-                    break;
+            if (mViewPager.getCurrentItem() == COMMITS_FRAGMENT_INDEX) {
+                mCommitsFragment.setFilter(query);
             }
             return true;
         }
@@ -200,10 +200,8 @@ public class ViewFileActivity extends SheimiFragmentActivity {
 
         @Override
         public boolean onMenuItemActionCollapse(MenuItem menuItem) {
-            switch (mViewPager.getCurrentItem()) {
-                case COMMITS_FRAGMENT_INDEX:
-                    mCommitsFragment.setFilter(null);
-                    break;
+            if (mViewPager.getCurrentItem() == COMMITS_FRAGMENT_INDEX) {
+                mCommitsFragment.setFilter(null);
             }
             return true;
         }

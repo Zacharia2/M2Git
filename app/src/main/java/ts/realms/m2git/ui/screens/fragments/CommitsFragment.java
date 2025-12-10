@@ -26,14 +26,13 @@ import ts.realms.m2git.R;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.CheckoutDialog;
 import ts.realms.m2git.ui.components.lists.CommitsListAdapter;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity.OnBackClickListener;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnBackClickListener;
 import ts.realms.m2git.ui.viewmodels.BaseFragment;
 
 /**
  * Created by sheimi on 8/5/13.
  */
-public class CommitsFragment extends BaseFragment implements
-    ActionMode.Callback {
+public class CommitsFragment extends BaseFragment implements ActionMode.Callback {
 
     private final static String IS_ACTION_MODE = "is action mode";
     private final static String CHOSEN_ITEM = "chosen item";

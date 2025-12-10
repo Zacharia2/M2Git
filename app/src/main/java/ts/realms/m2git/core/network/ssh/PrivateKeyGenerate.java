@@ -20,10 +20,10 @@ import java.io.FileOutputStream;
 import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
+import ts.realms.m2git.ui.components.dialogs.BaseDialogFragment;
 
 
-public class PrivateKeyGenerate extends SheimiDialogFragment {
+public class PrivateKeyGenerate extends BaseDialogFragment {
     private EditText mNewFilename;
     private EditText mKeyLength;
     private RadioGroup mRadioGroup;
@@ -96,7 +96,7 @@ public class PrivateKeyGenerate extends SheimiDialogFragment {
             kpair.dispose();
         } catch (Exception e) {
             Timber.e(e, "Failed to generate SSH key");
-//TODO: send to acra            new RuntimeException("Failed to generate SSH key", e);
+            //TODO: send to acra            new RuntimeException("Failed to generate SSH key", e);
             // Delete any leftover files
             newKey.delete();
             newPubKey.delete();

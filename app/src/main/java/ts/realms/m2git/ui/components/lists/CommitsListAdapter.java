@@ -21,7 +21,7 @@ import java.util.Set;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.tasks.GetCommitTask;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.utils.BasicFunctions;
 
 
@@ -205,7 +205,7 @@ public class CommitsListAdapter extends BaseAdapter {
         } else {
             colorResId = android.R.color.transparent;
         }
-        if (mContext instanceof SheimiFragmentActivity) {
+        if (mContext instanceof BaseCompatActivity) {
             color = mContext.getResources().getColor(colorResId);
             convertView.setBackgroundColor(color);
         }

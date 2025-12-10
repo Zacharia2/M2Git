@@ -5,15 +5,15 @@ import android.content.DialogInterface;
 
 import androidx.fragment.app.Fragment;
 
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity.OnBackClickListener;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnBackClickListener;
 
 /**
  * Created by sheimi on 8/7/13.
  */
 public abstract class BaseFragment extends Fragment {
 
-    private SheimiFragmentActivity mActivity;
+    private BaseCompatActivity mActivity;
 
     public abstract OnBackClickListener getOnBackClickListener();
 
@@ -22,10 +22,10 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mActivity = (SheimiFragmentActivity) context;
+        mActivity = (BaseCompatActivity) context;
     }
 
-    public SheimiFragmentActivity getRawActivity() {
+    public BaseCompatActivity getRawActivity() {
         return mActivity;
     }
 

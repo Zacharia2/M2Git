@@ -3,13 +3,13 @@ package ts.realms.m2git.core.git.tasks;
 import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.PreferenceHelper;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 
 /**
  * Super class for Tasks that operate on a git remote
  */
 
-public abstract class RepoRemoteOpTask extends RepoOpTask implements SheimiFragmentActivity.OnPasswordEntered {
+public abstract class RepoRemoteOpTask extends RepoOpTask implements BaseCompatActivity.OnPasswordEntered {
 
 
     public RepoRemoteOpTask(Repo repo) {
@@ -27,7 +27,7 @@ public abstract class RepoRemoteOpTask extends RepoOpTask implements SheimiFragm
         mRepo.setUsername(username);
         mRepo.setPassword(password);
         if (savePassword) {
-            PreferenceHelper prefHelper = MainApplication.getContext().getPreferenceHelper();
+            PreferenceHelper prefHelper = PreferenceHelper.getInstance(MainApplication.getContext());
             if (prefHelper != null) {
                 prefHelper.setTokenAccount(username);
                 prefHelper.setTokenSecretKey(password);

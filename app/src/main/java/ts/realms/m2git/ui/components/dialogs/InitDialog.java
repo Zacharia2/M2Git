@@ -10,19 +10,17 @@ import android.widget.EditText;
 
 import java.io.File;
 
-import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.tasks.InitLocalTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.PreferenceHelper;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
 import ts.realms.m2git.ui.screens.main.RepoListActivity;
 
 /**
  * Created by sheimi on 8/24/13.
  */
 
-public class InitDialog extends SheimiDialogFragment implements
+public class InitDialog extends BaseDialogFragment implements
     View.OnClickListener {
 
     private EditText mLocalPath;
@@ -35,7 +33,7 @@ public class InitDialog extends SheimiDialogFragment implements
         super.onCreateDialog(savedInstanceState);
         mActivity = (RepoListActivity) getActivity();
 
-        mPrefsHelper = ((MainApplication) mActivity.getApplicationContext()).getPreferenceHelper();
+        mPrefsHelper = PreferenceHelper.getInstance(this.getContext());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         LayoutInflater inflater = mActivity.getLayoutInflater();

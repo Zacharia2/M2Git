@@ -20,11 +20,18 @@ public class PreferenceHelper {
 
     private static final String PRIVACY_ACCEPTED_KEY = "privacy.accepted";
     private static final int PRIVACY_ACCEPTED_VERSION = 1;
-
+    private static PreferenceHelper sInstance;
     private final Context mContext;
 
     public PreferenceHelper(Context context) {
         mContext = context.getApplicationContext();
+    }
+
+    public static PreferenceHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new PreferenceHelper(context.getApplicationContext());
+        }
+        return sInstance;
     }
 
     /**

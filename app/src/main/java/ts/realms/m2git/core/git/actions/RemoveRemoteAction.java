@@ -17,7 +17,7 @@ import ts.realms.m2git.core.git.RepoAction;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
+import ts.realms.m2git.ui.components.dialogs.BaseDialogFragment;
 
 public class RemoveRemoteAction extends RepoAction {
 
@@ -44,7 +44,7 @@ public class RemoveRemoteAction extends RepoAction {
         mActivity.closeOperationDrawer();
     }
 
-    public static class RemoveRemoteDialog extends SheimiDialogFragment {
+    public static class RemoveRemoteDialog extends BaseDialogFragment {
         private Repo mRepo;
         private RepoDetailActivity mActivity;
         private ArrayAdapter<String> mAdapter;

@@ -26,8 +26,9 @@ import ts.realms.m2git.common.errors.StopTaskException;
 import ts.realms.m2git.core.git.tasks.CheckoutTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.RenameBranchDialog;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 
-public class BranchChooserActivity extends SheimiFragmentActivity implements ActionMode.Callback {
+public class BranchChooserActivity extends BaseCompatActivity implements ActionMode.Callback {
     private static final String LOGTAG = BranchChooserActivity.class.getSimpleName();
 
     private Repo mRepo;

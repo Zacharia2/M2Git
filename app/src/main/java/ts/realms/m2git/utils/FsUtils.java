@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 
 /**
  * Created by sheimi on 8/8/13.
@@ -82,7 +82,7 @@ public class FsUtils {
      * @param isExternal if true, will use external *shared* storage
      */
     public static File getAppDir(boolean isExternal) {
-        SheimiFragmentActivity activeActivity = BasicFunctions.getActiveActivity();
+        BaseCompatActivity activeActivity = BasicFunctions.getActiveActivity();
         if (isExternal) {
             return activeActivity.getExternalFilesDir(null);
         } else {
@@ -108,7 +108,7 @@ public class FsUtils {
         return getMimeType(Uri.fromFile(file).toString());
     }
 
-    public static void openFile(SheimiFragmentActivity activity, File file) {
+    public static void openFile(BaseCompatActivity activity, File file) {
         Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", file);
         String mimeType = FsUtils.getMimeType(uri.toString());
         Intent intent = new Intent(Intent.ACTION_EDIT);

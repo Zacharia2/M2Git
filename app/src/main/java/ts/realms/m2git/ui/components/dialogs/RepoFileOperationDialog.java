@@ -11,12 +11,11 @@ import androidx.annotation.NonNull;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.tasks.UpdateIndexTask;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
 
 /**
  * Created by sheimi on 8/16/13.
  */
-public class RepoFileOperationDialog extends SheimiDialogFragment {
+public class RepoFileOperationDialog extends BaseDialogFragment {
 
     public static final String FILE_PATH = "file path";
     private static final int ADD_TO_STAGE = 0;

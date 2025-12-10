@@ -31,10 +31,11 @@ import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.tasks.CommitDiffTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.Profile;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.utils.CodeGuesser;
 import ts.realms.m2git.utils.FsUtils;
 
-public class CommitDiffActivity extends SheimiFragmentActivity {
+public class CommitDiffActivity extends BaseCompatActivity {
 
     public final static String OLD_COMMIT = "old commit";
     public final static String NEW_COMMIT = "new commit";
@@ -63,7 +64,8 @@ public class CommitDiffActivity extends SheimiFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_diff);
-        setupActionBar();
+        setSupportActionBar(findViewById(R.id.view_diff_activity_top_app_bar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDiffContent = findViewById(R.id.fileContent);
         mLoading = findViewById(R.id.loading);
 
@@ -98,10 +100,6 @@ public class CommitDiffActivity extends SheimiFragmentActivity {
             }
         });
         mDiffContent.setBackgroundColor(Color.TRANSPARENT);
-    }
-
-    private void setupActionBar() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

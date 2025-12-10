@@ -20,8 +20,9 @@ import java.io.FileFilter;
 import ts.realms.m2git.R;
 import ts.realms.m2git.local.preference.Profile;
 import ts.realms.m2git.ui.components.lists.FilesListAdapter;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 
-public abstract class FileExplorerActivity extends SheimiFragmentActivity {
+public abstract class FileExplorerActivity extends BaseCompatActivity {
 
     public static final String RESULT_PATH = "result_path";
     private static final int RC_ACCESS_ALL_FILES = 123;
@@ -45,6 +46,8 @@ public abstract class FileExplorerActivity extends SheimiFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_list);
+        // 必须在setContentView后调用
+        setSupportActionBar(findViewById(R.id.file_list_activity_top_app_bar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRootFolder = getRootFolder();
         mCurrentDir = mRootFolder;

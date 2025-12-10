@@ -18,7 +18,7 @@ import ts.realms.m2git.core.git.tasks.RebaseTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.Profile;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
+import ts.realms.m2git.ui.components.dialogs.BaseDialogFragment;
 
 public class RebaseAction extends RepoAction {
 
@@ -39,7 +39,7 @@ public class RebaseAction extends RepoAction {
         mActivity.closeOperationDrawer();
     }
 
-    public static class RebaseDialog extends SheimiDialogFragment {
+    public static class RebaseDialog extends BaseDialogFragment {
 
         private Repo mRepo;
         private RepoDetailActivity mActivity;

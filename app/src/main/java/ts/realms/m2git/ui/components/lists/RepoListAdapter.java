@@ -31,8 +31,8 @@ import ts.realms.m2git.R;
 import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.database.RepoDbManager;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiFragmentActivity;
 import ts.realms.m2git.ui.screens.main.RepoListActivity;
 import ts.realms.m2git.utils.BasicFunctions;
 
@@ -166,16 +166,16 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
         final Repo repo = getItem(position);
         if (!repo.getRepoStatus().equals(RepoContract.REPO_STATUS_NULL)) return false;
         Context context = getContext();
-        if (context instanceof SheimiFragmentActivity) {
-            showRepoOptionsDialog((SheimiFragmentActivity) context, repo);
+        if (context instanceof BaseCompatActivity) {
+            showRepoOptionsDialog((BaseCompatActivity) context, repo);
         }
         return true;
     }
 
-    private void showRepoOptionsDialog(final SheimiFragmentActivity context, final Repo repo) {
+    private void showRepoOptionsDialog(final BaseCompatActivity context, final Repo repo) {
 
-        SheimiFragmentActivity.onOptionDialogClicked[] dialog =
-            new SheimiFragmentActivity.onOptionDialogClicked[]{() -> showRenameRepoDialog(context
+        BaseCompatActivity.onOptionDialogClicked[] dialog =
+            new BaseCompatActivity.onOptionDialogClicked[]{() -> showRenameRepoDialog(context
                 , repo), () -> showRemoveRepoDialog(context, repo), null};
         // 区分大小写
         final String remoteRaw = repo.getRemoteURL();
@@ -250,7 +250,7 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
         }
     }
 
-    private void showRemoveRepoDialog(SheimiFragmentActivity context, final Repo repo) {
+    private void showRemoveRepoDialog(BaseCompatActivity context, final Repo repo) {
         context.showMessageDialog(R.string.dialog_delete_repo_title,
             R.string.dialog_delete_repo_msg, R.string.label_delete, (dialogInterface, i) -> {
                 repo.deleteRepo(true);
@@ -258,7 +258,7 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
             });
     }
 
-    private void showRenameRepoDialog(final SheimiFragmentActivity context, final Repo repo) {
+    private void showRenameRepoDialog(final BaseCompatActivity context, final Repo repo) {
         context.showEditTextDialog(R.string.dialog_rename_repo_title,
             R.string.dialog_rename_repo_hint, R.string.label_rename, newRepoName -> {
                 if (!repo.renameRepo(newRepoName)) {

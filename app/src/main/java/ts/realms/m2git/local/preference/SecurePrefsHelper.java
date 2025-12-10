@@ -44,6 +44,7 @@ public class SecurePrefsHelper {
     private static final String KEY_ALIAS = "mgit_prefs";
     private static final String SEC_PREFS_FILE_NAME = "sec_prefs.xml";
     private static final String KEY_ALGORITHM_RSA = "RSA"; //KeyProperties.KEY_ALGORITHM_RSA is only available in API 23, so need to define it here
+    private static SecurePrefsHelper sInstance;
     private final KeyStore mKeyStore;
     SharedPreferences mSecurePrefs;
 
@@ -70,6 +71,17 @@ public class SecurePrefsHelper {
             Timber.e(e, "keystore error");
             throw new SecurePrefsException(e);
         }
+    }
+
+    public static SecurePrefsHelper getInstance(Context context) {
+        if (sInstance == null) {
+            try {
+                sInstance = new SecurePrefsHelper(context.getApplicationContext());
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+        }
+        return sInstance;
     }
 
     void generateKeyPair(Context context) throws NoSuchProviderException, NoSuchAlgorithmException,

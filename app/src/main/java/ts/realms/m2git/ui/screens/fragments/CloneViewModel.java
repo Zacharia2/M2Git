@@ -119,7 +119,7 @@ public class CloneViewModel extends AndroidViewModel {
             return false;
         }
 
-        PreferenceHelper prefsHelper = ((MainApplication) getApplication()).getPreferenceHelper();
+        PreferenceHelper prefsHelper = PreferenceHelper.getInstance(MainApplication.getContext());
         File file = Repo.getDir(prefsHelper, localName);
         if (file.exists()) {
             this.localRepoNameError.setValue(getApplication().getString(R.string.alert_localpath_repo_exists));

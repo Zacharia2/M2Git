@@ -11,13 +11,12 @@ import android.widget.EditText;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
-import ts.realms.m2git.ui.screens.fragments.SheimiDialogFragment;
 
 /**
  * Created by sheimi on 8/24/13.
  */
 
-public class CheckoutDialog extends SheimiDialogFragment implements
+public class CheckoutDialog extends BaseDialogFragment implements
     View.OnClickListener, DialogInterface.OnClickListener {
 
     public static final String BASE_COMMIT = "base commit";

@@ -216,7 +216,7 @@ public class Repo implements Comparable<Repo>, Serializable {
     }
 
     public static void setLocalRepoRoot(Context context, File repoRoot) {
-        PreferenceHelper prefs = ((MainApplication) context.getApplicationContext()).getPreferenceHelper();
+        PreferenceHelper prefs = PreferenceHelper.getInstance(context);
         prefs.setRepoRoot(repoRoot.getAbsolutePath());
 
         // need to make any existing "internal" repos "external" so that their paths are still correct
@@ -573,7 +573,7 @@ public class Repo implements Comparable<Repo>, Serializable {
     }
 
     public File getDir() {
-        PreferenceHelper prefHelper = MainApplication.getContext().getPreferenceHelper();
+        PreferenceHelper prefHelper = PreferenceHelper.getInstance(MainApplication.getContext());
         return Repo.getDir(prefHelper, getLocalPath());
     }
 
