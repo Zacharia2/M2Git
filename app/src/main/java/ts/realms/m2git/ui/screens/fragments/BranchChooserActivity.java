@@ -174,7 +174,7 @@ public class BranchChooserActivity extends BaseCompatActivity implements ActionM
             ListItemHolder holder;
             if (convertView == null) {
                 convertView = inflater.inflate(
-                    R.layout.listitem_dialog_choose_commit, parent, false);
+                    R.layout.list_item_dialog_choose_commit, parent, false);
                 holder = new ListItemHolder();
                 holder.commitTitle = convertView
                     .findViewById(R.id.commitTitle);

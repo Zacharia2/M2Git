@@ -34,7 +34,7 @@ public class FilesListAdapter extends ArrayAdapter<File> {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         FilesListItemHolder holder;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.listitem_files, parent,
+            convertView = inflater.inflate(R.layout.list_item_files, parent,
                 false);
             holder = new FilesListItemHolder();
             holder.fileTitle = convertView

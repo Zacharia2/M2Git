@@ -98,7 +98,7 @@ public class MergeAction extends RepoAction {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 ListItemHolder holder;
                 if (convertView == null) {
-                    convertView = inflater.inflate(R.layout.listitem_dialog_choose_commit, parent
+                    convertView = inflater.inflate(R.layout.list_item_dialog_choose_commit, parent
                         , false);
                     holder = new ListItemHolder();
                     holder.commitTitle = convertView.findViewById(R.id.commitTitle);

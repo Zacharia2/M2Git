@@ -171,7 +171,7 @@ public class CommitsListAdapter extends BaseAdapter {
             holder = (CommitsListItemHolder) convertView.getTag();
         }
         if (holder == null) {
-            convertView = inflater.inflate(R.layout.listitem_commits, parent,
+            convertView = inflater.inflate(R.layout.list_item_commits, parent,
                 false);
             holder = new CommitsListItemHolder();
             holder.commitsTitle = convertView

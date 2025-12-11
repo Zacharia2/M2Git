@@ -39,15 +39,23 @@ public class CredentialActivity extends BaseCompatActivity {
 //        - 仓库本身自己就有 username和password、不知道是不是凭证。
 //        BaseCompatActivity(promptForPasswordInner) -> RepoRemoteOpTask(onClicked) -> RepoOpTask(setCredentials)
 
+//        activity_credential、edit_account（menu）、list_item_account
+//        把menu添加上，然后动态适配list_item_account到activity_credential的目标列表中。
 
-        long cid = RepoDbManager.createCredential("ts1","s1");
-        Cursor cursor = RepoDbManager.getCredentialById(cid);
-        Credential credential = new Credential(cursor);
-        RepoDbManager.relateRepoWithCredential(cid,"1212");
-        RepoDbManager.relateRepoWithCredential(cid,"2323");
-        RepoDbManager.unrelateRepoWithCredential(cid,"1212");
-        int all = RepoDbManager.queryAllCredential().getCount();
-        RepoDbManager.deleteCredential(cid);
-        Map<String, String> re =  RepoDbManager.queryCredentialByRepoId("2323");
+
+//        fragment_credential_item、list_item_rel_repo_checkbox
+//        list_item_rel_repo_checkbox动态适配到fragment_credential_item的目标列表中。
+
+//        请求的时候用的dialog，用于单选目标token。
+
+//        long cid = RepoDbManager.createCredential("ts1","s1");
+//        Cursor cursor = RepoDbManager.getCredentialById(cid);
+//        Credential credential = new Credential(cursor);
+//        RepoDbManager.relateRepoWithCredential(cid,"1212");
+//        RepoDbManager.relateRepoWithCredential(cid,"2323");
+//        RepoDbManager.unrelateRepoWithCredential(cid,"1212");
+//        int all = RepoDbManager.queryAllCredential().getCount();
+//        RepoDbManager.deleteCredential(cid);
+//        Map<String, String> re =  RepoDbManager.queryCredentialByRepoId("2323");
     }
 }
