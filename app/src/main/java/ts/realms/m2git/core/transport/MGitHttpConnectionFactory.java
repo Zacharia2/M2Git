@@ -43,7 +43,7 @@
 
 // This file was copied from JGit and modified to work inside the MGit package and to include an {@code install} function.
 
-package ts.realms.m2git.core.network.transport;
+package ts.realms.m2git.core.transport;
 
 import org.eclipse.jgit.transport.HttpTransport;
 import org.eclipse.jgit.transport.http.HttpConnection;

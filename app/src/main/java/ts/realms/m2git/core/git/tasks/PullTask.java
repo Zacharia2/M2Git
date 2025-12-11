@@ -10,7 +10,7 @@ import org.eclipse.jgit.api.errors.TransportException;
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.core.network.ssh.SgitTransportCallback;
+import ts.realms.m2git.core.ssh.SgitTransportCallback;
 
 public class PullTask extends RepoRemoteOpTask {
 

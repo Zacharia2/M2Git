@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.network.transport;
+package ts.realms.m2git.core.transport;
 
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
 import org.eclipse.jgit.transport.CredentialItem;

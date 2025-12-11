@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.network.transport;
+package ts.realms.m2git.core.transport;
 
 import java.io.IOException;
 import java.net.InetAddress;

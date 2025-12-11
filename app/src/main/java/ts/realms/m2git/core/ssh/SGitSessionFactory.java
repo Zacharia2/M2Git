@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.network.ssh;
+package ts.realms.m2git.core.ssh;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;

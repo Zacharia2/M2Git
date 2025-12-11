@@ -12,7 +12,7 @@ import java.util.Collection;
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.core.network.ssh.SgitTransportCallback;
+import ts.realms.m2git.core.ssh.SgitTransportCallback;
 import ts.realms.m2git.utils.BasicFunctions;
 
 public class PushTask extends RepoRemoteOpTask {
