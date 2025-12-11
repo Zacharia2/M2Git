@@ -57,8 +57,7 @@
     <PreferenceCategory android:title="webdav">
         <SwitchPreferenceCompat
             android:defaultValue="false"
-            android:key="webdav server"
-            android:persistent="true"
+            android:key="@string/pref_key_webdav_server"
             android:summary="本地webdav服务器"
             android:title="启用webdav" />
         <EditTextPreference

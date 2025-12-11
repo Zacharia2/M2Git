@@ -1,5 +1,7 @@
 package ts.realms.m2git.core.mws;
 
+import android.util.Log;
+
 import java.io.File;
 
 import io.milton.config.HttpManagerBuilder;
@@ -19,7 +21,8 @@ public class SimpleMiltonServer {
         return miltonServer;
     }
 
-    public void build(int port, String homeFolder) {
+    public void build(String homeFolder, int port) {
+        Log.i("miltonServer", homeFolder + "::" + port);
         NullSecurityManager nsm = new NullSecurityManager();
         FileSystemResourceFactory resourceFactory = new FileSystemResourceFactory(new File(homeFolder), nsm, "/");
         resourceFactory.setAllowDirectoryBrowsing(true);
@@ -33,10 +36,14 @@ public class SimpleMiltonServer {
     }
 
     public void start() {
+        if (ss == null) return;
         ss.start();
+        Log.i("miltonServer", "miltonServer start");
     }
 
     public void stop() {
+        if (ss == null) return;
         ss.stop();
+        Log.i("miltonServer", "miltonServer stop");
     }
 }

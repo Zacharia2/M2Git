@@ -68,14 +68,30 @@ public class PreferenceHelper {
         Timber.d("set tokenSecretKey:%s", tokenSecretKey);
     }
 
+    public String getWebdavHomeDir() {
+        return getString(mContext.getString(R.string.pref_key_webdav_home_dir));
+    }
+
     public void setWebdavHomeDir(String homeDir) {
         edit(mContext.getString(R.string.pref_key_webdav_home_dir), homeDir);
         Timber.d("setWebdavHomeDir:%s", homeDir);
     }
 
+    public int getWebdavPort() {
+        return Integer.parseInt(getString(mContext.getString(R.string.pref_key_webdav_port)));
+    }
+
     public void setWebdavPort(String port) {
         edit(mContext.getString(R.string.pref_key_webdav_port), port);
         Timber.d("setWebdavPort:%s", port);
+    }
+
+    public boolean getWebdavStatus() {
+        return getBoolean(mContext.getString(R.string.pref_key_webdav_server));
+    }
+
+    public void setDefaultWebdavStatus() {
+        edit(mContext.getString(R.string.pref_key_webdav_server), false);
     }
 
     protected SharedPreferences getSharedPrefs() {
