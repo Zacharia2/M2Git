@@ -11,7 +11,7 @@ import android.widget.EditText;
 import java.io.File;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.network.ssh.PrivateKeyUtils;
+import ts.realms.m2git.core.ssh.PrivateKeyUtils;
 import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
 
 /**

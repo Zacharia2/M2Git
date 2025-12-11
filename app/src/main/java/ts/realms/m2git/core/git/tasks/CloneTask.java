@@ -18,7 +18,7 @@ import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.core.network.ssh.SgitTransportCallback;
+import ts.realms.m2git.core.ssh.SgitTransportCallback;
 import ts.realms.m2git.local.preference.Profile;
 
 public class CloneTask extends RepoRemoteOpTask {

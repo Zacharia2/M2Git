@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.network.ssh;
+package ts.realms.m2git.core.ssh;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

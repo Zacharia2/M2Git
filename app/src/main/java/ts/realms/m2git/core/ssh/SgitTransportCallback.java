@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.network.ssh;
+package ts.realms.m2git.core.ssh;
 
 import org.eclipse.jgit.api.TransportConfigCallback;
 import org.eclipse.jgit.transport.SshTransport;

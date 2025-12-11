@@ -15,8 +15,8 @@ import java.io.File;
 import java.io.FileFilter;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.network.ssh.PrivateKeyGenerate;
-import ts.realms.m2git.core.network.ssh.PrivateKeyUtils;
+import ts.realms.m2git.core.ssh.PrivateKeyGenerate;
+import ts.realms.m2git.core.ssh.PrivateKeyUtils;
 import ts.realms.m2git.ui.components.dialogs.EditKeyPasswordDialog;
 import ts.realms.m2git.ui.components.dialogs.RenameKeyDialog;
 import ts.realms.m2git.utils.BasicFunctions;
