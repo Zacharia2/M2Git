@@ -17,6 +17,7 @@ import ts.realms.m2git.core.transport.MGitHttpConnectionFactory
 import ts.realms.m2git.local.preference.SecurePrefsHelper
 import java.security.Security
 import androidx.core.content.edit
+import ts.realms.m2git.local.preference.PreferenceHelper
 
 /**
  * Custom Application Singleton
@@ -56,6 +57,7 @@ open class MainApplication : Application() {
             // System.exit(0);
         }
         mContext = applicationContext
+        PreferenceHelper.getInstance(this).setDefaultWebdavStatus()
         setAppVersionPref()
 
         try {

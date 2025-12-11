@@ -9,11 +9,11 @@ import android.os.Environment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -26,50 +26,33 @@ import java.io.File;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.core.mws.WebDavService;
 import ts.realms.m2git.local.preference.PreferenceHelper;
 import ts.realms.m2git.ui.screens.fragments.ExploreRootDirActivity;
 import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
 import ts.realms.m2git.ui.screens.main.RepoListActivity;
 import ts.realms.m2git.utils.BasicFunctions;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener {
-    private SharedPreferences.OnSharedPreferenceChangeListener mListener;
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    private PreferenceHelper preferenceHelper;
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
 
+        preferenceHelper = PreferenceHelper.getInstance(this.getContext());
         // need to set as for historical reasons SGit uses custom prefs file
         PreferenceManager prefMgr = getPreferenceManager();
         prefMgr.setSharedPreferencesName(getString(R.string.preference_file_key));
         prefMgr.setSharedPreferencesMode(Context.MODE_PRIVATE);
 
         // /storage/emulated/0/Documents
-        PreferenceHelper prefs = PreferenceHelper.getInstance(this.getContext());
-        if (prefs == null || prefs.getRepoRoot() == null || prefs.getRepoRoot().toString().isEmpty()) {
+        if (preferenceHelper == null || preferenceHelper.getRepoRoot() == null || preferenceHelper.getRepoRoot().toString().isEmpty()) {
             File documentsDir = new File(Environment.getExternalStorageDirectory(), "Documents");
             Repo.setLocalRepoRoot(this.getContext(), documentsDir);
         }
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
-
-        final String themePrefKey = getString(R.string.pref_key_use_theme_id);
-        final String gravatarPrefKey = getString(R.string.pref_key_use_gravatar);
-        final String useEnglishPrefKey = getString(R.string.pref_key_use_english);
-
-        mListener = (sharedPreferences, key) -> {
-            if (themePrefKey.equals(key) || useEnglishPrefKey.equals(key)) {
-                // nice trick to recreate the back stack, to ensure existing activities onCreate() are
-                // called to set new theme, courtesy of: http://stackoverflow.com/a/28799124/85472
-                TaskStackBuilder.create(getActivity())
-                    .addNextIntent(new Intent(getActivity(), RepoListActivity.class))
-                    .addNextIntent(getActivity().getIntent())
-                    .startActivities();
-            } else if (gravatarPrefKey.equals(key)) {
-                BasicFunctions.getImageLoader().clearMemoryCache();
-                BasicFunctions.getImageLoader().clearDiskCache();
-            }
-        };
 
         PreferenceScreen screen = getPreferenceScreen();
         int count = screen.getPreferenceCount();
@@ -107,12 +90,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     // 特殊情况，为webdav设置默认值
                     if (preference.getKey().equals(getString(R.string.pref_key_webdav_home_dir)) && preference.getText() == null) {
                         String defaultHome = Environment.getExternalStorageDirectory().toString();
-                        PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(getContext());
                         preferenceHelper.setWebdavHomeDir(defaultHome);
                         return defaultHome;
                     } else if (preference.getKey().equals(getString(R.string.pref_key_webdav_port)) && preference.getText() == null) {
-                        String defaultPort = "80";
-                        PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(getContext());
+                        String defaultPort = "8080";
                         preferenceHelper.setWebdavPort(defaultPort);
                         return defaultPort;
                     }
@@ -147,14 +128,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public void onResume() {
         super.onResume();
         // 获取当前 PreferenceScreen 关联的 SharedPreferences 并注册监听
-        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(mListener);
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         // 注销监听，防止内存泄漏
-        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(mListener);
+        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     /*为preference预留actionbar高度空间*/
@@ -198,11 +179,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 String feedbackUrl = context.getString(R.string.feedback_url);
                 Intent feedbackIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(feedbackUrl));
                 context.startActivity(feedbackIntent);
-                if (feedbackIntent.resolveActivity(context.getPackageManager()) != null) {
-
-                } else {
-                    Toast.makeText(context, "无法打开链接", Toast.LENGTH_SHORT).show();
-                }
                 return true;
             }
         }
@@ -224,15 +200,40 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         if (repoPreference != null) {
             repoPreference.setOnPreferenceClickListener(this);
         }
-        if (sshPreference != null) {
-            sshPreference.setOnPreferenceClickListener(this);
-        }
-        if (feedbackPreference != null) {
-            feedbackPreference.setOnPreferenceClickListener(this);
-        }
         if (credentialPreference != null) {
             credentialPreference.setOnPreferenceClickListener(this);
         }
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, @Nullable String s) {
+        final String themePrefKey = getString(R.string.pref_key_use_theme_id);
+        final String gravatarPrefKey = getString(R.string.pref_key_use_gravatar);
+        final String useEnglishPrefKey = getString(R.string.pref_key_use_english);
+        final String webdavServerPrefKey = getString(R.string.pref_key_webdav_server);
+
+        if (themePrefKey.equals(s) || useEnglishPrefKey.equals(s)) {
+            // nice trick to recreate the back stack, to ensure existing activities onCreate() are
+            // called to set new theme, courtesy of: http://stackoverflow.com/a/28799124/85472
+            TaskStackBuilder.create(getActivity())
+                .addNextIntent(new Intent(getActivity(), RepoListActivity.class))
+                .addNextIntent(getActivity().getIntent())
+                .startActivities();
+        } else if (gravatarPrefKey.equals(s)) {
+            BasicFunctions.getImageLoader().clearMemoryCache();
+            BasicFunctions.getImageLoader().clearDiskCache();
+        } else if (webdavServerPrefKey.equals(s)) {
+            // 默认false，异常中断后就不知道了，在app启动后初始化为默认
+            if (preferenceHelper.getWebdavStatus()) {
+                Intent intent = new Intent(getContext(), WebDavService.class);
+                intent.setAction("START");
+                intent.putExtra("PORT", preferenceHelper.getWebdavPort());
+                intent.putExtra("HOME", preferenceHelper.getWebdavHomeDir());
+                ContextCompat.startForegroundService(getContext(), intent);
+            } else {
+                Intent intent = new Intent(getContext(), WebDavService.class);
+                getContext().stopService(intent);
+            }
+        }
+    }
 }
