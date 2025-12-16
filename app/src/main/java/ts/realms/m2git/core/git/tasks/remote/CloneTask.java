@@ -16,13 +16,14 @@ import java.util.Locale;
 
 import timber.log.Timber;
 import ts.realms.m2git.R;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.ssh.SgitTransportCallback;
 import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.local.preference.Profile;
 
-public class CloneTask extends RepoRemoteOpTask {
+public class CloneTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     private final AsyncTaskCallback mCallback;
     private final boolean mCloneRecursive;
@@ -37,7 +38,7 @@ public class CloneTask extends RepoRemoteOpTask {
     }
 
     @Override
-    protected Boolean doInBackground(Void... v) {
+    public boolean doInBackground(Void... v) {
         boolean result = cloneRepo();
         if (!result) {
             Timber.e("del repo. clone failed");
@@ -48,7 +49,8 @@ public class CloneTask extends RepoRemoteOpTask {
         return result;
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (isTaskCanceled()) {
             return;

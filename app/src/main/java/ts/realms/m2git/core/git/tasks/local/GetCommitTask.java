@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 
-public class GetCommitTask extends RepoOpTask {
+public class GetCommitTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     private final GetCommitCallback mCallback;
     private final String mFile;
@@ -22,16 +23,13 @@ public class GetCommitTask extends RepoOpTask {
         mCallback = callback;
     }
 
-    public void executeTask() {
-        execute();
-    }
-
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         return getCommitsList();
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (mCallback != null) {
             mCallback.postCommits(mResult);

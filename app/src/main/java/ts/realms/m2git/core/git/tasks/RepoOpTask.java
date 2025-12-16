@@ -10,27 +10,29 @@ import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnPasswordEntered;
 import ts.realms.m2git.utils.BasicFunctions;
 
-public abstract class RepoOpTask extends MAsyncTask<Void, String, Boolean> {
+// 串行任务、并行任务、onPostExecute
+// MAsyncTask 具象化为RepoOpTask，继承父类的全部能力并扩展父类的能力
+// RepoOpTask拥有父类MAsyncTask所有公开方法和成员
+public abstract class RepoOpTask extends MAsyncTask implements MAsyncTask.AsyncTaskPostCallback {
 
     protected Repo mRepo;
-    protected boolean mIsTaskAdded;
     private int mSuccessMsg = 0;
     private boolean mParallel = false;
 
+    // mIsTaskAdded若两个类此变量同时存在，访问哪个变量由引用类型决定。
     public RepoOpTask(Repo repo) {
         mRepo = repo;
-        mIsTaskAdded = repo.addTask(this);
+        super.mIsTaskAdded = repo.addTask(this);
     }
 
     public RepoOpTask(Repo repo, boolean parallel) {
         mRepo = repo;
         // 有并行任务，也有串行任务。
-        mIsTaskAdded = parallel;
+        super.mIsTaskAdded = parallel;
         mParallel = parallel;
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
-        super.onPostExecute(isSuccess);
+    public void onPostExecute(Boolean isSuccess) {
         if (!mParallel) mRepo.removeTask(this);
         if (!isSuccess && !isTaskCanceled()) {
             if (mException == null) {
@@ -52,13 +54,13 @@ public abstract class RepoOpTask extends MAsyncTask<Void, String, Boolean> {
 
     public void executeTask() {
         if (mIsTaskAdded) {
-            execute();
+            super.executeTask();
             return;
         }
         BasicFunctions.getActiveActivity().showToastMessage(R.string.error_task_running);
     }
 
-    protected void setCredentials(TransportCommand command) {
+    protected void setCredentials(TransportCommand<?, ?> command) {
         String username = mRepo.getUsername();
         String password = mRepo.getPassword();
 
@@ -143,6 +145,7 @@ public abstract class RepoOpTask extends MAsyncTask<Void, String, Boolean> {
                 rightHint = showedWorkDown + "/" + mTotalWork;
                 leftHint = progress + "%";
             }
+            //  将进度传递从异步线程给主线程里面。
             publishProgress(msg, leftHint, rightHint, Integer.toString(progress));
         }
 

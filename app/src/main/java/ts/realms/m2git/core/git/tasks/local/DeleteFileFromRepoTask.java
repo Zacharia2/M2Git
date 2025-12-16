@@ -4,11 +4,12 @@ import java.io.File;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.utils.FsUtils;
 
-public class DeleteFileFromRepoTask extends RepoOpTask {
+public class DeleteFileFromRepoTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     private final DeleteOperationType mOperationType;
     public String mFilePattern;
@@ -24,11 +25,12 @@ public class DeleteFileFromRepoTask extends RepoOpTask {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         return removeFile();
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (mCallback != null) {
             mCallback.onPostExecute(isSuccess);

@@ -11,10 +11,11 @@ import java.io.IOException;
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.NoSuchIndexPathException;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 
-public class UpdateIndexTask extends RepoOpTask {
+public class UpdateIndexTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     private final String path;
     private final int newMode;
@@ -34,8 +35,7 @@ public class UpdateIndexTask extends RepoOpTask {
     }
 
     @Override
-    @Deprecated
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         return updateIndex();
     }
 

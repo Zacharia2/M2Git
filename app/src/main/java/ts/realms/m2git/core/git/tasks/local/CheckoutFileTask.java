@@ -2,16 +2,16 @@ package ts.realms.m2git.core.git.tasks.local;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 
-public class CheckoutFileTask extends RepoOpTask {
+public class CheckoutFileTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     private final AsyncTaskPostCallback mCallback;
     private final String mPath;
 
-    public CheckoutFileTask(Repo repo, String path,
-                            AsyncTaskPostCallback callback) {
+    public CheckoutFileTask(Repo repo, String path, AsyncTaskPostCallback callback) {
         super(repo);
         mCallback = callback;
         mPath = path;
@@ -19,11 +19,12 @@ public class CheckoutFileTask extends RepoOpTask {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         return checkout();
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (mCallback != null) {
             mCallback.onPostExecute(isSuccess);

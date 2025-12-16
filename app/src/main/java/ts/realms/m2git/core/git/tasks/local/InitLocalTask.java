@@ -2,18 +2,19 @@ package ts.realms.m2git.core.git.tasks.local;
 
 import org.eclipse.jgit.api.Git;
 
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.database.RepoContract;
 
-public class InitLocalTask extends RepoOpTask {
+public class InitLocalTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     public InitLocalTask(Repo repo) {
         super(repo);
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         boolean result = init();
         if (!result) {
             mRepo.deleteRepoSync(true);
@@ -22,7 +23,8 @@ public class InitLocalTask extends RepoOpTask {
         return true;
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (isSuccess) {
             mRepo.updateLatestCommitInfo();

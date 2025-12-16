@@ -3,10 +3,11 @@ package ts.realms.m2git.core.git.tasks.local;
 import java.util.Set;
 
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 
-public class StatusTask extends RepoOpTask {
+public class StatusTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     private final GetStatusCallback mCallback;
     private final StringBuffer mResult = new StringBuffer();
@@ -17,19 +18,16 @@ public class StatusTask extends RepoOpTask {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         return status();
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (mCallback != null && isSuccess) {
             mCallback.postStatus(mResult.toString());
         }
-    }
-
-    public void executeTask() {
-        execute();
     }
 
     private boolean status() {

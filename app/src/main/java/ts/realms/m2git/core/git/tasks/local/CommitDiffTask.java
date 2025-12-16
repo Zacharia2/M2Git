@@ -21,10 +21,11 @@ import java.util.List;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 
-public class CommitDiffTask extends RepoOpTask {
+public class CommitDiffTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     private final String mOldCommit;
     private final String mNewCommit;
@@ -46,12 +47,12 @@ public class CommitDiffTask extends RepoOpTask {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         boolean result = getCommitDiff();
         if (!result) {
             return false;
         }
-        mDiffStrings = new ArrayList<String>(mDiffEntries.size());
+        mDiffStrings = new ArrayList<>(mDiffEntries.size());
         for (DiffEntry diffEntry : mDiffEntries) {
             try {
                 String diffStr = parseDiffEntry(diffEntry);
@@ -63,7 +64,8 @@ public class CommitDiffTask extends RepoOpTask {
         return true;
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         RevCommit retCommit = null;
         if (isSuccess && mCallback != null && mDiffEntries != null) {
@@ -133,15 +135,11 @@ public class CommitDiffTask extends RepoOpTask {
             mDiffOutput.reset();
             mDiffFormatter.format(diffEntry);
             mDiffFormatter.flush();
-            return mDiffOutput.toString("UTF-8");
+            return mDiffOutput.toString(StandardCharsets.UTF_8);
         } catch (IOException e) {
             setException(e, R.string.error_diff_failed);
             throw new StopTaskException();
         }
-    }
-
-    public void executeTask() {
-        execute();
     }
 
     public interface CommitDiffResult {

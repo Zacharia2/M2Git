@@ -250,7 +250,7 @@ public final class FileSystemResourceFactory implements ResourceFactory {
     }
 
     private String stripContext(String url) {
-        if (this.contextPath != null && contextPath.length() > 0) {
+        if (this.contextPath != null && !contextPath.isEmpty()) {
             url = url.replaceFirst('/' + contextPath, "");
             log.debug("stripped context: " + url);
         }

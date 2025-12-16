@@ -9,11 +9,12 @@ import org.eclipse.jgit.api.errors.TransportException;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.ssh.SgitTransportCallback;
 
-public class PullTask extends RepoRemoteOpTask {
+public class PullTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskCallback {
 
     private final AsyncTaskCallback mCallback;
     private final String mRemote;
@@ -27,7 +28,7 @@ public class PullTask extends RepoRemoteOpTask {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         boolean result = pullRepo();
         if (mCallback != null) {
             result = mCallback.doInBackground(params) & result;
@@ -36,22 +37,21 @@ public class PullTask extends RepoRemoteOpTask {
     }
 
     @Override
-    protected void onProgressUpdate(String... progress) {
-        super.onProgressUpdate(progress);
+    public void onProgressUpdate(String... progress) {
         if (mCallback != null) {
             mCallback.onProgressUpdate(progress);
         }
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+    public void onPreExecute() {
         if (mCallback != null) {
             mCallback.onPreExecute();
         }
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (mCallback != null) {
             mCallback.onPostExecute(isSuccess);

@@ -5,11 +5,12 @@ import org.eclipse.jgit.lib.Ref;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.utils.BasicFunctions;
 
-public class MergeTask extends RepoOpTask {
+public class MergeTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
     private final AsyncTaskPostCallback mCallback;
     private final Ref mCommit;
@@ -27,11 +28,12 @@ public class MergeTask extends RepoOpTask {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public boolean doInBackground(Void... params) {
         return mergeBranch();
     }
 
-    protected void onPostExecute(Boolean isSuccess) {
+    @Override
+    public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
         if (mCallback != null) {
             mCallback.onPostExecute(isSuccess);
