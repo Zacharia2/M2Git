@@ -46,8 +46,6 @@ public abstract class FileExplorerActivity extends BaseCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_list);
-        // 必须在setContentView后调用
-        setSupportActionBar(findViewById(R.id.file_list_activity_top_app_bar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRootFolder = getRootFolder();
         mCurrentDir = mRootFolder;
