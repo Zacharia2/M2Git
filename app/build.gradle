@@ -9,8 +9,8 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdk 31
         minSdk 31
-        versionCode 255
-        versionName "1.7.7"
+        versionCode 261
+        versionName "1.8.0"
 
         // compileSdk 应始终使用最新版本，但不会影响运行时行为。
         // targetSdk 决定了应用是否启用新系统的行为变化，更新时需充分测试。
@@ -37,10 +37,6 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
         debug {
             applicationIdSuffix ".debug"
         }
