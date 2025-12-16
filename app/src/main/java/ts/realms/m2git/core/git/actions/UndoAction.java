@@ -8,8 +8,8 @@ import java.util.Iterator;
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
 import ts.realms.m2git.core.git.RepoAction;
-import ts.realms.m2git.core.git.SheimiAsyncTask.AsyncTaskPostCallback;
-import ts.realms.m2git.core.git.tasks.UndoCommitTask;
+import ts.realms.m2git.core.git.tasks.MAsyncTask.AsyncTaskPostCallback;
+import ts.realms.m2git.core.git.tasks.local.UndoCommitTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
 

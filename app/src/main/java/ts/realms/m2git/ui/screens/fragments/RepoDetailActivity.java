@@ -25,7 +25,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.RepoOperationDelegate;
-import ts.realms.m2git.core.git.SheimiAsyncTask;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.lists.RepoOperationsAdapter;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
@@ -291,7 +291,7 @@ public class RepoDetailActivity extends BaseCompatActivity {
         mRepo.getRemotes();
     }
 
-    public class ProgressCallback implements SheimiAsyncTask.AsyncTaskCallback {
+    public class ProgressCallback implements MAsyncTask.AsyncTaskCallback {
 
         private final int mInitMsg;
 

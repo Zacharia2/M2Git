@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.git.tasks;
+package ts.realms.m2git.core.git.tasks.local;
 
 import org.eclipse.jgit.api.RebaseCommand;
 import org.eclipse.jgit.api.ResetCommand;
@@ -7,6 +7,7 @@ import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 
 public class ResetCommitTask extends RepoOpTask {

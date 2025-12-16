@@ -1,25 +1,25 @@
-package ts.realms.m2git.core.git.tasks;
+package ts.realms.m2git.core.git.tasks.local;
+
+import org.eclipse.jgit.api.ResetCommand;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 
-public class CheckoutFileTask extends RepoOpTask {
+public class UndoCommitTask extends RepoOpTask {
 
     private final AsyncTaskPostCallback mCallback;
-    private final String mPath;
 
-    public CheckoutFileTask(Repo repo, String path,
-                            AsyncTaskPostCallback callback) {
+    public UndoCommitTask(Repo repo, AsyncTaskPostCallback callback) {
         super(repo);
         mCallback = callback;
-        mPath = path;
-        setSuccessMsg(R.string.success_checkout_file);
+        setSuccessMsg(R.string.success_undo);
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        return checkout();
+        return undo();
     }
 
     protected void onPostExecute(Boolean isSuccess) {
@@ -29,9 +29,11 @@ public class CheckoutFileTask extends RepoOpTask {
         }
     }
 
-    private boolean checkout() {
+    public boolean undo() {
         try {
-            mRepo.getGit().checkout().addPath(mPath).call();
+            mRepo.getGit().getRepository().writeMergeCommitMsg(null);
+            mRepo.getGit().getRepository().writeMergeHeads(null);
+            mRepo.getGit().reset().setRef("HEAD~").setMode(ResetCommand.ResetType.SOFT).call();
         } catch (StopTaskException e) {
             return false;
         } catch (Throwable e) {
@@ -40,5 +42,4 @@ public class CheckoutFileTask extends RepoOpTask {
         }
         return true;
     }
-
 }

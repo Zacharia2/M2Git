@@ -1,9 +1,10 @@
-package ts.realms.m2git.core.git.tasks;
+package ts.realms.m2git.core.git.tasks.local;
 
 import org.eclipse.jgit.lib.ObjectId;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 
 public class CherryPickTask extends RepoOpTask {

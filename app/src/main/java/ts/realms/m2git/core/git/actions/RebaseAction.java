@@ -14,11 +14,11 @@ import android.widget.TextView;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.RepoAction;
-import ts.realms.m2git.core.git.tasks.RebaseTask;
+import ts.realms.m2git.core.git.tasks.local.RebaseTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.Profile;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
 import ts.realms.m2git.ui.components.dialogs.BaseDialogFragment;
+import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
 
 public class RebaseAction extends RepoAction {
 

@@ -6,12 +6,11 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import timber.log.Timber;
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.git.SheimiAsyncTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnPasswordEntered;
 import ts.realms.m2git.utils.BasicFunctions;
 
-public abstract class RepoOpTask extends SheimiAsyncTask<Void, String, Boolean> {
+public abstract class RepoOpTask extends MAsyncTask<Void, String, Boolean> {
 
     protected Repo mRepo;
     protected boolean mIsTaskAdded;
@@ -89,7 +88,7 @@ public abstract class RepoOpTask extends SheimiAsyncTask<Void, String, Boolean> 
         BasicFunctions.getActiveActivity().promptForPassword(onPassEntered, errorInfo);
     }
 
-    class BasicProgressMonitor implements ProgressMonitor {
+    public class BasicProgressMonitor implements ProgressMonitor {
 
         private int mTotalWork;
         private int mWorkDone;

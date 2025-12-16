@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.git;
+package ts.realms.m2git.core.git.tasks;
 
 import android.os.AsyncTask;
 
@@ -8,7 +8,7 @@ import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.ui.components.dialogs.ErrorDialog;
 
-public abstract class SheimiAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
+public abstract class MAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
 
     protected Throwable mException;
     protected int mErrorRes = 0;

@@ -23,7 +23,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
-import ts.realms.m2git.core.git.tasks.CheckoutTask;
+import ts.realms.m2git.core.git.tasks.local.CheckoutTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.RenameBranchDialog;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;

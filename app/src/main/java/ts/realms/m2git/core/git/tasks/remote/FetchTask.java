@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.git.tasks;
+package ts.realms.m2git.core.git.tasks.remote;
 
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
@@ -7,6 +7,7 @@ import org.eclipse.jgit.transport.FetchResult;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.ssh.SgitTransportCallback;
 

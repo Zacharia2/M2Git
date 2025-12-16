@@ -25,7 +25,7 @@ import java.util.List;
 import timber.log.Timber;
 import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.git.tasks.CloneTask;
+import ts.realms.m2git.core.git.tasks.remote.CloneTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.ssh.PrivateKeyUtils;
 import ts.realms.m2git.core.transport.MGitHttpConnectionFactory;

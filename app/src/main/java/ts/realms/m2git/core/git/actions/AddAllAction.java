@@ -1,7 +1,7 @@
 package ts.realms.m2git.core.git.actions;
 
 import ts.realms.m2git.core.git.RepoAction;
-import ts.realms.m2git.core.git.tasks.AddToStageTask;
+import ts.realms.m2git.core.git.tasks.local.AddToStageTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
 

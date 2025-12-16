@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.git.tasks;
+package ts.realms.m2git.core.git.tasks.local;
 
 import android.content.Context;
 
@@ -8,6 +8,7 @@ import org.eclipse.jgit.lib.StoredConfig;
 import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.Profile;
 

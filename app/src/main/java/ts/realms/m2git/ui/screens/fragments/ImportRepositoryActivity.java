@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.FileFilter;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.git.tasks.InitLocalTask;
+import ts.realms.m2git.core.git.tasks.local.InitLocalTask;
 import ts.realms.m2git.core.models.Repo;
 
 public class ImportRepositoryActivity extends FileExplorerActivity {

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.RepoAction;
-import ts.realms.m2git.core.git.tasks.FetchTask;
+import ts.realms.m2git.core.git.tasks.remote.FetchTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;

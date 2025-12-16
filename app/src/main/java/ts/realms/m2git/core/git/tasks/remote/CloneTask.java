@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.git.tasks;
+package ts.realms.m2git.core.git.tasks.remote;
 
 import androidx.annotation.StringRes;
 
@@ -16,9 +16,10 @@ import java.util.Locale;
 
 import timber.log.Timber;
 import ts.realms.m2git.R;
-import ts.realms.m2git.local.database.RepoContract;
+import ts.realms.m2git.core.git.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.ssh.SgitTransportCallback;
+import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.local.preference.Profile;
 
 public class CloneTask extends RepoRemoteOpTask {

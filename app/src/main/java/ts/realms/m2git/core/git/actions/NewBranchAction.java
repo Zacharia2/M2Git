@@ -2,8 +2,8 @@ package ts.realms.m2git.core.git.actions;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.RepoAction;
-import ts.realms.m2git.core.git.SheimiAsyncTask;
-import ts.realms.m2git.core.git.tasks.CheckoutTask;
+import ts.realms.m2git.core.git.tasks.MAsyncTask;
+import ts.realms.m2git.core.git.tasks.local.CheckoutTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
 
@@ -26,7 +26,7 @@ public class NewBranchAction extends RepoAction {
         mActivity.closeOperationDrawer();
     }
 
-    private class ActivityResetPostCallback implements SheimiAsyncTask.AsyncTaskPostCallback {
+    private class ActivityResetPostCallback implements MAsyncTask.AsyncTaskPostCallback {
         private final String mBranchName;
 
         public ActivityResetPostCallback(String branchName) {

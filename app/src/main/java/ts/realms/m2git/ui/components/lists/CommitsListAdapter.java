@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.Set;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.git.tasks.GetCommitTask;
+import ts.realms.m2git.core.git.tasks.local.GetCommitTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.utils.BasicFunctions;

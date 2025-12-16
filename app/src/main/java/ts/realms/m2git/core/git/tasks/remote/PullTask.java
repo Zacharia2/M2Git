@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.git.tasks;
+package ts.realms.m2git.core.git.tasks.remote;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
@@ -9,6 +9,7 @@ import org.eclipse.jgit.api.errors.TransportException;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.common.errors.StopTaskException;
+import ts.realms.m2git.core.git.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.ssh.SgitTransportCallback;
 

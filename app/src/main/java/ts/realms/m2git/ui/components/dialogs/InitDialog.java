@@ -11,7 +11,7 @@ import android.widget.EditText;
 import java.io.File;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.git.tasks.InitLocalTask;
+import ts.realms.m2git.core.git.tasks.local.InitLocalTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.PreferenceHelper;
 import ts.realms.m2git.ui.screens.main.RepoListActivity;
