@@ -37,7 +37,7 @@
             android:id="@+id/rightHint"
             style="@style/items_with_same_width"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="end"
             android:text="@string/default_text"
             android:textColor="@color/general_gray_text_color"
             android:textSize="@dimen/file_list_header_hint_size" />
