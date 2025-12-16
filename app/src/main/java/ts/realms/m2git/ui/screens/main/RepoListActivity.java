@@ -35,10 +35,9 @@ import ts.realms.m2git.local.preference.PreferenceHelper;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
 import ts.realms.m2git.ui.components.dialogs.ImportLocalRepoDialog;
 import ts.realms.m2git.ui.components.lists.RepoListAdapter;
-import ts.realms.m2git.ui.screens.fragments.CloneViewModel;
 import ts.realms.m2git.ui.screens.fragments.ExploreFileActivity;
 import ts.realms.m2git.ui.screens.fragments.ImportRepositoryActivity;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 import ts.realms.m2git.ui.screens.settings.UserSettingsActivity;
 
 public class RepoListActivity extends BaseCompatActivity {
@@ -66,9 +65,6 @@ public class RepoListActivity extends BaseCompatActivity {
                 hideCloneView();
             }
         });
-
-        // 必须在setContentView调用
-        setSupportActionBar(findViewById(R.id.main_activity_top_app_bar));
 
         PrivateKeyUtils.migratePrivateKeys();
         initUpdatedSSL();

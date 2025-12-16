@@ -1,4 +1,4 @@
-package ts.realms.m2git.ui.screens.fragments;
+package ts.realms.m2git.ui.screens.main;
 
 import android.app.Application;
 
@@ -10,8 +10,8 @@ import java.io.File;
 import timber.log.Timber;
 import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.git.tasks.remote.CloneTask;
 import ts.realms.m2git.core.git.tasks.local.InitLocalTask;
+import ts.realms.m2git.core.git.tasks.remote.CloneTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.PreferenceHelper;
 

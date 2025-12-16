@@ -13,7 +13,9 @@ import android.widget.TextView;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.tasks.local.StatusTask;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.ui.screens.CommitDiff.CommitDiffActivity;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnBackClickListener;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailFragment;
 
 /**
  * Created by sheimi on 8/5/13.

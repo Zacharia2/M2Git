@@ -3,14 +3,14 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <translate
+        android:duration="300"
         android:fromXDelta="100%p"
-        android:toXDelta="0%p"
-        android:duration="300"
-        android:startOffset="250" />
+        android:startOffset="250"
+        android:toXDelta="0%p" />
     <alpha
-        android:fromAlpha="0.5"
-        android:toAlpha="1"
         android:duration="300"
-        android:startOffset="250" />
+        android:fromAlpha="0.5"
+        android:startOffset="250"
+        android:toAlpha="1" />
 
 </set>

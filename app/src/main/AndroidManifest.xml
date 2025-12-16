@@ -79,7 +79,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.fragments.RepoDetailActivity"
+            android:name="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity"
             android:label="@string/title_activity_repo_detail"
             android:parentActivityName="ts.realms.m2git.ui.screens.main.RepoListActivity">
             <meta-data
@@ -89,25 +89,25 @@
         <activity
             android:name="ts.realms.m2git.ui.screens.fragments.ViewFileActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:parentActivityName="ts.realms.m2git.ui.screens.fragments.RepoDetailActivity">
+            android:parentActivityName="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ts.realms.m2git.ui.screens.fragments.RepoDetailActivity" />
+                android:value="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity" />
         </activity>
         <activity
             android:name="ts.realms.m2git.ui.screens.fragments.BranchChooserActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:parentActivityName="ts.realms.m2git.ui.screens.fragments.RepoDetailActivity">
+            android:parentActivityName="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ts.realms.m2git.ui.screens.fragments.RepoDetailActivity" />
+                android:value="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity" />
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.fragments.CommitDiffActivity"
-            android:parentActivityName="ts.realms.m2git.ui.screens.fragments.RepoDetailActivity">
+            android:name="ts.realms.m2git.ui.screens.CommitDiff.CommitDiffActivity"
+            android:parentActivityName="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ts.realms.m2git.ui.screens.fragments.RepoDetailActivity" />
+                android:value="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity" />
         </activity>
         <activity
             android:name="ts.realms.m2git.ui.screens.fragments.ImportRepositoryActivity"

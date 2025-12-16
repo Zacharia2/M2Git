@@ -1,4 +1,4 @@
-package ts.realms.m2git.ui.screens.fragments;
+package ts.realms.m2git.ui.screens.CommitDiff;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -64,7 +64,6 @@ public class CommitDiffActivity extends BaseCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_diff);
-        setSupportActionBar(findViewById(R.id.view_diff_activity_top_app_bar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDiffContent = findViewById(R.id.fileContent);
         mLoading = findViewById(R.id.loading);

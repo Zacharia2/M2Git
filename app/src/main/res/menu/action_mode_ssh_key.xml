@@ -4,24 +4,24 @@
     <item
         android:id="@+id/action_mode_rename_key"
         android:icon="@drawable/ic_tag_w"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_mode_rename_key" />
+        android:title="@string/action_mode_rename_key"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_mode_show_private_key"
-        app:showAsAction="never"
-        android:title="@string/action_mode_show_private_key" />
+        android:title="@string/action_mode_show_private_key"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_mode_show_public_key"
-        app:showAsAction="never"
-        android:title="@string/action_mode_show_public_key" />
+        android:title="@string/action_mode_show_public_key"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_mode_edit_key_password"
-        app:showAsAction="never"
-        android:title="@string/action_mode_edit_key_password" />
+        android:title="@string/action_mode_edit_key_password"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_mode_delete"
         android:icon="@drawable/ic_trash"
-        app:showAsAction="ifRoom"
-        android:title="@string/label_delete" />
+        android:title="@string/label_delete"
+        app:showAsAction="ifRoom" />
 
 </menu>

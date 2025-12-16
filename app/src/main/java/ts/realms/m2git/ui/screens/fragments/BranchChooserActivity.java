@@ -121,7 +121,7 @@ public class BranchChooserActivity extends BaseCompatActivity implements ActionM
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        View v = getLayoutInflater().inflate(R.layout.fragment_branches, null);
+        View v = getLayoutInflater().inflate(R.layout.activity_branch_chooser, null);
         mRepo = (Repo) getIntent().getSerializableExtra(Repo.TAG);
         mBranchTagList = v.findViewById(R.id.branches);
         mLoading = v.findViewById(R.id.loading);

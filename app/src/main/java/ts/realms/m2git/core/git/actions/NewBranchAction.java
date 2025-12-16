@@ -5,7 +5,7 @@ import ts.realms.m2git.core.git.RepoAction;
 import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.git.tasks.local.CheckoutTask;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 /**
  * Created by liscju - piotr.listkiewicz@gmail.com on 2015-03-15.

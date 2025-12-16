@@ -1,4 +1,4 @@
-package ts.realms.m2git.ui.screens.fragments;
+package ts.realms.m2git.ui.screens.CommitDiff;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -27,7 +26,8 @@ import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.CheckoutDialog;
 import ts.realms.m2git.ui.components.lists.CommitsListAdapter;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnBackClickListener;
-import ts.realms.m2git.ui.viewmodels.BaseFragment;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
+import ts.realms.m2git.ui.viewModels.BaseFragment;
 
 /**
  * Created by sheimi on 8/5/13.
@@ -83,29 +83,21 @@ public class CommitsFragment extends BaseFragment implements ActionMode.Callback
         mCommitsList.setAdapter(mCommitsListAdapter);
 
         mCommitsList
-            .setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView,
-                                        View view, int position, long id) {
-                    if (mActionMode == null) {
-                        RevCommit newCommit = mCommitsListAdapter.getItem(position);
-                        showDiff(null, null, newCommit.getName(), true);
-                        return;
-                    }
-                    chooseItem(position);
+            .setOnItemClickListener((adapterView, view, position, id) -> {
+                if (mActionMode == null) {
+                    RevCommit newCommit = mCommitsListAdapter.getItem(position);
+                    showDiff(null, null, newCommit.getName(), true);
+                    return;
                 }
+                chooseItem(position);
             });
         mCommitsList
-            .setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> adapterView,
-                                               View view, int position, long l) {
-                    if (mActionMode == null) {
-                        enterDiffActionMode();
-                    }
-                    chooseItem(position);
-                    return true;
+            .setOnItemLongClickListener((adapterView, view, position, l) -> {
+                if (mActionMode == null) {
+                    enterDiffActionMode();
                 }
+                chooseItem(position);
+                return true;
             });
         reset();
         return v;

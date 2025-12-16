@@ -31,7 +31,7 @@ import ts.realms.m2git.core.git.tasks.local.CommitChangesTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.Profile;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 public class CommitAction extends RepoAction {
 

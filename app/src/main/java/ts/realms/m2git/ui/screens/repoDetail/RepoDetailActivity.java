@@ -1,4 +1,4 @@
-package ts.realms.m2git.ui.screens.fragments;
+package ts.realms.m2git.ui.screens.repoDetail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,8 +28,12 @@ import ts.realms.m2git.core.git.RepoOperationDelegate;
 import ts.realms.m2git.core.git.tasks.MAsyncTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.lists.RepoOperationsAdapter;
+import ts.realms.m2git.ui.screens.CommitDiff.CommitsFragment;
+import ts.realms.m2git.ui.screens.fragments.BranchChooserActivity;
+import ts.realms.m2git.ui.screens.fragments.FilesFragment;
+import ts.realms.m2git.ui.screens.fragments.StatusFragment;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
-import ts.realms.m2git.ui.viewmodels.BaseFragment;
+import ts.realms.m2git.ui.viewModels.BaseFragment;
 
 public class RepoDetailActivity extends BaseCompatActivity {
 
@@ -143,7 +147,6 @@ public class RepoDetailActivity extends BaseCompatActivity {
     }
 
     private void setupActionBar() {
-        setSupportActionBar(findViewById(R.id.repo_detail_activity_top_app_bar));
         mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);

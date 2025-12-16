@@ -40,7 +40,7 @@ import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.local.preference.Profile;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
-import ts.realms.m2git.ui.viewmodels.PermissionsHelper;
+import ts.realms.m2git.ui.viewModels.PermissionsHelper;
 import ts.realms.m2git.utils.AvatarDownloader;
 import ts.realms.m2git.utils.BasicFunctions;
 
@@ -164,12 +164,7 @@ public class BaseCompatActivity extends AppCompatActivity {
 
     /* View Utils Start */
     public void showToastMessage(final String msg) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(BaseCompatActivity.this, msg, Toast.LENGTH_LONG).show();
-            }
-        });
+        runOnUiThread(() -> Toast.makeText(BaseCompatActivity.this, msg, Toast.LENGTH_LONG).show());
     }
 
     public void showToastMessage(int resId) {

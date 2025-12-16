@@ -4,13 +4,13 @@
     <item
         android:id="@+id/action_create_external"
         android:icon="@drawable/ic_content_new"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_create_external_repo" />
+        android:title="@string/action_create_external_repo"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_import_external"
         android:icon="@drawable/ic_action_save"
-        app:showAsAction="always"
-        android:title="@string/label_import" />
+        android:title="@string/label_import"
+        app:showAsAction="always" />
 
 </menu>

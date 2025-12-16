@@ -4,8 +4,8 @@ import android.content.Intent;
 
 import ts.realms.m2git.core.git.RepoAction;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
 import ts.realms.m2git.ui.screens.fragments.ViewFileActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 /**
  * Created by phcoder on 05.12.15.

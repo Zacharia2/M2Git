@@ -1,36 +1,22 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/repo_detail_activity_top_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSurface"
-        app:title="@string/app_name" />
+    <include layout="@layout/activity_repo_detail_content" />
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/right_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="?mgit_drawer_background">
 
-        <include layout="@layout/activity_repo_detail_content" />
-
-        <RelativeLayout
-            android:id="@+id/right_drawer"
-            android:layout_width="240dp"
+        <ListView
+            android:id="@+id/repoOperationList"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:background="?mgit_drawer_background">
+            android:dividerHeight="0dp" />
+    </RelativeLayout>
 
-            <ListView
-                android:id="@+id/repoOperationList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:dividerHeight="0dp" />
-        </RelativeLayout>
-
-    </androidx.drawerlayout.widget.DrawerLayout>
-</LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

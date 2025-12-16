@@ -3,6 +3,7 @@ package ts.realms.m2git
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import androidx.core.content.edit
 import org.acra.config.dialog
 import org.acra.config.mailSender
 import org.acra.data.StringFormat
@@ -14,10 +15,9 @@ import timber.log.Timber
 import ts.realms.m2git.common.errors.SecurePrefsException
 import ts.realms.m2git.core.transport.AndroidJschCredentialsProvider
 import ts.realms.m2git.core.transport.MGitHttpConnectionFactory
+import ts.realms.m2git.local.preference.PreferenceHelper
 import ts.realms.m2git.local.preference.SecurePrefsHelper
 import java.security.Security
-import androidx.core.content.edit
-import ts.realms.m2git.local.preference.PreferenceHelper
 
 /**
  * Custom Application Singleton

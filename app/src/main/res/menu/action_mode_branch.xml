@@ -4,12 +4,12 @@
     <item
         android:id="@+id/action_mode_rename_branch"
         android:icon="@drawable/ic_tag_w"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_mode_rename_branch" />
+        android:title="@string/action_mode_rename_branch"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_mode_delete"
         android:icon="@drawable/ic_trash"
-        app:showAsAction="ifRoom"
-        android:title="@string/label_delete" />
+        android:title="@string/label_delete"
+        app:showAsAction="ifRoom" />
 
 </menu>

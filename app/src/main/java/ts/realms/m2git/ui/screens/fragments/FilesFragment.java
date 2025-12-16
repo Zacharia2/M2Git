@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 
 import timber.log.Timber;
@@ -19,6 +18,7 @@ import ts.realms.m2git.ui.components.dialogs.RepoFileOperationDialog;
 import ts.realms.m2git.ui.components.lists.FilesListAdapter;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnBackClickListener;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailFragment;
 import ts.realms.m2git.utils.FsUtils;
 
 /**
@@ -63,12 +63,9 @@ public class FilesFragment extends RepoDetailFragment {
         mFilesList = v.findViewById(R.id.filesList);
 
         mFilesListAdapter = new FilesListAdapter(getActivity(),
-            new FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    String name = file.getName();
-                    return !name.equals(".git");
-                }
+            file -> {
+                String name = file.getName();
+                return !name.equals(".git");
             });
         mFilesList.setAdapter(mFilesListAdapter);
 
@@ -184,17 +181,14 @@ public class FilesFragment extends RepoDetailFragment {
 
     @Override
     public OnBackClickListener getOnBackClickListener() {
-        return new OnBackClickListener() {
-            @Override
-            public boolean onClick() {
-                if (mRootDir == null || mCurrentDir == null)
-                    return false;
-                if (mRootDir.equals(mCurrentDir))
-                    return false;
-                File parent = mCurrentDir.getParentFile();
-                setCurrentDir(parent);
-                return true;
-            }
+        return () -> {
+            if (mRootDir == null || mCurrentDir == null)
+                return false;
+            if (mRootDir.equals(mCurrentDir))
+                return false;
+            File parent = mCurrentDir.getParentFile();
+            setCurrentDir(parent);
+            return true;
         };
     }
 }

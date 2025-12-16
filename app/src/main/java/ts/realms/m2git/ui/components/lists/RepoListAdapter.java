@@ -28,12 +28,12 @@ import java.util.List;
 
 import timber.log.Timber;
 import ts.realms.m2git.R;
-import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.local.database.RepoDbManager;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
 import ts.realms.m2git.ui.screens.main.RepoListActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 import ts.realms.m2git.utils.BasicFunctions;
 
 /**

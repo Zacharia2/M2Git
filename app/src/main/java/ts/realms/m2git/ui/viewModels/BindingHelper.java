@@ -1,4 +1,4 @@
-package ts.realms.m2git.ui.viewmodels;
+package ts.realms.m2git.ui.viewModels;
 
 import androidx.databinding.BindingAdapter;
 

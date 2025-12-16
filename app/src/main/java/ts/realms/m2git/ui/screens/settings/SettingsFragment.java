@@ -6,9 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +17,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 
@@ -136,25 +132,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         super.onPause();
         // 注销监听，防止内存泄漏
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    /*为preference预留actionbar高度空间*/
-    @NonNull
-    @Override
-    public RecyclerView onCreateRecyclerView(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent, @Nullable Bundle savedInstanceState) {
-        RecyclerView recyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState);
-        TypedValue tv = new TypedValue();
-        Context context = requireContext();
-        int actionBarSize;
-        if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            actionBarSize = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-        } else {
-            // 如果无法解析主题属性，回退到一个常见的默认高度（如56dp）
-            actionBarSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 56f, getResources().getDisplayMetrics());
-        }
-        recyclerView.setPadding(0, actionBarSize, 0, 0);
-        recyclerView.setClipToPadding(false);
-        return recyclerView;
     }
 
     @Override

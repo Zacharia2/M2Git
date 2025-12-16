@@ -163,7 +163,7 @@ public class RepoDbManager {
         ContentValues values = new ContentValues();
         if (relRepoString == null || relRepoString.isEmpty()) {
             new_rel = repo;
-        } else{
+        } else {
             HashSet<String> rel_list = new HashSet<>(Arrays.asList(relRepoString.split(",")));
             rel_list.add(repo);
             new_rel = String.join(",", rel_list);
@@ -214,13 +214,15 @@ public class RepoDbManager {
             if (cursor != null && cursor.moveToFirst()) {
                 // 循环遍历所有行
                 int rel_repoIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
+                int secretIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET);
+                int accountIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT);
                 do {
                     String rel_repo = cursor.getString(rel_repoIndex);
                     String[] rel_repo_list = rel_repo.split(",");
                     if (Arrays.asList(rel_repo_list).contains(repo_id)) {
                         queryResult = Map.of(
-                            RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, cursor.getString(cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET)),
-                            RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, cursor.getString(cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT))
+                            RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, cursor.getString(secretIndex),
+                            RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, cursor.getString(accountIndex)
                         );
                         break;
                     }

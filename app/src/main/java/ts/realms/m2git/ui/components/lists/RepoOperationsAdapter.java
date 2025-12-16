@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.ui.components.lists.RepoOperationsAdapter.DrawerItem;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 public class RepoOperationsAdapter extends ArrayAdapter<DrawerItem>
     implements OnItemClickListener {

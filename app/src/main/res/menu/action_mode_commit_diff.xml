@@ -4,16 +4,16 @@
     <item
         android:id="@+id/action_mode_diff"
         android:icon="@drawable/ic_file"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_mode_diff" />
+        android:title="@string/action_mode_diff"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_mode_copy_commit"
         android:icon="@drawable/ic_action_copy"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_copy_commit_str" />
+        android:title="@string/action_copy_commit_str"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_mode_checkout"
         android:icon="@drawable/ic_download"
-        app:showAsAction="ifRoom"
-        android:title="@string/label_checkout" />
+        android:title="@string/label_checkout"
+        app:showAsAction="ifRoom" />
 </menu>

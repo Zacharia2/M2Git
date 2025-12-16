@@ -17,7 +17,7 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@drawable/btn_cab_done_pressed_sgit" />
-    <item android:state_focused="true" android:state_enabled="true" android:drawable="@drawable/btn_cab_done_focused_sgit" />
-    <item android:state_enabled="true" android:drawable="@drawable/btn_cab_done_default_sgit" />
+    <item android:drawable="@drawable/btn_cab_done_pressed_sgit" android:state_pressed="true" />
+    <item android:drawable="@drawable/btn_cab_done_focused_sgit" android:state_enabled="true" android:state_focused="true" />
+    <item android:drawable="@drawable/btn_cab_done_default_sgit" android:state_enabled="true" />
 </selector>

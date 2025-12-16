@@ -18,8 +18,9 @@ import java.io.File;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.ChooseLanguageDialog;
+import ts.realms.m2git.ui.screens.CommitDiff.CommitsFragment;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
-import ts.realms.m2git.ui.viewmodels.BaseFragment;
+import ts.realms.m2git.ui.viewModels.BaseFragment;
 import ts.realms.m2git.utils.FsUtils;
 
 public class ViewFileActivity extends BaseCompatActivity {
@@ -64,7 +65,6 @@ public class ViewFileActivity extends BaseCompatActivity {
         mFileFragment.setArguments(b);
         mActivityMode = extras.getShort(TAG_MODE, TAG_MODE_NORMAL);
         b.putShort(TAG_MODE, mActivityMode);
-        setSupportActionBar(findViewById(R.id.view_file_activity_top_app_bar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(new File(fileName).getName());
     }

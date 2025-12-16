@@ -10,7 +10,7 @@ import ts.realms.m2git.core.git.RepoAction;
 import ts.realms.m2git.core.git.tasks.remote.FetchTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 public class FetchAction extends RepoAction {
     public FetchAction(Repo repo, RepoDetailActivity activity) {

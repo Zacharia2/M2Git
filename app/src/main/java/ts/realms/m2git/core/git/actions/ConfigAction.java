@@ -11,8 +11,8 @@ import ts.realms.m2git.common.errors.StopTaskException;
 import ts.realms.m2git.core.git.RepoAction;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.databinding.DialogRepoConfigBinding;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
-import ts.realms.m2git.ui.viewmodels.GitConfig;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
+import ts.realms.m2git.ui.viewModels.GitConfig;
 
 /**
  * Action to display configuration for a Repo

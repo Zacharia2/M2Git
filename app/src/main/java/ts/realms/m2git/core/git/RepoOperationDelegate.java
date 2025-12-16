@@ -31,7 +31,7 @@ import ts.realms.m2git.core.git.tasks.local.DeleteFileFromRepoTask;
 import ts.realms.m2git.core.git.tasks.local.MergeTask;
 import ts.realms.m2git.core.git.tasks.local.UpdateIndexTask;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 import ts.realms.m2git.utils.FsUtils;
 
 public class RepoOperationDelegate {

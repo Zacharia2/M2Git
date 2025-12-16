@@ -1,7 +1,7 @@
 package ts.realms.m2git.core.git;
 
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 public abstract class RepoAction {
 

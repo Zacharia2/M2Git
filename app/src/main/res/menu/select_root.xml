@@ -4,8 +4,8 @@
     <item
         android:id="@+id/action_select_root"
         android:icon="@drawable/ic_action_save"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_select_root_dir" />
+        android:title="@string/action_select_root_dir"
+        app:showAsAction="ifRoom" />
 
     <!-- TODO: allow creating new folders -->
     <!-- item

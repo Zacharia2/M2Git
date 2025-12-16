@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/action_edit"
-        android:title="编辑"
         android:orderInCategory="100"
+        android:title="编辑"
         app:showAsAction="always" />
 
 </menu>

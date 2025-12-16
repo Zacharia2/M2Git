@@ -19,8 +19,8 @@ import java.io.FileOutputStream;
 
 import timber.log.Timber;
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
 import ts.realms.m2git.ui.components.dialogs.BaseDialogFragment;
+import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
 
 
 public class PrivateKeyGenerate extends BaseDialogFragment {

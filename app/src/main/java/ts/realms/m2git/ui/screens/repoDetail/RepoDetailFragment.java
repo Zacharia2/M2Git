@@ -1,6 +1,6 @@
-package ts.realms.m2git.ui.screens.fragments;
+package ts.realms.m2git.ui.screens.repoDetail;
 
-import ts.realms.m2git.ui.viewmodels.BaseFragment;
+import ts.realms.m2git.ui.viewModels.BaseFragment;
 
 public abstract class RepoDetailFragment extends BaseFragment {
 

@@ -26,18 +26,18 @@
         <item name="android:layout_weight">1.0</item>
     </style>
 
-    <style name="Theme.Sgit" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Theme.Sgit" parent="Theme.Material3.Light">
         <!--状态栏颜色-->
-        <item name="android:windowLightStatusBar">false</item>
+        <!--        <item name="android:windowLightStatusBar">false</item>-->
         <!--actionBar-->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorSurface">#546E7A</item>
-        <item name="colorPrimary">#546E7A</item>
-        <item name="colorPrimaryDark">#546E7A</item>
+        <!--        <item name="windowActionBar">false</item>-->
+        <!--        <item name="windowNoTitle">true</item>-->
+        <!--        <item name="colorSurface">#546E7A</item>-->
+        <!--        <item name="colorPrimary">#546E7A</item>-->
+        <!--        <item name="colorPrimaryDark">#546E7A</item>-->
         <!-- 设置 ActionBar 标题和按钮颜色为白色 -->
-        <item name="colorControlNormal">@android:color/white</item>
-        <item name="titleTextColor">@android:color/white</item>
+        <!--        <item name="colorControlNormal">@android:color/white</item>-->
+        <!--        <item name="titleTextColor">@android:color/white</item>-->
         <!-- 以前的设置 -->
         <item name="android:actionBarItemBackground">@drawable/selectable_background_sgit</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Sgit</item>
@@ -48,7 +48,7 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_sgit</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_sgit</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Sgit</item>
-<!--        <item name="android:actionMenuTextColor">@android:color/black</item>-->
+        <!--        <item name="android:actionMenuTextColor">@android:color/black</item>-->
         <item name="android:textColor">@android:color/black</item>
         <item name="android:actionBarWidgetTheme">@style/Theme.Sgit.Widget</item>
         <item name="bt_branch_name_bg" type="color">@android:color/white</item>
@@ -68,12 +68,12 @@
 
     <style name="Theme.SgitDark" parent="Theme.AppCompat">
         <!--actionbar-->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorSurface">@android:color/background_dark</item>
-        <item name="colorPrimary">#474747</item>
-        <item name="colorPrimaryDark">@android:color/background_dark</item>
-        <item name="colorOnPrimary">@android:color/white</item>
+        <!--        <item name="windowActionBar">false</item>-->
+        <!--        <item name="windowNoTitle">true</item>-->
+        <!--        <item name="colorSurface">@android:color/background_dark</item>-->
+        <!--        <item name="colorPrimary">#474747</item>-->
+        <!--        <item name="colorPrimaryDark">@android:color/background_dark</item>-->
+        <!--        <item name="colorOnPrimary">@android:color/white</item>-->
         <!-- 以前的设置 -->
         <item name="android:actionMenuTextColor">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>

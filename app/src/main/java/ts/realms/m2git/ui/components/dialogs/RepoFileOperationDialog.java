@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.git.tasks.local.UpdateIndexTask;
-import ts.realms.m2git.ui.screens.fragments.RepoDetailActivity;
+import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 /**
  * Created by sheimi on 8/16/13.
