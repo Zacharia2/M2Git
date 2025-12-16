@@ -1,5 +1,4 @@
 <resources>
-
     <attr name="pager_title_strip_background" format="reference" />
     <attr name="bt_branch_name_bg" format="reference" />
     <attr name="bt_branch_name_text_color" format="reference" />
@@ -26,19 +25,7 @@
         <item name="android:layout_weight">1.0</item>
     </style>
 
-    <style name="Theme.Sgit" parent="Theme.Material3.Light">
-        <!--状态栏颜色-->
-        <!--        <item name="android:windowLightStatusBar">false</item>-->
-        <!--actionBar-->
-        <!--        <item name="windowActionBar">false</item>-->
-        <!--        <item name="windowNoTitle">true</item>-->
-        <!--        <item name="colorSurface">#546E7A</item>-->
-        <!--        <item name="colorPrimary">#546E7A</item>-->
-        <!--        <item name="colorPrimaryDark">#546E7A</item>-->
-        <!-- 设置 ActionBar 标题和按钮颜色为白色 -->
-        <!--        <item name="colorControlNormal">@android:color/white</item>-->
-        <!--        <item name="titleTextColor">@android:color/white</item>-->
-        <!-- 以前的设置 -->
+    <style name="Theme.Sgit" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_sgit</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Sgit</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Sgit</item>
@@ -48,7 +35,7 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_sgit</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_sgit</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Sgit</item>
-        <!--        <item name="android:actionMenuTextColor">@android:color/black</item>-->
+        <item name="android:actionMenuTextColor">@android:color/black</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:actionBarWidgetTheme">@style/Theme.Sgit.Widget</item>
         <item name="bt_branch_name_bg" type="color">@android:color/white</item>
@@ -67,22 +54,13 @@
     </style>
 
     <style name="Theme.SgitDark" parent="Theme.AppCompat">
-        <!--actionbar-->
-        <!--        <item name="windowActionBar">false</item>-->
-        <!--        <item name="windowNoTitle">true</item>-->
-        <!--        <item name="colorSurface">@android:color/background_dark</item>-->
-        <!--        <item name="colorPrimary">#474747</item>-->
-        <!--        <item name="colorPrimaryDark">@android:color/background_dark</item>-->
-        <!--        <item name="colorOnPrimary">@android:color/white</item>-->
-        <!-- 以前的设置 -->
         <item name="android:actionMenuTextColor">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="bt_branch_name_bg" type="color">@android:color/black</item>
         <item name="bt_branch_name_text_color" type="color">@android:color/white</item>
-        <item name="pager_title_strip_background" type="color">@color/branch_name_bg_dark</item>
+        <item name="pager_title_strip_background" type="color">@android:color/black</item>
         <item name="mgit_drawer_text_color" type="color">@android:color/white</item>
         <item name="mgit_drawer_background" type="color">@android:color/background_dark</item>
-        <!-- ic -->
         <item name="ic_file_fl" type="drawable">@drawable/ic_file</item>
         <item name="ic_folder_fl" type="drawable">@drawable/ic_folder_w</item>
         <item name="ic_branch_l" type="drawable">@drawable/ic_branch_w</item>
