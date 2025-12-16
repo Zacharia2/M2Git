@@ -46,6 +46,9 @@ public class CredentialActivity extends BaseCompatActivity {
 //        fragment_credential_item、list_item_rel_repo_checkbox
 //        list_item_rel_repo_checkbox动态适配到fragment_credential_item的目标列表中。
 
+
+//        检索到的凭证、选择的凭证(dialog_select_account)、新建凭证并关联。现在还需要选择的凭证。
+
 //        请求的时候用的dialog，用于单选目标token。
 
 //        long cid = RepoDbManager.createCredential("ts1","s1");
