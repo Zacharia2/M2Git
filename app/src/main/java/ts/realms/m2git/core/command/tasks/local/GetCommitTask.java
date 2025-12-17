@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ts.realms.m2git.ui.common.errors.StopTaskException;
-import ts.realms.m2git.core.command.tasks.MAsyncTask;
+import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 

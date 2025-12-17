@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.command.tasks.MAsyncTask;
+import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.network.ssh.SgitTransportCallback;

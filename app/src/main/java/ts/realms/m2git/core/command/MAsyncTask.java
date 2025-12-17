@@ -1,4 +1,4 @@
-package ts.realms.m2git.core.command.tasks;
+package ts.realms.m2git.core.command;
 
 import android.os.Handler;
 import android.os.Looper;
