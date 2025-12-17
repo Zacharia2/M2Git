@@ -79,7 +79,7 @@ public class WebDavService extends Service {
         );
 
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("M2Git WebDAV 服务器 - " + status)
+            .setContentTitle("m2git WebDAV 服务器 - " + status)
             .setContentText(detail != null ? detail : status)
             .setSmallIcon(R.drawable.ic_logo) // 替换为你的图标
             .setOngoing(true)
