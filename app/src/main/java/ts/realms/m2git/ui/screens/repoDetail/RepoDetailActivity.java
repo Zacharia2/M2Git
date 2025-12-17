@@ -24,14 +24,14 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.command.RepoOperationDelegate;
 import ts.realms.m2git.core.command.MAsyncTask;
+import ts.realms.m2git.core.command.RepoOperationDelegate;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.components.adapters.RepoOperationsAdapter;
-import ts.realms.m2git.ui.screens.commitDiff.CommitsFragment;
 import ts.realms.m2git.ui.components.fragments.BranchChooserActivity;
 import ts.realms.m2git.ui.components.fragments.FilesFragment;
 import ts.realms.m2git.ui.components.fragments.StatusFragment;
+import ts.realms.m2git.ui.screens.commitDiff.CommitsFragment;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 import ts.realms.m2git.ui.viewModels.BaseFragment;
 

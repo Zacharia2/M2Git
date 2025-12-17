@@ -18,8 +18,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import java.util.List;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.ui.components.fragments.BranchChooserActivity;
 
 /**

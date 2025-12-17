@@ -23,8 +23,8 @@ import java.util.Set;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.ui.components.dialogs.CheckoutDialog;
 import ts.realms.m2git.ui.components.adapters.CommitsListAdapter;
+import ts.realms.m2git.ui.components.dialogs.CheckoutDialog;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnBackClickListener;
 import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 import ts.realms.m2git.ui.viewModels.BaseFragment;

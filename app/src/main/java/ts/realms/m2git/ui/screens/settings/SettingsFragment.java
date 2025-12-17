@@ -1,9 +1,12 @@
 package ts.realms.m2git.ui.screens.settings;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -17,6 +20,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreferenceCompat;
 
 import java.io.File;
 
@@ -202,6 +206,21 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         } else if (webdavServerPrefKey.equals(s)) {
             // 默认false，异常中断后就不知道了，在app启动后初始化为默认
             if (preferenceHelper.getWebdavStatus()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        // 权限被拒绝，立即关闭开关并提示
+                        SwitchPreferenceCompat switchPref = findPreference(webdavServerPrefKey);
+                        if (switchPref != null) {
+                            switchPref.setChecked(false);
+                        }
+                        PreferenceHelper.getInstance(getContext()).setDefaultWebdavStatus();
+                        BasicFunctions.getActiveActivity().showToastMessage(
+                            "WebDAV服务需要通知权限来显示前台服务。请在系统设置中授予通知权限。"
+                        );
+                        return;
+                    }
+                }
                 Intent intent = new Intent(getContext(), WebDavService.class);
                 intent.setAction("START");
                 intent.putExtra("PORT", preferenceHelper.getWebdavPort());

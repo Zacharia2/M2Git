@@ -12,11 +12,11 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.conscrypt.Conscrypt
 import org.eclipse.jgit.transport.CredentialsProvider
 import timber.log.Timber
-import ts.realms.m2git.ui.common.errors.SecurePrefsException
 import ts.realms.m2git.core.network.transport.AndroidJschCredentialsProvider
 import ts.realms.m2git.core.network.transport.MGitHttpConnectionFactory
 import ts.realms.m2git.local.preference.PreferenceHelper
 import ts.realms.m2git.local.preference.SecurePrefsHelper
+import ts.realms.m2git.ui.common.errors.SecurePrefsException
 import java.security.Security
 
 /**
@@ -57,6 +57,7 @@ open class MainApplication : Application() {
             // System.exit(0);
         }
         mContext = applicationContext
+        // webdav服务跟随应用生命周期，在启动后设置为false。
         PreferenceHelper.getInstance(this).setDefaultWebdavStatus()
         setAppVersionPref()
 

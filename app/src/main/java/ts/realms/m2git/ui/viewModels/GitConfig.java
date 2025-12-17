@@ -5,8 +5,8 @@ import org.eclipse.jgit.lib.StoredConfig;
 import java.io.IOException;
 
 import timber.log.Timber;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 
 /**
  * Model for Git configuration
