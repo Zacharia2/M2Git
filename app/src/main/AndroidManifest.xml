@@ -36,7 +36,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <service
-            android:name=".core.mws.WebDavService"
+            android:name=".core.network.mws.WebDavService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
@@ -83,7 +83,7 @@
                 android:value="ts.realms.m2git.ui.screens.main.RepoListActivity" />
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.fragments.ViewFileActivity"
+            android:name="ts.realms.m2git.ui.components.fragments.ViewFileActivity"
             android:configChanges="orientation|keyboardHidden"
             android:parentActivityName="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity">
             <meta-data
@@ -91,7 +91,7 @@
                 android:value="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity" />
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.fragments.BranchChooserActivity"
+            android:name="ts.realms.m2git.ui.components.fragments.BranchChooserActivity"
             android:configChanges="orientation|keyboardHidden"
             android:parentActivityName="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity">
             <meta-data
@@ -99,14 +99,14 @@
                 android:value="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity" />
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.CommitDiff.CommitDiffActivity"
+            android:name="ts.realms.m2git.ui.screens.commitDiff.CommitDiffActivity"
             android:parentActivityName="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity" />
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.fragments.ImportRepositoryActivity"
+            android:name="ts.realms.m2git.ui.components.fragments.ImportRepositoryActivity"
             android:label="@string/title_activity_import_repository"
             android:parentActivityName="ts.realms.m2git.ui.screens.main.RepoListActivity">
             <meta-data
@@ -114,7 +114,7 @@
                 android:value="ts.realms.m2git.ui.screens.main.RepoListActivity" />
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity"
+            android:name="ts.realms.m2git.ui.components.fragments.PrivateKeyManageActivity"
             android:label="@string/title_activity_private_key_manage"
             android:parentActivityName="ts.realms.m2git.ui.screens.main.RepoListActivity">
             <meta-data
@@ -122,12 +122,12 @@
                 android:value="ts.realms.m2git.ui.screens.main.RepoListActivity" />
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.fragments.ExploreFileActivity"
+            android:name="ts.realms.m2git.ui.components.fragments.ExploreFileActivity"
             android:label="@string/title_activity_explore_file"
-            android:parentActivityName="ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity">
+            android:parentActivityName="ts.realms.m2git.ui.components.fragments.PrivateKeyManageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity" />
+                android:value="ts.realms.m2git.ui.components.fragments.PrivateKeyManageActivity" />
         </activity>
         <activity
             android:name="ts.realms.m2git.ui.screens.settings.UserSettingsActivity"
@@ -146,7 +146,7 @@
                 android:value="ts.realms.m2git.ui.screens.settings.UserSettingsActivity" />
         </activity>
         <activity
-            android:name="ts.realms.m2git.ui.screens.fragments.ExploreRootDirActivity"
+            android:name="ts.realms.m2git.ui.components.fragments.ExploreRootDirActivity"
             android:label="@string/title_activity_explore_file"
             android:parentActivityName="ts.realms.m2git.ui.screens.settings.UserSettingsActivity">
             <meta-data

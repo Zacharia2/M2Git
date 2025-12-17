@@ -22,10 +22,10 @@ import java.io.File;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.core.mws.WebDavService;
+import ts.realms.m2git.core.network.mws.WebDavService;
 import ts.realms.m2git.local.preference.PreferenceHelper;
-import ts.realms.m2git.ui.screens.fragments.ExploreRootDirActivity;
-import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
+import ts.realms.m2git.ui.components.fragments.ExploreRootDirActivity;
+import ts.realms.m2git.ui.components.fragments.PrivateKeyManageActivity;
 import ts.realms.m2git.ui.screens.main.RepoListActivity;
 import ts.realms.m2git.utils.BasicFunctions;
 

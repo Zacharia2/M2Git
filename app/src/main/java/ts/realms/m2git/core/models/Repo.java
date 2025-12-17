@@ -34,8 +34,8 @@ import java.util.Set;
 
 import timber.log.Timber;
 import ts.realms.m2git.MainApplication;
-import ts.realms.m2git.common.errors.StopTaskException;
-import ts.realms.m2git.core.git.tasks.RepoOpTask;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
+import ts.realms.m2git.core.command.tasks.RepoOpTask;
 import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.local.database.RepoDbManager;
 import ts.realms.m2git.local.preference.PreferenceHelper;

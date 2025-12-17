@@ -12,7 +12,7 @@
 
         <variable
             name="clickHandler"
-            type="ts.realms.m2git.common.interfaces.OnActionClickListener" />
+            type="ts.realms.m2git.ui.common.interfaces.OnActionClickListener" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

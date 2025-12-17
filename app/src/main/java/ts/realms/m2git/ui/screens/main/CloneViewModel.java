@@ -10,8 +10,8 @@ import java.io.File;
 import timber.log.Timber;
 import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.git.tasks.local.InitLocalTask;
-import ts.realms.m2git.core.git.tasks.remote.CloneTask;
+import ts.realms.m2git.core.command.tasks.local.InitLocalTask;
+import ts.realms.m2git.core.command.tasks.remote.CloneTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.PreferenceHelper;
 
@@ -101,7 +101,7 @@ public class CloneViewModel extends AndroidViewModel {
 
     private boolean validateRemoteUrl(String remoteUrl) {
         this.remoteUrlError.setValue(null);
-        if (remoteUrl.isBlank()) {
+        if (remoteUrl == null || remoteUrl.isBlank()) {
             this.remoteUrlError.setValue(getApplication().getString(R.string.alert_remoteurl_required));
             return false;
         }

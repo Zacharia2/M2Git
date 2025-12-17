@@ -12,9 +12,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.conscrypt.Conscrypt
 import org.eclipse.jgit.transport.CredentialsProvider
 import timber.log.Timber
-import ts.realms.m2git.common.errors.SecurePrefsException
-import ts.realms.m2git.core.transport.AndroidJschCredentialsProvider
-import ts.realms.m2git.core.transport.MGitHttpConnectionFactory
+import ts.realms.m2git.ui.common.errors.SecurePrefsException
+import ts.realms.m2git.core.network.transport.AndroidJschCredentialsProvider
+import ts.realms.m2git.core.network.transport.MGitHttpConnectionFactory
 import ts.realms.m2git.local.preference.PreferenceHelper
 import ts.realms.m2git.local.preference.SecurePrefsHelper
 import java.security.Security

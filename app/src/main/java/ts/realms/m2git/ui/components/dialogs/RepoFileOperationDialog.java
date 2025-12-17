@@ -1,6 +1,6 @@
 package ts.realms.m2git.ui.components.dialogs;
 
-import static ts.realms.m2git.core.git.tasks.local.DeleteFileFromRepoTask.DeleteOperationType;
+import static ts.realms.m2git.core.command.tasks.local.DeleteFileFromRepoTask.DeleteOperationType;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,7 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.git.tasks.local.UpdateIndexTask;
+import ts.realms.m2git.core.command.tasks.local.UpdateIndexTask;
 import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 /**

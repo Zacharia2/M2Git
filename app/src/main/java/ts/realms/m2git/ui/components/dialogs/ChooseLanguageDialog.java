@@ -7,7 +7,7 @@ import android.os.Bundle;
 import java.util.List;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.screens.fragments.ViewFileActivity;
+import ts.realms.m2git.ui.components.fragments.ViewFileActivity;
 import ts.realms.m2git.utils.CodeGuesser;
 
 /**

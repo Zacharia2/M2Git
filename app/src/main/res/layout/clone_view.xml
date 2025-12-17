@@ -16,7 +16,7 @@
 
         <variable
             name="clickHandler"
-            type="ts.realms.m2git.common.interfaces.OnActionClickListener" />
+            type="ts.realms.m2git.ui.common.interfaces.OnActionClickListener" />
 
     </data>
 

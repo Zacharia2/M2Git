@@ -21,7 +21,7 @@ import java.util.Calendar;
 import javax.security.auth.x500.X500Principal;
 
 import timber.log.Timber;
-import ts.realms.m2git.common.errors.SecurePrefsException;
+import ts.realms.m2git.ui.common.errors.SecurePrefsException;
 import ts.realms.m2git.utils.BasicFunctions;
 
 /**

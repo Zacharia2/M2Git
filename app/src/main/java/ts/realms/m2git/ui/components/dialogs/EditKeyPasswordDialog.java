@@ -12,7 +12,7 @@ import java.io.File;
 
 import ts.realms.m2git.R;
 import ts.realms.m2git.local.preference.SecurePrefsHelper;
-import ts.realms.m2git.ui.screens.fragments.PrivateKeyManageActivity;
+import ts.realms.m2git.ui.components.fragments.PrivateKeyManageActivity;
 
 /**
  * Allowing editing password for a stored private key
