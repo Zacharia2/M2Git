@@ -21,6 +21,7 @@
         android:id="@+id/importAsExternal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:minHeight="48dp"
         android:text="@string/dialog_import_import_as_external_repo" />
 

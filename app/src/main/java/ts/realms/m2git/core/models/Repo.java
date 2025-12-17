@@ -262,7 +262,7 @@ public class Repo implements Comparable<Repo>, Serializable {
         return mLocalPath;
     }
 
-    public String getDiaplayName() {
+    public String getDisplayName() {
         if (!isExternal())
             return mLocalPath;
         String[] strs = mLocalPath.split("/");

@@ -118,7 +118,7 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
         RepoListItemHolder holder = (RepoListItemHolder) view.getTag();
         final Repo repo = getItem(position);
 
-        holder.repoTitle.setText(repo.getDiaplayName());
+        holder.repoTitle.setText(repo.getDisplayName());
         holder.repoRemote.setText(repo.getRemoteURL());
 
         if (!repo.getRepoStatus().equals(RepoContract.REPO_STATUS_NULL)) {
@@ -223,7 +223,7 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
                     if (!intentList.isEmpty()) {
                         String title =
                             String.format(context.getString(R.string.dialog_open_remote_title),
-                                repo.getDiaplayName());
+                                repo.getDisplayName());
                         Intent chooserIntent = Intent.createChooser(intentList.remove(0), title);
                         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
                             intentList.toArray(new Parcelable[intentList.size()]));

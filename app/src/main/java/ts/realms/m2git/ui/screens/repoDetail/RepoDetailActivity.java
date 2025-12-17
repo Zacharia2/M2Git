@@ -89,7 +89,7 @@ public class RepoDetailActivity extends BaseCompatActivity {
             return;
         }
         repoInit();
-        setTitle(mRepo.getDiaplayName());
+        setTitle(mRepo.getDisplayName());
         setContentView(R.layout.activity_repo_detail);
         setupActionBar();
         createFragments();
