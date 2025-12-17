@@ -15,15 +15,14 @@ import org.eclipse.jgit.treewalk.FileTreeIterator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 
 public class CommitDiffTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
@@ -130,12 +129,13 @@ public class CommitDiffTask extends RepoOpTask implements MAsyncTask.AsyncTaskDo
         return false;
     }
 
+    @SuppressWarnings("CharsetObjectCanBeUsed")
     private String parseDiffEntry(DiffEntry diffEntry) throws StopTaskException {
         try {
             mDiffOutput.reset();
             mDiffFormatter.format(diffEntry);
             mDiffFormatter.flush();
-            return mDiffOutput.toString(StandardCharsets.UTF_8);
+            return mDiffOutput.toString("UTF-8");
         } catch (IOException e) {
             setException(e, R.string.error_diff_failed);
             throw new StopTaskException();
