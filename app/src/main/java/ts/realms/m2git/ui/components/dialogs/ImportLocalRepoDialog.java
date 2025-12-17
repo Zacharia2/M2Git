@@ -53,13 +53,12 @@ public class ImportLocalRepoDialog extends BaseDialogFragment implements
 
         builder.setView(view);
         mLocalPath = view.findViewById(R.id.localPath);
-        mLocalPath.setText(mFile.getName());
+        mLocalPath.setText(Repo.EXTERNAL_PREFIX + mFile.getAbsolutePath());
         mImportAsExternal = view.findViewById(R.id.importAsExternal);
         mImportAsExternal
             .setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
-                    mLocalPath.setText(Repo.EXTERNAL_PREFIX
-                        + mFile.getAbsolutePath());
+                    mLocalPath.setText(Repo.EXTERNAL_PREFIX + mFile.getAbsolutePath());
                 } else {
                     mLocalPath.setText(mFile.getName());
                 }
