@@ -58,7 +58,6 @@ public class CloneTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskD
         if (isSuccess) {
             mRepo.updateLatestCommitInfo();
             mRepo.updateStatus(RepoContract.REPO_STATUS_NULL);
-            mRepo.applyLfs();
         }
     }
 
@@ -74,6 +73,7 @@ public class CloneTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskD
         setCredentials(cloneCommand);
         try {
             cloneCommand.call();
+            mRepo.applyLfs();
             Profile.setLastCloneSuccess();
         } catch (InvalidRemoteException e) {
             setError(R.string.error_invalid_remote);
