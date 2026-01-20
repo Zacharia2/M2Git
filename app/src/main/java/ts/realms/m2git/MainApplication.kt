@@ -12,12 +12,14 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.conscrypt.Conscrypt
 import org.eclipse.jgit.transport.CredentialsProvider
 import timber.log.Timber
+import timber.log.Timber.DebugTree
 import ts.realms.m2git.core.network.transport.AndroidJschCredentialsProvider
 import ts.realms.m2git.core.network.transport.MGitHttpConnectionFactory
 import ts.realms.m2git.local.preference.PreferenceHelper
 import ts.realms.m2git.local.preference.SecurePrefsHelper
 import ts.realms.m2git.ui.common.errors.SecurePrefsException
 import java.security.Security
+
 
 /**
  * Custom Application Singleton
@@ -50,6 +52,9 @@ open class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(DebugTree())
+        }
         // 对可能出现的异常进行捕获，避免因未处理的异常导致应用崩溃。
         Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
             Timber.tag("MGitApplication").e(throwable, "未处理的异常")
