@@ -1,13 +1,13 @@
 package ts.realms.m2git.core.network.mws;
 
-import android.util.Log;
-
 import java.io.File;
+import java.util.Locale;
 
 import io.milton.config.HttpManagerBuilder;
 import io.milton.http.HttpManager;
 import io.milton.http.fs.NullSecurityManager;
 import io.milton.simpleton.SimpletonServer;
+import timber.log.Timber;
 import ts.realms.m2git.core.network.mws.fs.FileSystemResourceFactory;
 
 public class SimpleMiltonServer {
@@ -22,13 +22,15 @@ public class SimpleMiltonServer {
     }
 
     public void build(String homeFolder, int port) {
-        Log.i("miltonServer", homeFolder + "::" + port);
+        Timber.tag("miltonServer").i(homeFolder + "::" + port);
+        Locale.setDefault(Locale.ENGLISH);
         NullSecurityManager nsm = new NullSecurityManager();
         FileSystemResourceFactory resourceFactory = new FileSystemResourceFactory(new File(homeFolder), nsm, "/");
         resourceFactory.setAllowDirectoryBrowsing(true);
         HttpManagerBuilder b = new HttpManagerBuilder();
         b.setEnableFormAuth(false);
         b.setResourceFactory(resourceFactory);
+        b.setEnableQuota(true);
         HttpManager httpManager = b.buildHttpManager();
         ss = new SimpletonServer(httpManager, b.getOuterWebdavResponseHandler(), 100, 10);
         ss.setHttpPort(port);
@@ -38,12 +40,12 @@ public class SimpleMiltonServer {
     public void start() {
         if (ss == null) return;
         ss.start();
-        Log.i("miltonServer", "miltonServer start");
+        Timber.tag("miltonServer").i("miltonServer start");
     }
 
     public void stop() {
         if (ss == null) return;
         ss.stop();
-        Log.i("miltonServer", "miltonServer stop");
+        Timber.tag("miltonServer").i("miltonServer stop");
     }
 }

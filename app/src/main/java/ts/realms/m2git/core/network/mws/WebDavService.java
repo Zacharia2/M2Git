@@ -9,7 +9,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -21,6 +20,7 @@ import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.ui.screens.settings.SettingsFragment;
 
@@ -44,7 +44,7 @@ public class WebDavService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) return START_STICKY;
         String action = intent.getAction();
-        Log.i(TAG, "Service action: " + action);
+        Timber.tag(TAG).i("Service action: %s", action);
         if ("START".equals(action)) {
             int port = intent.getIntExtra("PORT", 8080);
             String home = intent.getStringExtra("HOME");
@@ -59,8 +59,8 @@ public class WebDavService extends Service {
                     updateNotification(port, "运行中", "http://" + ip + ":" + port);
 
                 } catch (Exception e) {
-                    Log.e(TAG, "服务器启动失败", e);
-                    Log.e("WebDavService", "启动失败", e);
+                    Timber.tag(TAG).e(e, "服务器启动失败");
+                    Timber.tag(TAG).e(e, "启动失败");
                     stopSelf();
                 }
             });
@@ -128,7 +128,7 @@ public class WebDavService extends Service {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, "获取IP失败", e);
+            Timber.tag(TAG).e(e, "获取IP失败");
         }
         return "localhost";
     }

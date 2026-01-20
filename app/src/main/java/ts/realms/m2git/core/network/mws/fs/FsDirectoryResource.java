@@ -56,13 +56,14 @@ import io.milton.resource.MakeCollectionableResource;
 import io.milton.resource.MoveableResource;
 import io.milton.resource.PropFindableResource;
 import io.milton.resource.PutableResource;
+import io.milton.resource.QuotaResource;
 import io.milton.resource.Resource;
 
 /**
  * Represents a directory in a physical file system.
  *
  */
-public class FsDirectoryResource extends FsResource implements MakeCollectionableResource, PutableResource, CopyableResource, DeletableResource, MoveableResource, PropFindableResource, LockingCollectionResource, GetableResource {
+public class FsDirectoryResource extends FsResource implements MakeCollectionableResource, PutableResource, CopyableResource, DeletableResource, MoveableResource, PropFindableResource, LockingCollectionResource, GetableResource, QuotaResource {
 
     private static final Logger log = LoggerFactory.getLogger(FsDirectoryResource.class);
 
@@ -124,9 +125,6 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
 
     /**
      * Will redirect if a default page has been specified on the factory
-     *
-     * @param request
-     * @return
      */
     @Override
     public String checkRedirect(Request request) {
@@ -189,13 +187,6 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
      * factory's allowDirectoryBrowsing has been set to false.
      * <p>
      * If so it will just output a message saying that access has been disabled.
-     *
-     * @param out
-     * @param range
-     * @param params
-     * @param contentType
-     * @throws IOException
-     * @throws NotAuthorizedException
      */
     @Override
     public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType) throws IOException, NotAuthorizedException {
@@ -258,5 +249,39 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
             String s = insertSsoPrefix(abUrl, ssoPrefix);
             return s += name;
         }
+    }
+
+    private Boolean isRootDirectory() {
+        try {
+            return getFile().getCanonicalPath().equals(factory.getRoot().getCanonicalPath());
+        } catch (IOException e) {
+            log.error("Failed to determine if directory is root", e);
+            return false;
+        }
+    }
+
+    @Override
+    public Long getQuotaUsed() {
+        if (!isRootDirectory()) {
+            return null;
+        }
+        long totalSpace = getFile().getTotalSpace();
+        long freeSpace = getFile().getFreeSpace();
+        if (totalSpace < 0 || freeSpace < 0) {
+            return null;
+        }
+        return totalSpace - freeSpace;
+    }
+
+    @Override
+    public Long getQuotaAvailable() {
+        if (!isRootDirectory()) {
+            return null;
+        }
+        long freeSpace = getFile().getFreeSpace();
+        if (freeSpace < 0) {
+            return null;
+        }
+        return freeSpace;
     }
 }
