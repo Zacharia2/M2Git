@@ -1,8 +1,10 @@
 package ts.realms.m2git.ui.screens.settings;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -35,6 +38,7 @@ import ts.realms.m2git.utils.BasicFunctions;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private PreferenceHelper preferenceHelper;
+    private BroadcastReceiver serviceStatusReceiver;
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
@@ -62,6 +66,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         }
 
         registerOnPreferenceClickListener();
+        registerBroadcastReceiver();
     }
 
 
@@ -214,7 +219,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                         if (switchPref != null) {
                             switchPref.setChecked(false);
                         }
-                        PreferenceHelper.getInstance(getContext()).setDefaultWebdavStatus();
+                        preferenceHelper.setDefaultWebdavStatus();
                         BasicFunctions.getActiveActivity().showToastMessage(
                             "WebDAV服务需要通知权限来显示前台服务。请在系统设置中授予通知权限。"
                         );
@@ -230,6 +235,30 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 Intent intent = new Intent(getContext(), WebDavService.class);
                 getContext().stopService(intent);
             }
+        }
+    }
+
+    private void registerBroadcastReceiver() {
+        serviceStatusReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (WebDavService.ACTION_SERVICE_STOPPED.equals(intent.getAction())) {
+                    // 确保在主线程更新UI
+                    final String webdavServerPrefKey = getString(R.string.pref_key_webdav_server);
+                    SwitchPreferenceCompat switchPref = findPreference(webdavServerPrefKey);
+                    if (switchPref != null) {
+                        switchPref.setChecked(false);
+                    }
+                    preferenceHelper.setDefaultWebdavStatus();
+                }
+            }
+        };
+
+        // 注册本地广播接收器
+        Context context = getContext();
+        if (context != null) {
+            IntentFilter filter = new IntentFilter(WebDavService.ACTION_SERVICE_STOPPED);
+            LocalBroadcastManager.getInstance(context).registerReceiver(serviceStatusReceiver, filter);
         }
     }
 }

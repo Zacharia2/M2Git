@@ -1,0 +1,10 @@
+PROPFIND http://192.168.1.34:8080 HTTP/1.1
+Depth: 0
+content-type: Content-Type: text/xml; charset=utf-8
+
+<D:propfind xmlns:D='DAV:'>
+    <D:prop>
+        <D:quota-available-bytes/>
+        <D:quota-used-bytes/>
+    </D:prop>
+</D:propfind>

@@ -12,6 +12,7 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -23,12 +24,13 @@ import java.util.concurrent.Executors;
 import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.ui.screens.settings.SettingsFragment;
+import ts.realms.m2git.utils.BasicFunctions;
 
 public class WebDavService extends Service {
+    public static final String ACTION_SERVICE_STOPPED = "ts.realms.m2git.WEBDAV_SERVICE_STOPPED";
     private static final String CHANNEL_ID = "webdav_service";
     private static final int NOTIFICATION_ID = 1;
     private static final String TAG = "WebDavService";
-
     private SimpleMiltonServer server;
     private ExecutorService serverExecutor;
 
@@ -59,8 +61,11 @@ public class WebDavService extends Service {
                     updateNotification(port, "运行中", "http://" + ip + ":" + port);
 
                 } catch (Exception e) {
-                    Timber.tag(TAG).e(e, "服务器启动失败");
-                    Timber.tag(TAG).e(e, "启动失败");
+                    Timber.tag(TAG).e(e, "WebDav 服务器启动失败");
+                    String m = "服务器启动失败: " + e.getMessage();
+                    BasicFunctions.getActiveActivity().showToastMessage(m);
+                    // 本地广播通知更新switchPref关闭状态
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTION_SERVICE_STOPPED));
                     stopSelf();
                 }
             });
@@ -99,10 +104,6 @@ public class WebDavService extends Service {
     private void updateNotification(int port, String status, String detail) {
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.notify(NOTIFICATION_ID, createNotification(port, status, detail));
-    }
-
-    private void updateNotification(int port, String status) {
-        updateNotification(port, status, null);
     }
 
     private void createNotificationChannel() {
