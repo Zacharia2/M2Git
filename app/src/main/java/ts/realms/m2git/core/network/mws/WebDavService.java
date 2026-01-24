@@ -1,6 +1,7 @@
 package ts.realms.m2git.core.network.mws;
 
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -93,6 +94,10 @@ public class WebDavService extends Service {
                 this, 0, stopIntent, PendingIntent.FLAG_IMMUTABLE
             ))
             .setContentIntent(PendingIntent.getActivity(this, 0, switchIntent, PendingIntent.FLAG_IMMUTABLE))
+            //  保活：强化前台服务
+            .setPriority(NotificationCompat.PRIORITY_MAX) // 最高优先级
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // 锁屏可见
             .build();
     }
 
@@ -105,6 +110,7 @@ public class WebDavService extends Service {
         manager.notify(NOTIFICATION_ID, createNotification(status, detail));
     }
 
+    @SuppressLint("ObsoleteSdkInt")
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -112,6 +118,8 @@ public class WebDavService extends Service {
             );
             channel.setDescription("WebDAV 服务器运行状态");
             channel.setShowBadge(false);
+            channel.setBypassDnd(false);  // 关闭绕过免打扰模式
+            channel.setImportance(NotificationManager.IMPORTANCE_MIN);  // 最小但持续显示
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
         }
     }
