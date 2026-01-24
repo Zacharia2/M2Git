@@ -38,7 +38,6 @@ import ts.realms.m2git.utils.BasicFunctions;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
     private PreferenceHelper preferenceHelper;
-    private BroadcastReceiver serviceStatusReceiver;
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
@@ -239,7 +238,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private void registerBroadcastReceiver() {
-        serviceStatusReceiver = new BroadcastReceiver() {
+        BroadcastReceiver serviceStatusReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (WebDavService.ACTION_SERVICE_STOPPED.equals(intent.getAction())) {

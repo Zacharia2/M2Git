@@ -96,7 +96,7 @@ open class MainApplication : Application() {
         val sharedPreference = getSharedPreferences(
             getString(R.string.preference_file_key), MODE_PRIVATE
         )
-        val version = BuildConfig.VERSION_NAME
+        val version = BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")"
         sharedPreference.edit {
             putString(getString(R.string.preference_key_app_version), version)
         }
