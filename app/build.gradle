@@ -9,7 +9,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdk 31
         minSdk 31
-        versionCode 270
+        versionCode 271
         versionName "1.8.2"
 
         // compileSdk 应始终使用最新版本，但不会影响运行时行为。
@@ -94,6 +94,7 @@ dependencies {
     }
     implementation("xerces:xercesImpl:2.12.2") //  DefaultPropFindRequestFieldParser: Can't create default XMLReader; is system property org.xml.sax.driver set?
     implementation("org.slf4j:slf4j-log4j12:2.0.16")
+    implementation("com.github.tony19:logback-android:3.0.0")  // No appenders could be found for logger
 
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.7.0"
