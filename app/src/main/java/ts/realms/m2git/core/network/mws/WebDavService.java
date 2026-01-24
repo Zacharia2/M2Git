@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 
 import timber.log.Timber;
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.screens.settings.SettingsFragment;
+import ts.realms.m2git.ui.screens.settings.UserSettingsActivity;
 import ts.realms.m2git.utils.BasicFunctions;
 
 public class WebDavService extends Service {
@@ -50,7 +50,7 @@ public class WebDavService extends Service {
         if ("START".equals(action)) {
             int port = intent.getIntExtra("PORT", 8080);
             String home = intent.getStringExtra("HOME");
-            startForeground(NOTIFICATION_ID, createNotification(port, "正在启动..."));
+            startForeground(NOTIFICATION_ID, createNotification("正在启动..."));
             // 在后台线程启动服务器
             serverExecutor = Executors.newSingleThreadExecutor();
             serverExecutor.submit(() -> {
@@ -58,8 +58,7 @@ public class WebDavService extends Service {
                     server.build(home, port);
                     server.start();
                     String ip = getLocalIpAddress();
-                    updateNotification(port, "运行中", "http://" + ip + ":" + port);
-
+                    updateNotification("运行中", "http://" + ip + ":" + port);
                 } catch (Exception e) {
                     Timber.tag(TAG).e(e, "WebDav 服务器启动失败");
                     String m = "服务器启动失败: " + e.getMessage();
@@ -71,39 +70,39 @@ public class WebDavService extends Service {
             });
 
         } else if ("STOP".equals(action)) {
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(ACTION_SERVICE_STOPPED));
             stopSelf();
         }
         return START_STICKY;
     }
 
-    private Notification createNotification(int port, String status, String detail) {
+    private Notification createNotification(String status, String detail) {
+        Intent switchIntent = new Intent(this, UserSettingsActivity.class);
+        switchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // 提高通知优先级，立即显示通知
         Intent stopIntent = new Intent(this, WebDavService.class);
         stopIntent.setAction("STOP");
-        PendingIntent stopPendingIntent = PendingIntent.getService(
-            this, 0, stopIntent, PendingIntent.FLAG_IMMUTABLE
-        );
-
         return new NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("m2git WebDAV 服务器 - " + status)
             .setContentText(detail != null ? detail : status)
             .setSmallIcon(R.drawable.ic_logo) // 替换为你的图标
             .setOngoing(true)
             .setOnlyAlertOnce(true) // 避免重复声音
-            .addAction(R.drawable.ic_logo, "停止", stopPendingIntent)
-            .setContentIntent(PendingIntent.getActivity(
-                this, 0, new Intent(this, SettingsFragment.class),
-                PendingIntent.FLAG_IMMUTABLE
+            .addAction(R.drawable.ic_logo, "停止", PendingIntent.getService(
+                this, 0, stopIntent, PendingIntent.FLAG_IMMUTABLE
             ))
+            .setContentIntent(PendingIntent.getActivity(this, 0, switchIntent, PendingIntent.FLAG_IMMUTABLE))
             .build();
     }
 
-    private Notification createNotification(int port, String status) {
-        return createNotification(port, status, null);
+    private Notification createNotification(String status) {
+        return createNotification(status, null);
     }
 
-    private void updateNotification(int port, String status, String detail) {
+    private void updateNotification(String status, String detail) {
         NotificationManager manager = getSystemService(NotificationManager.class);
-        manager.notify(NOTIFICATION_ID, createNotification(port, status, detail));
+        manager.notify(NOTIFICATION_ID, createNotification(status, detail));
     }
 
     private void createNotificationChannel() {
