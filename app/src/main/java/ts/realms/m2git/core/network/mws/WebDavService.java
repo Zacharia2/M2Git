@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 
@@ -39,7 +40,6 @@ public class WebDavService extends Service {
     public void onCreate() {
         super.onCreate();
         server = SimpleMiltonServer.getInstance();
-        createNotificationChannel();
     }
 
 
@@ -48,10 +48,11 @@ public class WebDavService extends Service {
         if (intent == null) return START_STICKY;
         String action = intent.getAction();
         Timber.tag(TAG).i("Service action: %s", action);
+        createNotificationChannel();
         if ("START".equals(action)) {
             int port = intent.getIntExtra("PORT", 8080);
             String home = intent.getStringExtra("HOME");
-            startForeground(NOTIFICATION_ID, createNotification("正在启动..."));
+            startForeground(NOTIFICATION_ID, createNotification("正在启动..."), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
             // 在后台线程启动服务器
             serverExecutor = Executors.newSingleThreadExecutor();
             serverExecutor.submit(() -> {
@@ -119,7 +120,6 @@ public class WebDavService extends Service {
             channel.setDescription("WebDAV 服务器运行状态");
             channel.setShowBadge(false);
             channel.setBypassDnd(false);  // 关闭绕过免打扰模式
-            channel.setImportance(NotificationManager.IMPORTANCE_MIN);  // 最小但持续显示
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
         }
     }

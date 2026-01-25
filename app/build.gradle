@@ -9,7 +9,7 @@ android {
         //noinspection ExpiredTargetSdkVersion
         targetSdk 31
         minSdk 31
-        versionCode 274
+        versionCode 275
         versionName "1.8.2"
 
         // compileSdk 应始终使用最新版本，但不会影响运行时行为。
