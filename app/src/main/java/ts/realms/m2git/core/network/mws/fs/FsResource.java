@@ -26,10 +26,6 @@ import java.io.File;
 import java.util.Date;
 
 import io.milton.http.Auth;
-import io.milton.http.LockInfo;
-import io.milton.http.LockResult;
-import io.milton.http.LockTimeout;
-import io.milton.http.LockToken;
 import io.milton.http.Request;
 import io.milton.http.Request.Method;
 import io.milton.http.exceptions.NotAuthorizedException;
@@ -37,14 +33,13 @@ import io.milton.http.http11.auth.DigestResponse;
 import io.milton.resource.CollectionResource;
 import io.milton.resource.CopyableResource;
 import io.milton.resource.DigestResource;
-import io.milton.resource.LockableResource;
 import io.milton.resource.MoveableResource;
 import io.milton.resource.Resource;
 
 /**
  *
  */
-public abstract class FsResource implements Resource, MoveableResource, CopyableResource, LockableResource, DigestResource {
+public abstract class FsResource implements Resource, MoveableResource, CopyableResource, DigestResource {
 
     private static final Logger log = LoggerFactory.getLogger(FsResource.class);
     final FileSystemResourceFactory factory;
@@ -151,31 +146,5 @@ public abstract class FsResource implements Resource, MoveableResource, Copyable
             throw new RuntimeException("Failed to delete");
         }
         factory.getWsManager().ifPresent(wsManager -> wsManager.notifyDeleted(factory.toResourcePath(file)));
-    }
-
-    public LockResult lock(LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException {
-        final LockResult lockResult = factory.getLockManager().lock(timeout, lockInfo, this);
-        factory.getWsManager().ifPresent(wsManager -> wsManager.notifyLocked(factory.toResourcePath(file)));
-        return lockResult;
-    }
-
-    public LockResult refreshLock(String token, LockTimeout timeout) throws NotAuthorizedException {
-        final LockResult lockResult = factory.getLockManager().refresh(token, timeout, this);
-        factory.getWsManager().ifPresent(wsManager -> wsManager.notifyLocked(factory.toResourcePath(file)));
-        return lockResult;
-    }
-
-    public void unlock(String tokenId) throws NotAuthorizedException {
-        factory.getLockManager().unlock(tokenId, this);
-        factory.getWsManager().ifPresent(wsManager -> wsManager.notifyUnlocked(factory.toResourcePath(file)));
-    }
-
-    public LockToken getCurrentLock() {
-        if (factory.getLockManager() != null) {
-            return factory.getLockManager().getCurrentToken(this);
-        } else {
-            log.warn("getCurrentLock called, but no lock manager: file: " + file.getAbsolutePath());
-            return null;
-        }
     }
 }

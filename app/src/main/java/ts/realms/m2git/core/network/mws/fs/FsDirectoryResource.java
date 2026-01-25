@@ -39,10 +39,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import io.milton.http.Auth;
-import io.milton.http.LockInfo;
-import io.milton.http.LockResult;
-import io.milton.http.LockTimeout;
-import io.milton.http.LockToken;
 import io.milton.http.Range;
 import io.milton.http.Request;
 import io.milton.http.XmlWriter;
@@ -51,7 +47,6 @@ import io.milton.resource.CollectionResource;
 import io.milton.resource.CopyableResource;
 import io.milton.resource.DeletableResource;
 import io.milton.resource.GetableResource;
-import io.milton.resource.LockingCollectionResource;
 import io.milton.resource.MakeCollectionableResource;
 import io.milton.resource.MoveableResource;
 import io.milton.resource.PropFindableResource;
@@ -63,7 +58,7 @@ import io.milton.resource.Resource;
  * Represents a directory in a physical file system.
  *
  */
-public class FsDirectoryResource extends FsResource implements MakeCollectionableResource, PutableResource, CopyableResource, DeletableResource, MoveableResource, PropFindableResource, LockingCollectionResource, GetableResource, QuotaResource {
+public class FsDirectoryResource extends FsResource implements MakeCollectionableResource, PutableResource, CopyableResource, DeletableResource, MoveableResource, PropFindableResource, GetableResource, QuotaResource {
 
     private static final Logger log = LoggerFactory.getLogger(FsDirectoryResource.class);
 
@@ -159,15 +154,6 @@ public class FsDirectoryResource extends FsResource implements MakeCollectionabl
 
     private boolean isRecursive(File dest) throws IOException {
         return dest.getCanonicalPath().startsWith(this.file.getCanonicalPath());
-    }
-
-    @Override
-    public LockToken createAndLock(String name, LockTimeout timeout, LockInfo lockInfo) throws NotAuthorizedException {
-        File dest = new File(this.getFile(), name);
-        createEmptyFile(dest);
-        FsFileResource newRes = new FsFileResource(host, factory, dest, contentService);
-        LockResult res = newRes.lock(timeout, lockInfo);
-        return res.getLockToken();
     }
 
     private void createEmptyFile(File file) {
