@@ -4,11 +4,12 @@ import java.io.File;
 import java.util.Locale;
 
 import io.milton.config.HttpManagerBuilder;
-import io.milton.http.HttpManager;
 import io.milton.http.fs.NullSecurityManager;
 import io.milton.simpleton.SimpletonServer;
 import timber.log.Timber;
 import ts.realms.m2git.core.network.mws.fs.FileSystemResourceFactory;
+import ts.realms.m2git.core.network.mws.fs.LocalCacheManager;
+import ts.realms.m2git.core.network.mws.fs.SimplePropertyManager;
 
 public class SimpleMiltonServer {
     private static SimpleMiltonServer miltonServer;
@@ -27,14 +28,13 @@ public class SimpleMiltonServer {
         NullSecurityManager nsm = new NullSecurityManager();
         FileSystemResourceFactory resourceFactory = new FileSystemResourceFactory(new File(homeFolder), nsm, "/");
         resourceFactory.setAllowDirectoryBrowsing(true);
+        resourceFactory.setPropertyManager(new SimplePropertyManager(new LocalCacheManager()));
         HttpManagerBuilder b = new HttpManagerBuilder();
-        b.setEnableFormAuth(false);
         b.setResourceFactory(resourceFactory);
         b.setEnableQuota(true);
-        HttpManager httpManager = b.buildHttpManager();
-        ss = new SimpletonServer(httpManager, b.getOuterWebdavResponseHandler(), 100, 10);
+        b.setEnableFormAuth(false);
+        ss = new SimpletonServer(b.buildHttpManager(), b.getOuterWebdavResponseHandler(), 100, 10);
         ss.setHttpPort(port);
-
     }
 
     public void start() {
