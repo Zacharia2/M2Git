@@ -86,6 +86,24 @@ public class PreferenceHelper {
         Timber.d("setWebdavPort:%s", port);
     }
 
+    public String getWebdavUser() {
+        return getString(mContext.getString(R.string.pref_key_webdav_user));
+    }
+
+    public void setWebdavUser(String user) {
+        edit(mContext.getString(R.string.pref_key_webdav_user), user);
+        Timber.d("setWebdavUser:%s", user);
+    }
+
+    public String getWebdavPassword() {
+        return getString(mContext.getString(R.string.pref_key_webdav_password));
+    }
+
+    public void setWebdavPassword(String password) {
+        edit(mContext.getString(R.string.pref_key_webdav_password), password);
+        Timber.d("setWebdavPassword:%s", "*".repeat(password.length()));
+    }
+
     public boolean getWebdavStatus() {
         return getBoolean(mContext.getString(R.string.pref_key_webdav_server));
     }

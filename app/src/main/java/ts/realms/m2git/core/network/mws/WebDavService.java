@@ -50,14 +50,16 @@ public class WebDavService extends Service {
         Timber.tag(TAG).i("Service action: %s", action);
         createNotificationChannel();
         if ("START".equals(action)) {
-            int port = intent.getIntExtra("PORT", 8080);
-            String home = intent.getStringExtra("HOME");
             startForeground(NOTIFICATION_ID, createNotification("正在启动..."), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+            String home = intent.getStringExtra("HOME");
+            int port = intent.getIntExtra("PORT", 8080);
+            String user = intent.getStringExtra("USER");
+            String password = intent.getStringExtra("PASSWORD");
             // 在后台线程启动服务器
             serverExecutor = Executors.newSingleThreadExecutor();
             serverExecutor.submit(() -> {
                 try {
-                    server.build(home, port);
+                    server.build(home, port, user, password);
                     server.start();
                     String ip = getLocalIpAddress();
                     updateNotification("运行中", "http://" + ip + ":" + port);

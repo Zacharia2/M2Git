@@ -100,6 +100,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                         String defaultPort = "8080";
                         preferenceHelper.setWebdavPort(defaultPort);
                         return defaultPort;
+                    } else if (preference.getKey().equals(getString(R.string.pref_key_webdav_user)) && preference.getText() == null) {
+                        String defaultUser = "user";
+                        preferenceHelper.setWebdavUser(defaultUser);
+                        return defaultUser;
+                    } else if (preference.getKey().equals(getString(R.string.pref_key_webdav_password)) && preference.getText() == null) {
+                        String defaultPassword = "123456";
+                        preferenceHelper.setWebdavPassword(defaultPassword);
+                        return defaultPassword;
                     }
                     // 正常情况下
                     return String.format(summary.toString(), preference.getText());
@@ -227,8 +235,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 }
                 Intent intent = new Intent(getContext(), WebDavService.class);
                 intent.setAction("START");
-                intent.putExtra("PORT", preferenceHelper.getWebdavPort());
                 intent.putExtra("HOME", preferenceHelper.getWebdavHomeDir());
+                intent.putExtra("PORT", preferenceHelper.getWebdavPort());
+                intent.putExtra("USER", preferenceHelper.getWebdavUser());
+                intent.putExtra("PASSWORD", preferenceHelper.getWebdavPassword());
                 ContextCompat.startForegroundService(getContext(), intent);
             } else {
                 Intent intent = new Intent(getContext(), WebDavService.class);
