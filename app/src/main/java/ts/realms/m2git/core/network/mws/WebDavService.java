@@ -62,7 +62,7 @@ public class WebDavService extends Service {
                     server.build(home, port, user, password);
                     server.start();
                     String ip = getLocalIpAddress();
-                    updateNotification("运行中", "http://" + ip + ":" + port);
+                    updateNotification("运行中", "https://" + ip + ":" + port);
                 } catch (Exception e) {
                     Timber.tag(TAG).e(e, "WebDav 服务器启动失败");
                     String m = "服务器启动失败: " + e.getMessage();

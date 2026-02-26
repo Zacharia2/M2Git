@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Locale;
 import java.util.Map;
@@ -34,6 +33,7 @@ public class SimpleMiltonServer {
     public void buildWithSecurityManager(String homeFolder, int port, SecurityManager securityManager) {
         Timber.tag("miltonServer").i(homeFolder + "::" + port);
         Locale.setDefault(Locale.ENGLISH);
+        System.setProperty("java.net.preferIPv4Stack", "true");
         FileSystemResourceFactory resourceFactory = new FileSystemResourceFactory(new File(homeFolder), securityManager, "/");
         resourceFactory.setAllowDirectoryBrowsing(true);
         resourceFactory.setPropertyManager(new SimplePropertyManager(new LocalCacheManager()));
