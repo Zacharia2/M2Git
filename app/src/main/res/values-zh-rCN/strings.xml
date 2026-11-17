@@ -146,6 +146,10 @@
     <string name="title_activity_settings">设置</string>
     <string name="title_config_repo">仓库配置</string>
 
+    <!-- LFS -->
+    <string name="lfs_downloading">正在下载 LFS 对象 …</string>
+    <string name="lfs_checking_out">正在检出 LFS 文件 …</string>
+
     <!-- toast msg -->
     <string name="feedback_subject">反馈</string>
     <string name="cannot_delete_branch">无法删除 %s</string>

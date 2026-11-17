@@ -20,7 +20,8 @@ public abstract class MAsyncTask {
     protected Object asyncTaskCallback = this; // 最终值是 当前这个抽象类的具体子类的实例对象的引用。
     private CompletableFuture<Void> completableExecuteTaskFuture;
     private boolean mIsCanceled = false;
-    private String[] progressValues;
+    // volatile 保证后台线程写入对主线程可见
+    private volatile String[] progressValues;
 
     protected void setException(Throwable e) {
         Timber.e(e, "set exception");
@@ -39,7 +40,7 @@ public abstract class MAsyncTask {
     }
 
     public void cancelTask() {
-        if (!completableExecuteTaskFuture.isCancelled()) {
+        if (completableExecuteTaskFuture != null && !completableExecuteTaskFuture.isCancelled()) {
             completableExecuteTaskFuture.cancel(false);
             mIsCanceled = completableExecuteTaskFuture.isCancelled();
         }
@@ -81,33 +82,42 @@ public abstract class MAsyncTask {
                 } else {
                     isSuccess = false;
                 }
+                // 在后台线程中捕获当前 progressValues 快照，
+                // 避免 onPostExecute 与 onProgressUpdate 的顺序竞态
+                final String[] capturedProgress = this.progressValues;
                 Handler uiThread = new Handler(Looper.getMainLooper());
                 uiThread.post(() -> {
+                    // 先回调 onProgressUpdate，再回调 onPostExecute，
+                    // 保证进度更新在任务完成回调之前到达
+                    if (capturedProgress != null && capturedProgress.length != 0) {
+                        if (asyncTaskCallback instanceof AsyncTaskCallback) {
+                            ((AsyncTaskCallback) asyncTaskCallback).onProgressUpdate(capturedProgress);
+                        }
+                    }
                     // onPostExecute、AsyncTaskCallback、AsyncTaskPostCallback
                     if (asyncTaskCallback instanceof AsyncTaskPostCallback) {
                         ((AsyncTaskPostCallback) asyncTaskCallback).onPostExecute(isSuccess);
                     } else if (asyncTaskCallback instanceof AsyncTaskCallback) {
                         ((AsyncTaskCallback) asyncTaskCallback).onPostExecute(isSuccess);
                     }
-                    if (this.progressValues != null && this.progressValues.length != 0) {
-                        // onProgressUpdate、AsyncTaskCallback
-                        if (asyncTaskCallback instanceof AsyncTaskCallback) {
-                            ((AsyncTaskCallback) asyncTaskCallback).onProgressUpdate(progressValues);
-                        }
-                    }
                 });
 
             });
         } else {
             BasicFunctions.getActiveActivity().showToastMessage(R.string.error_task_running);
+            // mIsTaskAdded==false 时，返回一个已完成的 Future 而非 null，
+            // 避免调用方 NPE
+            completableExecuteTaskFuture = CompletableFuture.completedFuture(null);
         }
         return completableExecuteTaskFuture;
     }
 
     protected final void publishProgress(String... values) {
         // 从异步线程doInBackground中调用，回到主线程执行。
-        Handler uiThread = new Handler(Looper.getMainLooper());
-        uiThread.post(() -> this.progressValues = values);
+        // volatile 直接赋值，保证后台线程的值对主线程立即可见
+        // 原代码通过 Handler.post 在主线程赋值，但赋值与 onPostExecute 的 post 存在竞态，
+        // 改为 volatile 写入后由后台线程直接赋值，消除竞态。
+        this.progressValues = values;
     }
 
     public interface AsyncTaskCallback {

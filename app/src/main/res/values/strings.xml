@@ -150,6 +150,10 @@
     <string name="feedback_url" translatable="false">https://github.com/Zacharia2/M2Git/issues/new</string>
     <string name="bk" translatable="false">MTUzMjQ2</string>
 
+    <!-- LFS -->
+    <string name="lfs_downloading">Downloading LFS objects …</string>
+    <string name="lfs_checking_out">Checking out LFS files …</string>
+
     <!-- toast msg -->
     <string name="feedback_subject">Feedback</string>
     <string name="cannot_delete_branch">cannot delete %s</string>

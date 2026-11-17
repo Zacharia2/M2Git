@@ -1,5 +1,7 @@
 package ts.realms.m2git.core.command.tasks.remote;
 
+import android.content.Context;
+
 import androidx.annotation.StringRes;
 
 import org.eclipse.jgit.api.CloneCommand;
@@ -12,10 +14,14 @@ import org.eclipse.jgit.errors.NotSupportedException;
 import org.eclipse.jgit.lib.ProgressMonitor;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Locale;
 
 import timber.log.Timber;
+import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
+import ts.realms.m2git.core.command.LfsAutoTool;
 import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
@@ -74,6 +80,26 @@ public class CloneTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskD
         try {
             cloneCommand.call();
             mRepo.applyLfs();
+
+            String worktree = mRepo.getDir().getPath();
+            if (LfsAutoTool.hasLfs(worktree)) {
+                Context ctx = MainApplication.getContext();
+                mRepo.updateStatus(ctx.getString(R.string.lfs_downloading));
+                Collection<Path> files = LfsAutoTool.downloadAll(worktree);
+                Timber.i("共下载 " + files.size() + " 个 LFS 对象");
+
+                // ---- LFS 检出：直接调用标准 checkout，触发 SmudgeFilter 替换工作区指针 ----
+                mRepo.updateStatus(ctx.getString(R.string.lfs_checking_out));
+                try (Git git = Git.open(localRepo)) {
+                    git.checkout()
+                        .setStartPoint("HEAD")
+                        .setAllPaths(true)
+                        .setForced(true)   // 克隆刚完成，仓库干净，强制重写无副作用
+                        .call();
+                }
+                Timber.i("LFS 检出完成，工作区已替换为真实内容");
+            }
+
             Profile.setLastCloneSuccess();
         } catch (InvalidRemoteException e) {
             setError(R.string.error_invalid_remote);

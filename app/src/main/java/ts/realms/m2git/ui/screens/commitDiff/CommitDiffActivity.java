@@ -1,5 +1,6 @@
 package ts.realms.m2git.ui.screens.commitDiff;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -82,6 +83,7 @@ public class CommitDiffActivity extends BaseCompatActivity {
         loadFileContent();
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void loadFileContent() {
         mDiffContent.addJavascriptInterface(new CodeLoader(), JS_INF);
         mDiffContent.loadDataWithBaseURL("file:///android_asset/", HTML_TMPL,
@@ -111,8 +113,7 @@ public class CommitDiffActivity extends BaseCompatActivity {
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Uri futurePathName = Uri.fromFile(sharedDiffPathName());
         shareIntent.putExtra(Intent.EXTRA_STREAM, futurePathName);
-        shareIntent.setData(futurePathName);
-        shareIntent.setType("text/x-patch");
+        shareIntent.setDataAndType(futurePathName, "text/x-patch");
 
         shareActionProvider.setOnShareTargetSelectedListener(new ShareActionProvider.OnShareTargetSelectedListener() {
             public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {

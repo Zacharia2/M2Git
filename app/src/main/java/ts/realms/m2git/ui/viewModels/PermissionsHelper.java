@@ -1,6 +1,7 @@
 package ts.realms.m2git.ui.viewModels;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build.VERSION;
 import android.os.Environment;
 
@@ -18,8 +19,8 @@ public final class PermissionsHelper {
         }
 
         public boolean canReadStorage(Context context) {
-            return VERSION.SDK_INT <= 23 || ContextCompat.checkSelfPermission(context, "android" +
-                ".permission.READ_EXTERNAL_STORAGE") == 0 || this.isExternalStorageManager();
+            return ContextCompat.checkSelfPermission(context, "android.permission.READ_EXTERNAL_STORAGE")
+                == PackageManager.PERMISSION_GRANTED || this.isExternalStorageManager();
         }
     }
 }

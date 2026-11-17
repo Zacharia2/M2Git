@@ -56,10 +56,11 @@ open class MainApplication : Application() {
             Timber.plant(DebugTree())
         }
         // 对可能出现的异常进行捕获，避免因未处理的异常导致应用崩溃。
-        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+        val existingHandler = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             Timber.tag("MGitApplication").e(throwable, "未处理的异常")
-            // 可以选择退出应用或重启应用
-            // System.exit(0);
+            // 委托给默认 handler（ACRA / 系统），保证崩溃上报和正常退出流程
+            existingHandler?.uncaughtException(thread, throwable)
         }
         mContext = applicationContext
         // webdav服务跟随应用生命周期，在启动后设置为false。
