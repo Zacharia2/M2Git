@@ -133,6 +133,10 @@
     <string name="dialog_open_remote_no_app_available">没有可用于打开此地址的应用</string>
     <string name="dialog_permission_not_granted">MGit 需要读写权限 以便将本地 repo 写入到您的内部存储中。若不给予 MGit 此权限，它将无法正常运行。</string>
     <string name="dialog_stage_changes">暂存所有更改</string>
+    <string name="dialog_battery_hint_title">保持后台运行</string>
+    <string name="dialog_battery_hint_msg">若 WebDAV 后台传输中断，请在系统设置的电池/耗电管理中允许本应用后台运行。</string>
+    <string name="dialog_cert_hint_title">首次使用 HTTPS</string>
+    <string name="dialog_cert_hint_msg">本服务的 HTTPS 证书由自建 CA 签发，首次使用请按以下步骤操作：\n\n1. 先用浏览器的无痕窗口访问本服务，登录后从页面下载根证书；\n2. 安装证书到「受信任的根证书颁发机构」（Windows 不要选“自动选择存储区”）；\n3. 完全退出浏览器再重新打开，之后正常访问即可，无需再次下载。</string>
 
     <!-- Others -->
     <string name="pull_msg_init">正在拉取 …</string>

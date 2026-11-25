@@ -135,6 +135,10 @@
     <string name="dialog_open_remote_no_app_available">No Apps available to open the url</string>
     <string name="dialog_permission_not_granted">MGit requires that you grant it write access to be able to write local git repos to your storage, until you do this MGit will NOT work properly.</string>
     <string name="dialog_stage_changes">Stage changes</string>
+    <string name="dialog_battery_hint_title">Keep running in the background</string>
+    <string name="dialog_battery_hint_msg">If background WebDAV transfers are interrupted, allow background activity for this app in your device\'s battery settings.</string>
+    <string name="dialog_cert_hint_title">First-Time HTTPS Setup</string>
+    <string name="dialog_cert_hint_msg">This service uses an HTTPS certificate issued by its own private CA. For first-time use, please follow these steps:\n\n1. Access this service via your browser\'s incognito window, sign in, then download the root certificate from the page;\n2. Install the certificate into \"Trusted Root Certification Authorities\" (on Windows, do NOT choose \"Automatically select the certificate store\");\n3. Fully quit and restart your browser, then access the service normally — no need to download it again.</string>
 
     <!-- Others -->
     <string name="pull_msg_init">Pulling … </string>
@@ -148,7 +152,6 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_config_repo">Repository config</string>
     <string name="feedback_url" translatable="false">https://github.com/Zacharia2/M2Git/issues/new</string>
-    <string name="bk" translatable="false">MTUzMjQ2</string>
 
     <!-- LFS -->
     <string name="lfs_downloading">Downloading LFS objects …</string>

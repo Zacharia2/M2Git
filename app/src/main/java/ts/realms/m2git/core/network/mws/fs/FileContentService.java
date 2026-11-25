@@ -30,6 +30,19 @@ import java.io.InputStream;
  * @author brad
  */
 public interface FileContentService {
+    /**
+     * SimpleFileContentService 原子覆盖写使用的临时文件前缀/后缀，
+     * 目录列表必须过滤，否则上传期间客户端会看到 tmp 文件（还可能下载到半截内容）。
+     */
+    String TMP_PREFIX = ".milton-";
+    String TMP_SUFFIX = ".tmp";
+
+    /**
+     * 原子替换目标文件内容：写临时文件 + ATOMIC_MOVE。
+     * 实现方可以在写入钩子里拿到真实的最终路径 target。
+     */
+    void replaceFileContent(File target, InputStream in) throws IOException;
+
     void setFileContent(File file, InputStream in) throws IOException;
 
     InputStream getFileContent(File file) throws FileNotFoundException;

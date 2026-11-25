@@ -1,22 +1,21 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
+ * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
+ * regarding copyright ownership. The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+ * with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
+ * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package ts.realms.m2git.core.network.mws.fs;
 
 import org.apache.commons.io.FileUtils;
@@ -29,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -55,21 +55,13 @@ import io.milton.resource.MultiNamespaceCustomPropertyResource;
 import io.milton.resource.PropFindableResource;
 import io.milton.resource.ReplaceableResource;
 
-/**
- *
- */
-public class FsFileResource extends FsResource implements CopyableResource, DeletableResource, GetableResource, MoveableResource, PropFindableResource, ReplaceableResource, MultiNamespaceCustomPropertyResource {
+public class FsFileResource extends FsResource implements CopyableResource, DeletableResource, GetableResource,
+    MoveableResource, PropFindableResource, ReplaceableResource, MultiNamespaceCustomPropertyResource {
 
     private static final Logger log = LoggerFactory.getLogger(FsFileResource.class);
 
     private final FileContentService contentService;
 
-    /**
-     *
-     * @param host    - the requested host. E.g. www.mycompany.com
-     * @param factory
-     * @param file
-     */
     public FsFileResource(String host, FileSystemResourceFactory factory, File file, FileContentService contentService) {
         super(host, factory, file);
         this.contentService = contentService;
@@ -84,6 +76,10 @@ public class FsFileResource extends FsResource implements CopyableResource, Dele
     public String getContentType(String preferredList) {
         String mime = ContentTypeUtils.findContentTypes(this.file);
         String s = ContentTypeUtils.findAcceptableContentType(mime, preferredList);
+        // text/* 默认按 UTF-8 输出；无 charset 时浏览器按 Latin-1 猜测，UTF-8 内容会 mojibake
+        if (s != null && s.startsWith("text/") && !s.toLowerCase().contains("charset")) {
+            s = s + "; charset=UTF-8";
+        }
         if (log.isTraceEnabled()) {
             log.trace("getContentType: preferred: {} mime: {} selected: {}", preferredList, mime, s);
         }
@@ -96,7 +92,8 @@ public class FsFileResource extends FsResource implements CopyableResource, Dele
     }
 
     @Override
-    public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType) throws IOException, NotFoundException {
+    public void sendContent(OutputStream out, Range range, Map<String, String> params, String contentType)
+        throws IOException, NotFoundException {
         InputStream in = null;
         try {
             in = contentService.getFileContent(file);
@@ -117,17 +114,11 @@ public class FsFileResource extends FsResource implements CopyableResource, Dele
         }
     }
 
-    /**
-     * @{@inheritDoc}
-     */
     @Override
     public Long getMaxAgeSeconds(Auth auth) {
         return factory.maxAgeSeconds(this);
     }
 
-    /**
-     * @{@inheritDoc}
-     */
     @Override
     protected void doCopy(File dest) {
         try {
@@ -137,10 +128,19 @@ public class FsFileResource extends FsResource implements CopyableResource, Dele
         }
     }
 
+    /**
+     * 原子覆盖写（同目录临时文件 + ATOMIC_MOVE），任一时刻磁盘上的目标文件都是完整内容。
+     * 写入后强制刷新 mtime：Android 共享存储(FUSE)上可能失败（返回 false），此时
+     * ETag 的 length 分量仍覆盖大多数场景，但必须打日志暴露，否则表现为
+     * 同秒同尺寸覆盖 PUT 后客户端拿到错误的 304 旧内容。
+     */
     @Override
-    public void replaceContent(InputStream in, Long length) throws BadRequestException, ConflictException, NotAuthorizedException {
+    public void replaceContent(InputStream in, Long length)
+        throws BadRequestException, ConflictException, NotAuthorizedException {
         try {
-            contentService.setFileContent(file, in);
+            // 写入完全交给 FileContentService，钩子里能看到最终路径
+            contentService.replaceFileContent(file, in);
+            refreshMTime(file);
             factory.getWsManager().ifPresent(wsManager -> wsManager.notifyUpdated(factory.toResourcePath(file)));
         } catch (IOException ex) {
             throw new BadRequestException("Couldnt write to: " + file.getAbsolutePath(), ex);
@@ -157,7 +157,8 @@ public class FsFileResource extends FsResource implements CopyableResource, Dele
     }
 
     @Override
-    public void setProperty(QName name, Object value) throws PropertySource.PropertySetException, NotAuthorizedException {
+    public void setProperty(QName name, Object value)
+        throws PropertySource.PropertySetException, NotAuthorizedException {
         final PropertyManager propertyManager = factory.getPropertyManager();
         if (propertyManager != null) {
             propertyManager.setProperty(name, value, this);
@@ -180,6 +181,6 @@ public class FsFileResource extends FsResource implements CopyableResource, Dele
         if (propertyManager != null) {
             return propertyManager.getAllPropertyNames(this);
         }
-        return null;
+        return Collections.emptyList();
     }
 }
