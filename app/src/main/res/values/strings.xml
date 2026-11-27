@@ -205,6 +205,22 @@
     <string name="pref_key_webdav_user" translatable="false">webdav_user</string>
     <string name="pref_key_webdav_password" translatable="false">webdav_password</string>
 
+    <!-- Credential Manager -->
+    <string name="dialog_credential_new_title">New credential</string>
+    <string name="dialog_credential_edit_title">Edit credential</string>
+    <string name="dialog_credential_delete_title">Delete credential</string>
+    <string name="dialog_credential_delete_msg">Are you sure you want to delete \"%s\"? Associated repositories will lose this credential.</string>
+    <string name="dialog_credential_pick_repos_title">Link repositories</string>
+    <string name="credential_account_required">Account cannot be empty</string>
+    <string name="credential_save_failed">Failed to save</string>
+    <string name="credential_no_repos">No repositories yet</string>
+    <string name="credential_no_related_repos">No repositories associated</string>
+    <string name="credential_related_count">Associated repositories: %1$d</string>
+    <string name="credential_token_prefix">Token: %1$s</string>
+    <string name="credential_account_hint">Account / Username</string>
+    <string name="credential_secret_hint">Token / Password</string>
+    <string name="credential_rel_repos">Associated repositories</string>
+
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit error - gathering data to email a crash report</string>
     <string name="crash_report_email" translatable="false">mgit@manichord.com</string>

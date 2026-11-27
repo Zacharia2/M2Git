@@ -11,21 +11,28 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import timber.log.Timber;
+import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.utils.BasicFunctions;
 
 /**
  * Manage entries in the persisted database tracking local repo metadata.
  * 管理持久化数据库中 跟踪本地仓库元数据 的条目，以及仓库关联的凭证。
+ *
+ * 观察者注册表使用 ConcurrentHashMap + CopyOnWriteArraySet：
+ * - notifyObservers 可能从后台线程触发（如 Repo.updateLatestCommitInfo）
+ * - register/unregister 在 UI 线程触发
+ * - 原 HashMap + HashSet 并发时会抛 ConcurrentModificationException
  */
 public class RepoDbManager {
 
-    private static final Map<String, Set<RepoDbObserver>> mObservers = new HashMap<>();
+    private static final Map<String, Set<RepoDbObserver>> mObservers = new ConcurrentHashMap<>();
     private static RepoDbManager mInstance;
     private final SQLiteDatabase mWritableDB;
     private final SQLiteDatabase mReadableDB;
-
 
     private RepoDbManager(Context context) {
         RepoDbHelper mDbHelper = new RepoDbHelper(context);
@@ -33,15 +40,22 @@ public class RepoDbManager {
         mReadableDB = mDbHelper.getReadableDatabase();
     }
 
-    private static RepoDbManager getInstance() {
+    private static synchronized RepoDbManager getInstance() {
         if (mInstance == null) {
-            mInstance = new RepoDbManager(BasicFunctions.getActiveActivity());
+            Context ctx = BasicFunctions.getActiveActivity();
+            if (ctx == null) {
+                // 后台服务（WebDAV / Clone Task）首次调用时 active activity 可能为空，
+                // 用 Application context 兜底
+                ctx = MainApplication.getContext();
+            }
+            mInstance = new RepoDbManager(ctx);
         }
         return mInstance;
     }
 
     public static void registerDbObserver(String table, RepoDbObserver observer) {
-        Set<RepoDbObserver> set = mObservers.computeIfAbsent(table, k -> new HashSet<>());
+        Set<RepoDbObserver> set = mObservers.computeIfAbsent(
+            table, k -> new CopyOnWriteArraySet<>());
         set.add(observer);
     }
 
@@ -54,8 +68,13 @@ public class RepoDbManager {
     public static void notifyObservers(String table) {
         Set<RepoDbObserver> set = mObservers.get(table);
         if (set == null) return;
+        // 可能从后台线程触发，观察者需自行切线程
         for (RepoDbObserver observer : set) {
-            observer.notifyChanged();
+            try {
+                observer.notifyChanged();
+            } catch (Exception e) {
+                Timber.tag("DB").e(e, "observer notify failed: %s", observer.getClass());
+            }
         }
     }
 
@@ -125,68 +144,70 @@ public class RepoDbManager {
     public static long createCredential(String token_account, String token_secret) {
         long credentialId = -1;
         try (Cursor cursor = getInstance()._queryAllCredential()) {
-            if (cursor != null) {
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    int columnTokenAccountIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT);
-                    int columnCredentialIdIndex = cursor.getColumnIndex(RepoContract.RepoCredential._ID);
-                    String curr_token_account = cursor.getString(columnTokenAccountIndex);
-                    if (token_account.equals(curr_token_account)) {
-                        credentialId = cursor.getInt(columnCredentialIdIndex);
+            if (cursor != null && cursor.moveToFirst()) {
+                int accountIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT);
+                int idIndex = cursor.getColumnIndex(RepoContract.RepoCredential._ID);
+                do {
+                    if (token_account.equals(cursor.getString(accountIndex))) {
+                        credentialId = cursor.getInt(idIndex);
                         break;
                     }
-                    cursor.moveToNext();
-                }
-            }
-            if (credentialId == -1) {
-                ContentValues values = new ContentValues();
-                values.put(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, token_account);
-                values.put(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, token_secret);
-                credentialId = getInstance()
-                    .mWritableDB
-                    .insert(RepoContract.RepoCredential.TABLE_NAME, null, values);
+                } while (cursor.moveToNext());
             }
         } catch (Exception e) {
-            e.fillInStackTrace();
+            Timber.tag("DB").e(e, "createCredential: query existing failed");
+        }
+
+        if (credentialId == -1) {
+            ContentValues values = new ContentValues();
+            values.put(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, token_account);
+            values.put(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, token_secret);
+            credentialId = getInstance()
+                .mWritableDB
+                .insert(RepoContract.RepoCredential.TABLE_NAME, null, values);
+            notifyObservers(RepoContract.RepoCredential.TABLE_NAME);
         }
         return credentialId;
     }
 
     public static void relateRepoWithCredential(long credentialId, String repo) {
-        Cursor credential = getCredentialById(credentialId);
-        if (credential == null || !credential.moveToFirst()) {
-            return; // Credential not found or cursor is empty
+        // try-with-resources：原代码未关闭 cursor，每次关联泄漏一个 cursor
+        try (Cursor credential = getCredentialById(credentialId)) {
+            if (credential == null || !credential.moveToFirst()) {
+                return;
+            }
+            int columnIndex = credential.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
+            String relRepoString = credential.getString(columnIndex);
+            String new_rel;
+            if (relRepoString == null || relRepoString.isEmpty()) {
+                new_rel = repo;
+            } else {
+                HashSet<String> rel_list = new HashSet<>(Arrays.asList(relRepoString.split(",")));
+                rel_list.add(repo);
+                new_rel = String.join(",", rel_list);
+            }
+            ContentValues values = new ContentValues();
+            values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, new_rel);
+            updateCredential(credentialId, values);
         }
-        int columnIndex = credential.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
-        String relRepoString = credential.getString(columnIndex);
-        String new_rel;
-        ContentValues values = new ContentValues();
-        if (relRepoString == null || relRepoString.isEmpty()) {
-            new_rel = repo;
-        } else {
-            HashSet<String> rel_list = new HashSet<>(Arrays.asList(relRepoString.split(",")));
-            rel_list.add(repo);
-            new_rel = String.join(",", rel_list);
-        }
-        values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, new_rel);
-        updateCredential(credentialId, values);
     }
 
     public static void unrelateRepoWithCredential(long id, String repo) {
-        Cursor credential = getCredentialById(id);
-        if (credential == null || !credential.moveToFirst()) {
-            return; // Credential not found or cursor is empty
+        try (Cursor credential = getCredentialById(id)) {
+            if (credential == null || !credential.moveToFirst()) {
+                return;
+            }
+            int columnIndex = credential.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
+            String relRepoString = credential.getString(columnIndex);
+            if (relRepoString == null || relRepoString.isEmpty()) return;
+            HashSet<String> rel_list = new HashSet<>(Arrays.asList(relRepoString.split(",")));
+            if (!rel_list.contains(repo)) return;
+            rel_list.remove(repo);
+            String new_rel = String.join(",", rel_list);
+            ContentValues values = new ContentValues();
+            values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, new_rel);
+            updateCredential(id, values);
         }
-        int columnIndex = credential.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
-        String relRepoString = credential.getString(columnIndex);
-        if (relRepoString == null) return;
-        HashSet<String> rel_list = new HashSet<>(Arrays.asList(relRepoString.split(",")));
-        if (!rel_list.contains(repo)) return;
-        rel_list.remove(repo);
-        String new_rel = String.join(",", rel_list);
-        ContentValues values = new ContentValues();
-        values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, new_rel);
-        updateCredential(id, values);
     }
 
     public static void updateCredential(long id, ContentValues values) {
@@ -194,6 +215,7 @@ public class RepoDbManager {
         String[] whereArgs = {String.valueOf(id)};
         getInstance().mWritableDB.update(RepoContract.RepoCredential.TABLE_NAME, values,
             whereClause, whereArgs);
+        notifyObservers(RepoContract.RepoCredential.TABLE_NAME);
     }
 
     public static Cursor getCredentialById(long id) {
@@ -206,11 +228,15 @@ public class RepoDbManager {
 
     public static void deleteCredential(long id) {
         getInstance()._deleteCredential(id);
+        notifyObservers(RepoContract.RepoCredential.TABLE_NAME);
     }
 
+    /**
+     * 按 repoId 反查关联的凭证。
+     * 修复：新建后未关联的凭证 rel_repo 为 NULL，直接 split 会 NPE。
+     */
     public static Map<String, String> queryCredentialByRepoId(String repo_id) {
         try (Cursor cursor = RepoDbManager.queryAllCredential()) {
-            Map<String, String> queryResult = Collections.emptyMap();
             if (cursor != null && cursor.moveToFirst()) {
                 // 循环遍历所有行
                 int rel_repoIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
@@ -218,20 +244,22 @@ public class RepoDbManager {
                 int accountIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT);
                 do {
                     String rel_repo = cursor.getString(rel_repoIndex);
-                    String[] rel_repo_list = rel_repo.split(",");
-                    if (Arrays.asList(rel_repo_list).contains(repo_id)) {
-                        queryResult = Map.of(
-                            RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, cursor.getString(secretIndex),
-                            RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, cursor.getString(accountIndex)
-                        );
-                        break;
+                    if (rel_repo == null || rel_repo.isEmpty()) continue;
+                    for (String rid : rel_repo.split(",")) {
+                        if (repo_id.equals(rid)) {
+                            Map<String, String> result = new HashMap<>();
+                            result.put(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET,
+                                cursor.getString(secretIndex));
+                            result.put(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT,
+                                cursor.getString(accountIndex));
+                            return result;
+                        }
                     }
-
-                } while (cursor.moveToNext()); // 移动到下一行，如果成功则继续循环
+                } while (cursor.moveToNext());
             } else {
                 Timber.tag("DB").d("No credentials found.");
             }
-            return queryResult;
+            return Collections.emptyMap();
         }
     }
 

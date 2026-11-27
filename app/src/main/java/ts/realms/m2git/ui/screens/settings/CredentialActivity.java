@@ -1,57 +1,256 @@
 package ts.realms.m2git.ui.screens.settings;
 
-
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import ts.realms.m2git.R;
+import ts.realms.m2git.core.models.Credential;
+import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.local.database.RepoContract;
+import ts.realms.m2git.local.database.RepoDbManager;
 import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 
-public class CredentialActivity extends BaseCompatActivity {
-    private static final String TAG = "DemoFragmentActivity";
+/**
+ * 凭证管理器。
+ *
+ * 功能：列表 / 新建 / 编辑 / 删除 / 关联仓库。
+ * 数据变更由 RepoDbObserver 驱动，回调可能来自后台线程，统一切主线程。
+ */
+public class CredentialActivity extends BaseCompatActivity
+        implements RepoDbManager.RepoDbObserver {
+
+    private final List<Credential> mCredentials = new ArrayList<>();
+    private AccountAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credential);
 
-        //        - view是一个列表视图
-        //            - 仓库和证书的关系是：一个仓库对应一个证书、一个证书对应多个仓库。
-        //        - 创建，在视图中创建，或者在代码请求中不存在创建(可以直接通过cid关联)。
-        //        - 删除
-        //            - 根据cid删除，列表视图可以提供cid，只有在视图中删除
-        //            - 查找
-        //            - 查找全部，获得全部记录，在列表视图加载的时候
-        //            - 根据RepoId查找，获得唯一一个证书记录，在代码中查找，请求凭证时。
-        //        - 根据cid查找，获得一条记录
-        //            - 是否还需要根据其它方式查找？看需要。有什么需要？关联的需要、断联的需要、获取的需要。其实就是修改的需要。
-        //        - 关联
-        //            - 根据cid，repoId关联
-        //            - 在视图中关联（视图会有cid）、在视图创建后再次编辑进行关联（视图会有cid）、在请求不存在创建后关联（用创建后的cid）
-        //        - 断联
-        //            - 只在视图中断联
-        //        - 仓库本身自己就有 username和password、不知道是不是凭证。
-        //        BaseCompatActivity(promptForPasswordInner) -> RepoRemoteOpTask(onClicked) -> RepoOpTask(setCredentials)
+        ActionBar bar = getSupportActionBar();
+        if (bar != null) {
+            bar.setTitle(R.string.title_activity_credential_manager);
+            bar.setDisplayHomeAsUpEnabled(true);
+        }
 
-        //        activity_credential、edit_account（menu）、list_item_account
-        //        把menu添加上，然后动态适配list_item_account到activity_credential的目标列表中。
+        RecyclerView list = findViewById(R.id.accountList);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new AccountAdapter(mCredentials, new AccountAdapter.Listener() {
+            @Override public void onEdit(Credential c)   { showEditDialog(c); }
+            @Override public void onDelete(Credential c) { confirmDelete(c); }
+        });
+        list.setAdapter(mAdapter);
 
+        findViewById(R.id.addAccountLayout).setOnClickListener(v -> showEditDialog(null));
+    }
 
-        //        fragment_credential_item、list_item_rel_repo_checkbox
-        //        list_item_rel_repo_checkbox动态适配到fragment_credential_item的目标列表中。
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RepoDbManager.registerDbObserver(RepoContract.RepoCredential.TABLE_NAME, this);
+        reload();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        RepoDbManager.unregisterDbObserver(RepoContract.RepoCredential.TABLE_NAME, this);
+    }
 
-        //        检索到的凭证、选择的凭证(dialog_select_account)、新建凭证并关联。现在还需要选择的凭证。
+    @Override
+    public void notifyChanged() {
+        // 通知可能来自后台线程（Repo.updateLatestCommitInfo 等），统一切主线程；
+        // 同时避免 Activity 已销毁时仍然操作 Adapter。
+        runOnUiThread(() -> {
+            if (isFinishing() || isDestroyed()) return;
+            reload();
+        });
+    }
 
-        //        请求的时候用的dialog，用于单选目标token。
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-        //        long cid = RepoDbManager.createCredential("ts1","s1");
-        //        Cursor cursor = RepoDbManager.getCredentialById(cid);
-        //        Credential credential = new Credential(cursor);
-        //        RepoDbManager.relateRepoWithCredential(cid,"1212");
-        //        RepoDbManager.relateRepoWithCredential(cid,"2323");
-        //        RepoDbManager.unrelateRepoWithCredential(cid,"1212");
-        //        int all = RepoDbManager.queryAllCredential().getCount();
-        //        RepoDbManager.deleteCredential(cid);
-        //        Map<String, String> re =  RepoDbManager.queryCredentialByRepoId("2323");
+    // ============================================================ 列表
+
+    private void reload() {
+        mCredentials.clear();
+        Cursor cursor = RepoDbManager.queryAllCredential();
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    do { mCredentials.add(new Credential(cursor)); }
+                    while (cursor.moveToNext());
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    // ============================================================ 新建/编辑
+
+    private void showEditDialog(Credential existing) {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_account, null);
+        EditText editAccount = view.findViewById(R.id.editAccount);
+        EditText editSecret  = view.findViewById(R.id.editSecret);
+        TextView relSummary  = view.findViewById(R.id.textRelSummary);
+        View     relRow      = view.findViewById(R.id.layoutRelRepo);
+
+        final Set<String> selected = new HashSet<>();
+        if (existing != null) {
+            editAccount.setText(existing.getTokenAccount());
+            editSecret.setText(existing.getTokenSecret());
+            String[] rel = existing.getRelRepoId();
+            if (rel != null) selected.addAll(Arrays.asList(rel));
+        }
+        refreshRelSummary(relSummary, selected);
+
+        relRow.setOnClickListener(v -> showPickReposDialog(selected,
+            () -> refreshRelSummary(relSummary, selected)));
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle(existing == null
+                ? R.string.dialog_credential_new_title
+                : R.string.dialog_credential_edit_title)
+            .setView(view)
+            .setPositiveButton(R.string.label_save, null)
+            .setNegativeButton(R.string.label_cancel, null)
+            .create();
+
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            .setOnClickListener(v -> {
+                String account = editAccount.getText().toString().trim();
+                String secret  = editSecret.getText().toString().trim();
+                if (account.isEmpty()) {
+                    showToastMessage(R.string.credential_account_required);
+                    return;
+                }
+                saveCredential(existing, account, secret, selected);
+                dialog.dismiss();
+            }));
+        dialog.show();
+    }
+
+    private void saveCredential(Credential existing, String account, String secret,
+                                Set<String> repoIds) {
+        if (existing == null) {
+            long cid = RepoDbManager.createCredential(account, secret);
+            if (cid == -1) {
+                showToastMessage(R.string.credential_save_failed);
+                return;
+            }
+            for (String rid : repoIds) {
+                RepoDbManager.relateRepoWithCredential(cid, rid);
+            }
+        } else {
+            ContentValues values = new ContentValues();
+            values.put(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, account);
+            values.put(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, secret);
+            RepoDbManager.updateCredential(existing.getID(), values);
+
+            Set<String> old = new HashSet<>();
+            if (existing.getRelRepoId() != null) {
+                old.addAll(Arrays.asList(existing.getRelRepoId()));
+            }
+            for (String rid : repoIds) {
+                if (!old.contains(rid)) {
+                    RepoDbManager.relateRepoWithCredential(existing.getID(), rid);
+                }
+            }
+            for (String rid : old) {
+                if (!repoIds.contains(rid)) {
+                    RepoDbManager.unrelateRepoWithCredential(existing.getID(), rid);
+                }
+            }
+        }
+    }
+
+    private void refreshRelSummary(TextView tv, Set<String> selected) {
+        if (selected.isEmpty()) {
+            tv.setText(R.string.credential_no_related_repos);
+        } else {
+            tv.setText(getString(R.string.credential_related_count, selected.size()));
+        }
+    }
+
+    // ============================================================ 仓库多选
+
+    private void showPickReposDialog(Set<String> selected, Runnable onDone) {
+        Cursor cursor = RepoDbManager.queryAllRepo();
+        if (cursor == null) return;
+        final List<Repo> repos;
+        try {
+            repos = Repo.getRepoList(cursor);
+        } finally {
+            cursor.close();
+        }
+
+        if (repos.isEmpty()) {
+            showToastMessage(R.string.credential_no_repos);
+            return;
+        }
+
+        // 关键修复：用 draft 副本接收勾选，取消时不影响原 selected，
+        // 只有点"确定"才写回。原实现直接改 selected 导致取消无效。
+        final Set<String> draft = new HashSet<>(selected);
+        CharSequence[] labels = new CharSequence[repos.size()];
+        boolean[] checked = new boolean[repos.size()];
+        for (int i = 0; i < repos.size(); i++) {
+            Repo r = repos.get(i);
+            String id = String.valueOf(r.getID());
+            labels[i] = r.getDisplayName() + "  (#" + id + ")";
+            checked[i] = draft.contains(id);
+        }
+
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_credential_pick_repos_title)
+            .setMultiChoiceItems(labels, checked, (d, which, isChecked) -> {
+                String id = String.valueOf(repos.get(which).getID());
+                if (isChecked) draft.add(id); else draft.remove(id);
+            })
+            .setPositiveButton(R.string.label_ok, (d, w) -> {
+                selected.clear();
+                selected.addAll(draft);
+                if (onDone != null) onDone.run();
+            })
+            .setNegativeButton(R.string.label_cancel, null)
+            .show();
+    }
+
+    // ============================================================ 删除
+
+    private void confirmDelete(Credential c) {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_credential_delete_title)
+            .setMessage(getString(R.string.dialog_credential_delete_msg, c.getTokenAccount()))
+            .setPositiveButton(R.string.label_delete,
+                (d, w) -> RepoDbManager.deleteCredential(c.getID()))
+            .setNegativeButton(R.string.label_cancel, null)
+            .show();
     }
 }

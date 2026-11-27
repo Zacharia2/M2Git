@@ -1,5 +1,9 @@
 package ts.realms.m2git.core.models;
 
+import java.util.Map;
+
+import ts.realms.m2git.local.database.RepoContract;
+import ts.realms.m2git.local.database.RepoDbManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -563,12 +567,26 @@ public class Repo implements Comparable<Repo>, Serializable {
     }
 
     public void setToken(Context context) {
-        String tokenAccount = Profile.getTokenAccount(context);
-        String tokenSecretKey = Profile.getTokenSecretKey(context);
-        if (tokenAccount != null && !tokenAccount.isEmpty() && tokenSecretKey != null && !tokenSecretKey.isEmpty()) {
-            setUsername(tokenAccount);
-            setPassword(tokenSecretKey);
-            Timber.tag("Repo").log(Log.INFO, "Set token: " + tokenAccount);
+        // 优先级：凭证表（按 repoId 精确匹配） > 全局 token
+        // Map<String, String> cred = RepoDbManager.queryCredentialByRepoId(String.valueOf(getID()));
+        // String account = cred.get(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT);
+        // String secret  = cred.get(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET);
+
+        // if (account != null && !account.isEmpty()) {
+        //     setUsername(account);
+        //     setPassword(secret);
+        //     Timber.tag("Repo").i("Set token from credential manager: %s", account);
+        //     return;
+        // }
+
+        // 回退到全局 token（Profile / PreferenceHelper）
+        String globalAccount = Profile.getTokenAccount(context);
+        String globalSecret  = Profile.getTokenSecretKey(context);
+        if (globalAccount != null && !globalAccount.isEmpty()
+                && globalSecret != null && !globalSecret.isEmpty()) {
+            setUsername(globalAccount);
+            setPassword(globalSecret);
+            Timber.tag("Repo").i("Set token from global prefs: %s", globalAccount);
         }
     }
 

@@ -186,6 +186,22 @@
     <string name="preference_credential_manager_summary">凭证管理器</string>
     <string name="title_activity_credential_manager">凭证管理器</string>
 
+    <!-- Credential Manager -->
+    <string name="dialog_credential_new_title">新建凭证</string>
+    <string name="dialog_credential_edit_title">编辑凭证</string>
+    <string name="dialog_credential_delete_title">删除凭证</string>
+    <string name="dialog_credential_delete_msg">确定删除「%s」吗？关联的仓库将失去该凭证。</string>
+    <string name="dialog_credential_pick_repos_title">关联仓库</string>
+    <string name="credential_account_required">账号不能为空</string>
+    <string name="credential_save_failed">保存失败</string>
+    <string name="credential_no_repos">还没有任何仓库</string>
+    <string name="credential_no_related_repos">未关联仓库</string>
+    <string name="credential_related_count">已关联 %1$d 个仓库</string>
+    <string name="credential_token_prefix">Token: %1$s</string>
+    <string name="credential_account_hint">账号 / 用户名</string>
+    <string name="credential_secret_hint">Token / 密码</string>
+    <string name="credential_rel_repos">关联仓库</string>
+
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit 发生错误 - 正在获取用于崩溃报告的数据</string>
 
