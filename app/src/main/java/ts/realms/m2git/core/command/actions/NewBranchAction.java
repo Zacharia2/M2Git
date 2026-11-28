@@ -1,8 +1,8 @@
 package ts.realms.m2git.core.command.actions;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.core.command.RepoAction;
 import ts.realms.m2git.core.command.MAsyncTask;
+import ts.realms.m2git.core.command.RepoAction;
 import ts.realms.m2git.core.command.tasks.local.CheckoutTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;

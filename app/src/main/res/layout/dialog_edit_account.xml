@@ -9,10 +9,10 @@
         android:id="@+id/editAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/credential_account_hint"
-        android:inputType="text"
         android:autofillHints="username"
+        android:hint="@string/credential_account_hint"
         android:importantForAutofill="no"
+        android:inputType="text"
         android:textColor="?android:attr/textColorPrimary" />
 
     <EditText
@@ -20,10 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:hint="@string/credential_secret_hint"
-        android:inputType="textPassword"
         android:autofillHints="password"
+        android:hint="@string/credential_secret_hint"
         android:importantForAutofill="no"
+        android:inputType="textPassword"
         android:textColor="?android:attr/textColorPrimary" />
 
     <LinearLayout
@@ -31,11 +31,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="8dp">
 
         <TextView
@@ -43,15 +43,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/credential_rel_repos"
-            android:textSize="16sp"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/textRelSummary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:alpha="0.7"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

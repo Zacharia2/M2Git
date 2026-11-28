@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -32,14 +31,16 @@ import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
 
 /**
  * 凭证管理器。
- *
+ * <p>
  * 功能：列表 / 新建 / 编辑 / 删除 / 关联仓库。
  * 数据变更由 RepoDbObserver 驱动，回调可能来自后台线程，统一切主线程。
  */
 public class CredentialActivity extends BaseCompatActivity
-        implements RepoDbManager.RepoDbObserver {
+    implements RepoDbManager.RepoDbObserver {
 
-    /** 编辑时发现重名 account 的提示（应迁移到 strings.xml）。 */
+    /**
+     * 编辑时发现重名 account 的提示（应迁移到 strings.xml）。
+     */
     private static final String MSG_DUPLICATE_ACCOUNT = "该账户名已被其他凭证使用，请更换账户名";
 
     private final List<Credential> mCredentials = new ArrayList<>();
@@ -59,8 +60,15 @@ public class CredentialActivity extends BaseCompatActivity
         RecyclerView list = findViewById(R.id.accountList);
         list.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new AccountAdapter(mCredentials, new AccountAdapter.Listener() {
-            @Override public void onEdit(Credential c)   { showEditDialog(c); }
-            @Override public void onDelete(Credential c) { confirmDelete(c); }
+            @Override
+            public void onEdit(Credential c) {
+                showEditDialog(c);
+            }
+
+            @Override
+            public void onDelete(Credential c) {
+                confirmDelete(c);
+            }
         });
         list.setAdapter(mAdapter);
 
@@ -107,7 +115,9 @@ public class CredentialActivity extends BaseCompatActivity
         if (cursor != null) {
             try {
                 if (cursor.moveToFirst()) {
-                    do { mCredentials.add(new Credential(cursor)); }
+                    do {
+                        mCredentials.add(new Credential(cursor));
+                    }
                     while (cursor.moveToNext());
                 }
             } finally {
@@ -122,9 +132,9 @@ public class CredentialActivity extends BaseCompatActivity
     private void showEditDialog(Credential existing) {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_account, null);
         EditText editAccount = view.findViewById(R.id.editAccount);
-        EditText editSecret  = view.findViewById(R.id.editSecret);
-        TextView relSummary  = view.findViewById(R.id.textRelSummary);
-        View     relRow      = view.findViewById(R.id.layoutRelRepo);
+        EditText editSecret = view.findViewById(R.id.editSecret);
+        TextView relSummary = view.findViewById(R.id.textRelSummary);
+        View relRow = view.findViewById(R.id.layoutRelRepo);
 
         final Set<String> selected = new HashSet<>();
         if (existing != null) {
@@ -152,7 +162,7 @@ public class CredentialActivity extends BaseCompatActivity
         dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             .setOnClickListener(v -> {
                 String account = editAccount.getText().toString().trim();
-                String secret  = editSecret.getText().toString().trim();
+                String secret = editSecret.getText().toString().trim();
                 if (account.isEmpty()) {
                     showToastMessage(R.string.credential_account_required);
                     return;
@@ -184,7 +194,7 @@ public class CredentialActivity extends BaseCompatActivity
      * 覆盖语义：更新 secret，并将本次勾选的关联仓库与旧关联取并集（不删除旧关联）。
      */
     private void confirmOverwrite(AlertDialog editDialog, long existingId,
-                                String account, String secret, Set<String> repoIds) {
+                                  String account, String secret, Set<String> repoIds) {
         new AlertDialog.Builder(this)
             .setTitle(R.string.dialog_credential_overwrite_title)
             .setMessage(getString(R.string.dialog_credential_overwrite_msg, account))
@@ -210,7 +220,7 @@ public class CredentialActivity extends BaseCompatActivity
             }
             // 一次性写入关联，避免逐个 relate 触发多次 notify
             RepoDbManager.setCredentialRepos(cid, repoIds);
-        // CredentialActivity.saveCredential 编辑分支
+            // CredentialActivity.saveCredential 编辑分支
         } else {
             LinkedHashSet<String> ordered = new LinkedHashSet<>(repoIds);
             ContentValues values = new ContentValues();
@@ -229,7 +239,8 @@ public class CredentialActivity extends BaseCompatActivity
             }
             // 同步 repo 表冗余字段
             Set<String> oldSet = new HashSet<>();
-            if (existing.getRelRepoId() != null) oldSet.addAll(Arrays.asList(existing.getRelRepoId()));
+            if (existing.getRelRepoId() != null)
+                oldSet.addAll(Arrays.asList(existing.getRelRepoId()));
 
             // 被移除关联的 repo：清空冗余凭证
             for (String rid : oldSet) {
@@ -285,7 +296,8 @@ public class CredentialActivity extends BaseCompatActivity
             .setTitle(R.string.dialog_credential_pick_repos_title)
             .setMultiChoiceItems(labels, checked, (d, which, isChecked) -> {
                 String id = String.valueOf(repos.get(which).getID());
-                if (isChecked) draft.add(id); else draft.remove(id);
+                if (isChecked) draft.add(id);
+                else draft.remove(id);
             })
             .setPositiveButton(R.string.label_ok, (d, w) -> {
                 selected.clear();

@@ -6,11 +6,11 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import java.util.Iterator;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
-import ts.realms.m2git.core.command.RepoAction;
 import ts.realms.m2git.core.command.MAsyncTask.AsyncTaskPostCallback;
+import ts.realms.m2git.core.command.RepoAction;
 import ts.realms.m2git.core.command.tasks.local.UndoCommitTask;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 public class UndoAction extends RepoAction {

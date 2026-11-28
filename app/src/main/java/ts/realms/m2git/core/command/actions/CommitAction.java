@@ -25,11 +25,11 @@ import java.util.HashSet;
 import java.util.List;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.RepoAction;
 import ts.realms.m2git.core.command.tasks.local.CommitChangesTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.Profile;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
 import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 

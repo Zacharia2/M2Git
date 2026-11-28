@@ -59,8 +59,7 @@ public class MGitSSLSocketFactory extends SSLSocketFactory {
 
 
     private Socket modifySocket(Socket socket) {
-        if (socket instanceof SSLSocket) {
-            SSLSocket sslSocket = (SSLSocket) socket;
+        if (socket instanceof SSLSocket sslSocket) {
             sslSocket.setEnabledProtocols(enabledProtocols);
         }
         return socket;

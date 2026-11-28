@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground"
     android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingStart="16dp"
-    android:paddingEnd="8dp"
     android:paddingTop="12dp"
-    android:paddingBottom="12dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:paddingEnd="8dp"
+    android:paddingBottom="12dp">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -20,25 +20,25 @@
             android:id="@+id/accountName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/accountToken"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             android:alpha="0.7"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/accountMeta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             android:alpha="0.6"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <ImageButton
@@ -46,6 +46,6 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:src="@android:drawable/ic_menu_delete"
-        android:contentDescription="@string/label_delete" />
+        android:contentDescription="@string/label_delete"
+        android:src="@android:drawable/ic_menu_delete" />
 </LinearLayout>

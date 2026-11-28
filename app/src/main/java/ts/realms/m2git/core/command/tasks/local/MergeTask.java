@@ -4,10 +4,10 @@ import org.eclipse.jgit.api.MergeCommand;
 import org.eclipse.jgit.lib.Ref;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.utils.BasicFunctions;
 
 public class MergeTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {

@@ -8,7 +8,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 
 import org.eclipse.jgit.api.Git;
@@ -38,12 +37,12 @@ import java.util.Set;
 
 import timber.log.Timber;
 import ts.realms.m2git.MainApplication;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.tasks.RepoOpTask;
 import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.local.database.RepoDbManager;
 import ts.realms.m2git.local.preference.PreferenceHelper;
 import ts.realms.m2git.local.preference.Profile;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.utils.FsUtils;
 
 /**
@@ -581,9 +580,9 @@ public class Repo implements Comparable<Repo>, Serializable {
 
         // 回退到全局 token（Profile / PreferenceHelper）
         String globalAccount = Profile.getTokenAccount(context);
-        String globalSecret  = Profile.getTokenSecretKey(context);
+        String globalSecret = Profile.getTokenSecretKey(context);
         if (globalAccount != null && !globalAccount.isEmpty()
-                && globalSecret != null && !globalSecret.isEmpty()) {
+            && globalSecret != null && !globalSecret.isEmpty()) {
             setUsername(globalAccount);
             setPassword(globalSecret);
             Timber.tag("Repo").i("Set token from global prefs: %s", globalAccount);

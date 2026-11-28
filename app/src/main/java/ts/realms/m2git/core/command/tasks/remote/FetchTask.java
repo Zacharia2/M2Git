@@ -6,11 +6,11 @@ import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.transport.FetchResult;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.network.ssh.SgitTransportCallback;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 
 public class FetchTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskCallback {
 

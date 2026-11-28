@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.RepoAction;
 import ts.realms.m2git.core.command.tasks.local.AddToStageTask;
 import ts.realms.m2git.core.command.tasks.local.CommitChangesTask;
@@ -24,6 +23,7 @@ import ts.realms.m2git.core.command.tasks.remote.PullTask;
 import ts.realms.m2git.core.command.tasks.remote.PushTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.Profile;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.ui.screens.repoDetail.RepoDetailActivity;
 
 public class SyncRepoAction extends RepoAction {

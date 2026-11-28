@@ -3,10 +3,10 @@ package ts.realms.m2git.core.command.tasks.local;
 import org.eclipse.jgit.lib.ObjectId;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 
 public class CherryPickTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 

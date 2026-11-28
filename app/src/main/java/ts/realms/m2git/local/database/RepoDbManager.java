@@ -21,20 +21,20 @@ import ts.realms.m2git.utils.BasicFunctions;
 /**
  * Manage entries in the persisted database tracking local repo metadata.
  * 管理持久化数据库中 跟踪本地仓库元数据 的条目，以及仓库关联的凭证。
- *
+ * <p>
  * 并发说明：
  * - DB_LOCK 保护“凭证 / 仓库”的复合读-改-写序列（查重+插入、读关联+合并+写回），
- *   避免多线程丢失更新。SQLiteDatabase 自身线程安全，但复合序列不原子。
+ * 避免多线程丢失更新。SQLiteDatabase 自身线程安全，但复合序列不原子。
  * - 观察者注册表使用 ConcurrentHashMap + CopyOnWriteArraySet。
  */
 public class RepoDbManager {
 
     private static final Map<String, Set<RepoDbObserver>> mObservers = new ConcurrentHashMap<>();
-    private static RepoDbManager mInstance;
-
-    /** 保护复合读-改-写序列；可重入，所有加锁路径只使用这一把锁，无死锁风险。 */
+    /**
+     * 保护复合读-改-写序列；可重入，所有加锁路径只使用这一把锁，无死锁风险。
+     */
     private static final Object DB_LOCK = new Object();
-
+    private static RepoDbManager mInstance;
     private final SQLiteDatabase mWritableDB;
     private final SQLiteDatabase mReadableDB;
 
@@ -88,12 +88,12 @@ public class RepoDbManager {
 
     /**
      * 将用户名/密码写入 repo 表，并同步到凭证管理器。
-     *
+     * <p>
      * 修复点：
      * - 关联前先 `_unrelateRepoFromAllCredentials`，保证一个 repo 只关联一个凭证，
-     *   避免 queryCredentialByRepoId 返回旧凭证（Bug 2）。
+     * 避免 queryCredentialByRepoId 返回旧凭证（Bug 2）。
      * - 清除凭证（username/password 为 null）时同样解除关联，
-     *   避免凭证列表计数虚高、repo 表与凭证管理器不一致（Bug 1）。
+     * 避免凭证列表计数虚高、repo 表与凭证管理器不一致（Bug 1）。
      */
     public static void persistCredentials(long repoId, String username, String password) {
         synchronized (DB_LOCK) {
@@ -253,7 +253,7 @@ public class RepoDbManager {
         Map<Long, String> updates = new LinkedHashMap<>();
         try (Cursor cursor = instance._queryAllCredential()) {
             if (cursor == null || !cursor.moveToFirst()) return;
-            int idIndex  = cursor.getColumnIndex(RepoContract.RepoCredential._ID);
+            int idIndex = cursor.getColumnIndex(RepoContract.RepoCredential._ID);
             int relIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
             if (idIndex < 0 || relIndex < 0) return;
             do {
@@ -321,12 +321,12 @@ public class RepoDbManager {
 
     /**
      * 创建凭证。
-     *
+     * <p>
      * 新建前 UI 应先调用 {@link #findCredentialIdByAccount(String)} 检查同名冲突，
      * 若存在则弹确认框，由用户决定是否覆盖：
      * - 用户选择覆盖：调用 {@link #overwriteCredential(long, String, String)}；
      * - 用户选择取消：不调用本方法。
-     *
+     * <p>
      * 本方法保留查重作为兜底：若已存在同名 account，返回旧 id，不更新 secret。
      * 注意：查重+插入在 DB_LOCK 内完成，避免并发重复插入。
      * 修复：notifyObservers 移到 synchronized 块外。
@@ -467,6 +467,65 @@ public class RepoDbManager {
 
     // ============================================================ 内部查询
 
+    /**
+     * 从所有凭证的 rel_repo 中移除指定 repoId。调用方必须持有 DB_LOCK。
+     */
+    private static void _unrelateRepoFromAllCredentials(String repoId) {
+        RepoDbManager instance = getInstance();
+        // 先收集，再批量更新：避免边遍历 Cursor 边改同一张表
+        Map<Long, String> updates = new LinkedHashMap<>();
+        try (Cursor cursor = instance._queryAllCredential()) {
+            if (cursor == null || !cursor.moveToFirst()) return;
+            int idIndex = cursor.getColumnIndex(RepoContract.RepoCredential._ID);
+            int relIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
+            if (idIndex < 0 || relIndex < 0) return;
+            do {
+                String rel = cursor.getString(relIndex);
+                if (rel == null || rel.isEmpty()) continue;
+                boolean contains = false;
+                LinkedHashSet<String> remaining = new LinkedHashSet<>();
+                for (String s : rel.split(",")) {
+                    if (s.isEmpty()) continue;
+                    if (repoId.equals(s)) {
+                        contains = true;
+                    } else {
+                        remaining.add(s);
+                    }
+                }
+                if (contains) {
+                    updates.put(cursor.getLong(idIndex), String.join(",", remaining));
+                }
+            } while (cursor.moveToNext());
+        }
+        for (Map.Entry<Long, String> e : updates.entrySet()) {
+            ContentValues values = new ContentValues();
+            values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, e.getValue());
+            instance.mWritableDB.update(RepoContract.RepoCredential.TABLE_NAME, values,
+                RepoContract.RepoCredential._ID + " = ?",
+                new String[]{String.valueOf(e.getKey())});
+        }
+    }
+
+    /**
+     * 判断某个 repo 是否仍被任意凭证关联。调用方必须持有 DB_LOCK。
+     */
+    private static boolean _isRepoReferencedByAnyCredential(String repoId) {
+        RepoDbManager instance = getInstance();
+        try (Cursor cursor = instance._queryAllCredential()) {
+            if (cursor == null || !cursor.moveToFirst()) return false;
+            int relIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
+            if (relIndex < 0) return false;
+            do {
+                String rel = cursor.getString(relIndex);
+                if (rel == null || rel.isEmpty()) continue;
+                for (String s : rel.split(",")) {
+                    if (repoId.equals(s)) return true;
+                }
+            } while (cursor.moveToNext());
+        }
+        return false;
+    }
+
     private Cursor _searchRepo(String query) {
         String whereClause =
             RepoContract.RepoEntry.COLUMN_NAME_LOCAL_PATH
@@ -566,61 +625,6 @@ public class RepoDbManager {
         }
         notifyObservers(RepoContract.RepoCredential.TABLE_NAME);
         notifyObservers(RepoContract.RepoEntry.TABLE_NAME);
-    }
-
-    /** 从所有凭证的 rel_repo 中移除指定 repoId。调用方必须持有 DB_LOCK。 */
-    private static void _unrelateRepoFromAllCredentials(String repoId) {
-        RepoDbManager instance = getInstance();
-        // 先收集，再批量更新：避免边遍历 Cursor 边改同一张表
-        Map<Long, String> updates = new LinkedHashMap<>();
-        try (Cursor cursor = instance._queryAllCredential()) {
-            if (cursor == null || !cursor.moveToFirst()) return;
-            int idIndex = cursor.getColumnIndex(RepoContract.RepoCredential._ID);
-            int relIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
-            if (idIndex < 0 || relIndex < 0) return;
-            do {
-                String rel = cursor.getString(relIndex);
-                if (rel == null || rel.isEmpty()) continue;
-                boolean contains = false;
-                LinkedHashSet<String> remaining = new LinkedHashSet<>();
-                for (String s : rel.split(",")) {
-                    if (s.isEmpty()) continue;
-                    if (repoId.equals(s)) {
-                        contains = true;
-                    } else {
-                        remaining.add(s);
-                    }
-                }
-                if (contains) {
-                    updates.put(cursor.getLong(idIndex), String.join(",", remaining));
-                }
-            } while (cursor.moveToNext());
-        }
-        for (Map.Entry<Long, String> e : updates.entrySet()) {
-            ContentValues values = new ContentValues();
-            values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, e.getValue());
-            instance.mWritableDB.update(RepoContract.RepoCredential.TABLE_NAME, values,
-                RepoContract.RepoCredential._ID + " = ?",
-                new String[]{String.valueOf(e.getKey())});
-        }
-    }
-
-    /** 判断某个 repo 是否仍被任意凭证关联。调用方必须持有 DB_LOCK。 */
-    private static boolean _isRepoReferencedByAnyCredential(String repoId) {
-        RepoDbManager instance = getInstance();
-        try (Cursor cursor = instance._queryAllCredential()) {
-            if (cursor == null || !cursor.moveToFirst()) return false;
-            int relIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
-            if (relIndex < 0) return false;
-            do {
-                String rel = cursor.getString(relIndex);
-                if (rel == null || rel.isEmpty()) continue;
-                for (String s : rel.split(",")) {
-                    if (repoId.equals(s)) return true;
-                }
-            } while (cursor.moveToNext());
-        }
-        return false;
     }
 
     public interface RepoDbObserver {

@@ -8,11 +8,11 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.TransportException;
 
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.network.ssh.SgitTransportCallback;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 
 public class PullTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskCallback {
 

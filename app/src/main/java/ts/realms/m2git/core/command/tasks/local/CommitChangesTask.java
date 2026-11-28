@@ -7,11 +7,11 @@ import org.eclipse.jgit.lib.StoredConfig;
 
 import ts.realms.m2git.MainApplication;
 import ts.realms.m2git.R;
-import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.command.tasks.RepoOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.local.preference.Profile;
+import ts.realms.m2git.ui.common.errors.StopTaskException;
 
 public class CommitChangesTask extends RepoOpTask implements MAsyncTask.AsyncTaskDoCallback {
 
