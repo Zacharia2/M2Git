@@ -181,8 +181,6 @@
     <string name="action_git_profile">Git 配置</string>
     <string name="action_open_in_other_app">在其他应用中打开</string>
     <string name="action_add_private_key">添加私钥</string>
-    <string name="preference_personal_access_tokens_account">Token 账户</string>
-    <string name="preference_personal_access_tokens_secret_key">Token 密钥</string>
     <string name="preference_credential_manager_summary">凭证管理器</string>
     <string name="title_activity_credential_manager">凭证管理器</string>
 
@@ -207,6 +205,9 @@
     <string name="credential_account_duplicate">该账户名已被其他凭证使用，请更换账户名</string>
     <string name="credential_secret_edit_hint">留空表示不修改</string>
     <string name="credential_secret_keep_hint">Token / 密码（留空则不修改）</string>
+    <string name="dialog_credential_pick_title">选择凭证</string>
+    <string name="credential_picker_manual">手动输入凭证</string>
+    <string name="credential_input_required">账号和密码不能为空</string>
 
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit 发生错误 - 正在获取用于崩溃报告的数据</string>

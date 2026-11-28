@@ -8,7 +8,7 @@ import timber.log.Timber;
 import ts.realms.m2git.R;
 import ts.realms.m2git.core.command.MAsyncTask;
 import ts.realms.m2git.core.models.Repo;
-import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnPasswordEntered;
+import ts.realms.m2git.ui.screens.main.BaseCompatActivity.OnCredentialEntered;
 import ts.realms.m2git.utils.BasicFunctions;
 
 // 串行任务、并行任务、onPostExecute
@@ -75,20 +75,18 @@ public abstract class RepoOpTask extends MAsyncTask implements MAsyncTask.AsyncT
 
     }
 
-    protected void handleAuthError(OnPasswordEntered onPassEntered) {
+    protected void handleAuthError(OnCredentialEntered listener) {
         String msg = mException.getMessage();
-        Timber.w("clone Auth error: %s", msg);
-
+        Timber.w("remote op auth error: %s", msg);
         if (msg == null || ((!msg.contains("Auth fail")) && (!msg.toLowerCase().contains("auth")))) {
             return;
         }
-
         String errorInfo = null;
         if (msg.contains("Auth fail")) {
-            errorInfo =
-                BasicFunctions.getActiveActivity().getString(R.string.dialog_prompt_for_password_title_auth_fail);
+            errorInfo = BasicFunctions.getActiveActivity()
+                .getString(R.string.dialog_prompt_for_password_title_auth_fail);
         }
-        BasicFunctions.getActiveActivity().promptForPassword(onPassEntered, errorInfo);
+        BasicFunctions.getActiveActivity().promptForCredential(listener, errorInfo);
     }
 
     public class BasicProgressMonitor implements ProgressMonitor {

@@ -27,6 +27,7 @@ import ts.realms.m2git.core.command.tasks.RepoRemoteOpTask;
 import ts.realms.m2git.core.models.Repo;
 import ts.realms.m2git.core.network.ssh.SgitTransportCallback;
 import ts.realms.m2git.local.database.RepoContract;
+import ts.realms.m2git.local.database.RepoDbManager;
 import ts.realms.m2git.local.preference.Profile;
 
 public class CloneTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskDoCallback {
@@ -58,12 +59,17 @@ public class CloneTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskD
     @Override
     public void onPostExecute(Boolean isSuccess) {
         super.onPostExecute(isSuccess);
-        if (isTaskCanceled()) {
-            return;
-        }
+        if (isTaskCanceled()) return;
         if (isSuccess) {
             mRepo.updateLatestCommitInfo();
             mRepo.updateStatus(RepoContract.REPO_STATUS_NULL);
+
+            long pendingId = mRepo.getPendingCredentialId();
+            if (pendingId != -1) {
+                RepoDbManager.relateRepoWithCredential(pendingId, String.valueOf(mRepo.getID()));
+                mRepo.clearPendingCredential();
+                mRepo.clearTempCredential();          // 已落库，下次走查表分支
+            }
         }
     }
 
@@ -143,9 +149,14 @@ public class CloneTask extends RepoRemoteOpTask implements MAsyncTask.AsyncTaskD
         // created gets deleted
         String userName = mRepo.getUsername();
         String password = mRepo.getPassword();
+        long pendingId = mRepo.getPendingCredentialId();
+
         mRepo = Repo.createRepo(mRepo.getLocalPath(), mRepo.getRemoteURL(), mCloneStatusName);
-        mRepo.setUsername(userName);
-        mRepo.setPassword(password);
+        if (pendingId != -1) {
+            mRepo.setPendingCredential(pendingId, userName, password);
+        } else {
+            mRepo.setTempCredential(userName, password);   // 弹窗场景
+        }
         return new CloneTask(mRepo, mCloneRecursive, mCloneStatusName, mCallback);
     }
 

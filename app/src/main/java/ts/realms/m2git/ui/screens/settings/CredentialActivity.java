@@ -41,8 +41,6 @@ public class CredentialActivity extends BaseCompatActivity
     /**
      * 编辑时发现重名 account 的提示（应迁移到 strings.xml）。
      */
-    private static final String MSG_DUPLICATE_ACCOUNT = "该账户名已被其他凭证使用，请更换账户名";
-
     private final List<Credential> mCredentials = new ArrayList<>();
     private AccountAdapter mAdapter;
 
@@ -110,20 +108,9 @@ public class CredentialActivity extends BaseCompatActivity
     // ============================================================ 列表
 
     private void reload() {
+        RepoDbManager.pruneOrphanCredentialRelations();  // 防御性清理悬空关联
         mCredentials.clear();
-        Cursor cursor = RepoDbManager.queryAllCredential();
-        if (cursor != null) {
-            try {
-                if (cursor.moveToFirst()) {
-                    do {
-                        mCredentials.add(new Credential(cursor));
-                    }
-                    while (cursor.moveToNext());
-                }
-            } finally {
-                cursor.close();
-            }
-        }
+        mCredentials.addAll(RepoDbManager.getAllCredentials());
         mAdapter.notifyDataSetChanged();
     }
 
@@ -225,33 +212,14 @@ public class CredentialActivity extends BaseCompatActivity
             LinkedHashSet<String> ordered = new LinkedHashSet<>(repoIds);
             ContentValues values = new ContentValues();
             values.put(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, account);
-            boolean secretChanged = false;
             if (secret != null && !secret.isEmpty()) {
                 values.put(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, secret);
-                secretChanged = true;
             }
             values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, String.join(",", ordered));
             try {
                 RepoDbManager.updateCredential(existing.getID(), values);
             } catch (android.database.sqlite.SQLiteConstraintException e) {
                 showToastMessage(R.string.credential_account_duplicate);
-                return;
-            }
-            // 同步 repo 表冗余字段
-            Set<String> oldSet = new HashSet<>();
-            if (existing.getRelRepoId() != null)
-                oldSet.addAll(Arrays.asList(existing.getRelRepoId()));
-
-            // 被移除关联的 repo：清空冗余凭证
-            for (String rid : oldSet) {
-                if (!ordered.contains(rid)) {
-                    RepoDbManager.clearRepoCredential(Long.parseLong(rid));
-                }
-            }
-            // 仍然关联的 repo：刷新为新 account / secret
-            String effectiveSecret = secretChanged ? secret : existing.getTokenSecret();
-            for (String rid : ordered) {
-                RepoDbManager.setRepoCredential(Long.parseLong(rid), account, effectiveSecret);
             }
         }
     }

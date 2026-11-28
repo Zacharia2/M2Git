@@ -29,6 +29,10 @@ public class Credential {
         return mTokenSecret;
     }
 
+    public String getDisplayName() {
+        return mTokenAccount + " (#" + mID + ")";
+    }
+
     public String[] getRelRepoId() {
         return mRelRepo;
     }

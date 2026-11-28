@@ -3,7 +3,9 @@ package ts.realms.m2git.local.database;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by sheimi on 8/6/13.
@@ -98,16 +100,6 @@ public final class RepoContract {
         return cursor.getString(columnIndex);
     }
 
-    public static String getUsername(Cursor cursor) {
-        int columnIndex = cursor.getColumnIndex(RepoContract.RepoEntry.COLUMN_NAME_USERNAME);
-        return cursor.getString(columnIndex);
-    }
-
-    public static String getPassword(Cursor cursor) {
-        int columnIndex = cursor.getColumnIndex(RepoContract.RepoEntry.COLUMN_NAME_PASSWORD);
-        return cursor.getString(columnIndex);
-    }
-
     public static int getOneCredentialId(Cursor cursor) {
         if (cursor.isBeforeFirst()) {
             cursor.moveToFirst();
@@ -138,8 +130,14 @@ public final class RepoContract {
         }
         int columnIndex = cursor.getColumnIndex(RepoContract.RepoCredential.COLUMN_REL_REPO);
         String relRepoString = cursor.getString(columnIndex);
-        if (relRepoString == null) return null;
-        return relRepoString.split(",");
+        if (relRepoString == null || relRepoString.trim().isEmpty()) {
+            return new String[0];
+        }
+        List<String> ids = new ArrayList<>();
+        for (String s : relRepoString.split(",")) {
+            if (!s.trim().isEmpty()) ids.add(s.trim());
+        }
+        return ids.toArray(new String[0]);
     }
 
     public static abstract class RepoEntry implements BaseColumns {
@@ -147,7 +145,9 @@ public final class RepoContract {
         public static final String COLUMN_NAME_LOCAL_PATH = "local_path";
         public static final String COLUMN_NAME_REMOTE_URL = "remote_url";
         public static final String COLUMN_NAME_REPO_STATUS = "repo_status";
+        @Deprecated
         public static final String COLUMN_NAME_USERNAME = "username";
+        @Deprecated
         public static final String COLUMN_NAME_PASSWORD = "password";
         // latest commit's committer name
         public static final String COLUMN_NAME_LATEST_COMMITTER_UNAME = "latest_committer_uname";
@@ -158,8 +158,6 @@ public final class RepoContract {
             _ID,
             COLUMN_NAME_LOCAL_PATH,
             COLUMN_NAME_REMOTE_URL,
-            COLUMN_NAME_USERNAME,
-            COLUMN_NAME_PASSWORD,
             COLUMN_NAME_REPO_STATUS,
             COLUMN_NAME_LATEST_COMMITTER_UNAME,
             COLUMN_NAME_LATEST_COMMITTER_EMAIL,

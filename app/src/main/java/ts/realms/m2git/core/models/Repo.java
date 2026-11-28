@@ -1,9 +1,5 @@
 package ts.realms.m2git.core.models;
 
-import java.util.Map;
-
-import ts.realms.m2git.local.database.RepoContract;
-import ts.realms.m2git.local.database.RepoDbManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -33,6 +29,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -41,7 +38,6 @@ import ts.realms.m2git.core.command.tasks.RepoOpTask;
 import ts.realms.m2git.local.database.RepoContract;
 import ts.realms.m2git.local.database.RepoDbManager;
 import ts.realms.m2git.local.preference.PreferenceHelper;
-import ts.realms.m2git.local.preference.Profile;
 import ts.realms.m2git.ui.common.errors.StopTaskException;
 import ts.realms.m2git.utils.FsUtils;
 
@@ -87,13 +83,13 @@ public class Repo implements Comparable<Repo>, Serializable {
     private Set<String> mRemotes;
     private Git mGit;
     private StoredConfig mStoredConfig;
+    private transient boolean mTempCredential = false;   // transient，不序列化
+    private transient long mPendingCredentialId = -1;   // -1 = 无
 
     public Repo(Cursor cursor) {
         mID = RepoContract.getRepoID(cursor);
         mRemoteURL = RepoContract.getRemoteURL(cursor);
         mLocalPath = RepoContract.getLocalPath(cursor);
-        mUsername = RepoContract.getUsername(cursor);
-        mPassword = RepoContract.getPassword(cursor);
         mRepoStatus = RepoContract.getRepoStatus(cursor);
         mLastCommitter = RepoContract.getLatestCommitterName(cursor);
         mLastCommitterEmail = RepoContract.getLatestCommitterEmail(cursor);
@@ -312,16 +308,8 @@ public class Repo implements Comparable<Repo>, Serializable {
         return mPassword;
     }
 
-    public void setPassword(String password) {
-        mPassword = password;
-    }
-
     public String getUsername() {
         return mUsername;
-    }
-
-    public void setUsername(String username) {
-        mUsername = username;
     }
 
     public void cancelTask() {
@@ -565,27 +553,57 @@ public class Repo implements Comparable<Repo>, Serializable {
         return getCommitDisplayName(getBranchName());
     }
 
-    public void setToken(Context context) {
-        // 优先级：凭证表（按 repoId 精确匹配） > 全局 token
-        // Map<String, String> cred = RepoDbManager.queryCredentialByRepoId(String.valueOf(getID()));
-        // String account = cred.get(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT);
-        // String secret  = cred.get(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET);
+    /**
+     * Clone 前选择已有凭证。account/secret 用于立即生效，id 用于克隆成功后落库关联。
+     */
+    public void setPendingCredential(long credentialId, String account, String secret) {
+        mPendingCredentialId = credentialId;
+        setTempCredential(account, secret);             // 复用现有临时凭证机制
+    }
 
-        // if (account != null && !account.isEmpty()) {
-        //     setUsername(account);
-        //     setPassword(secret);
-        //     Timber.tag("Repo").i("Set token from credential manager: %s", account);
-        //     return;
-        // }
+    public long getPendingCredentialId() {
+        return mPendingCredentialId;
+    }
 
-        // 回退到全局 token（Profile / PreferenceHelper）
-        String globalAccount = Profile.getTokenAccount(context);
-        String globalSecret = Profile.getTokenSecretKey(context);
-        if (globalAccount != null && !globalAccount.isEmpty()
-            && globalSecret != null && !globalSecret.isEmpty()) {
-            setUsername(globalAccount);
-            setPassword(globalSecret);
-            Timber.tag("Repo").i("Set token from global prefs: %s", globalAccount);
+    public void clearPendingCredential() {
+        mPendingCredentialId = -1;
+    }
+
+    /**
+     * 密码弹窗专用：标记为临时凭证，setToken 会优先使用，不查表覆盖
+     */
+    public void setTempCredential(String username, String password) {
+        mUsername = username;
+        mPassword = password;
+        mTempCredential = true;
+    }
+
+    public void clearTempCredential() {
+        mTempCredential = false;
+        mUsername = null;
+        mPassword = null;
+    }
+
+    public void setToken() {
+        // 1) 密码弹窗刚输入的临时凭证（仅本次内存对象有效）
+        if (mTempCredential && mUsername != null && !mUsername.isEmpty()
+            && mPassword != null && !mPassword.isEmpty()) {
+            return;
+        }
+        // 2) 每次都从凭证表刷新（唯一持久数据源）
+        mTempCredential = false;
+        Map<String, String> cred =
+            RepoDbManager.queryCredentialByRepoId(String.valueOf(getID()));
+        String account = cred.get(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT);
+        String secret = cred.get(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET);
+        if (account != null && !account.isEmpty()
+            && secret != null && !secret.isEmpty()) {
+            mUsername = account;
+            mPassword = secret;
+            Timber.tag("Repo").i("token from credential table: %s", account);
+        } else {
+            mUsername = null;   // 显式清空，避免旧缓存残留
+            mPassword = null;
         }
     }
 
@@ -678,5 +696,6 @@ public class Repo implements Comparable<Repo>, Serializable {
 
     public void saveCredentials() {
         RepoDbManager.persistCredentials(getID(), getUsername(), getPassword());
+        mTempCredential = false;   // 已持久化，下次走查表分支，能感知外部修改
     }
 }

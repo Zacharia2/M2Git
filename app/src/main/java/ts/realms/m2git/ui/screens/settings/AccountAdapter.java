@@ -22,6 +22,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.VH> {
 
     private final List<Credential> mData;
     private final Listener mListener;
+
     public AccountAdapter(List<Credential> data, Listener listener) {
         mData = data;
         mListener = listener;

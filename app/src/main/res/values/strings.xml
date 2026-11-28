@@ -190,8 +190,6 @@
     <string name="action_git_profile">Git Profile</string>
     <string name="action_open_in_other_app">Open in other apps</string>
     <string name="action_add_private_key">Add Private Key</string>
-    <string name="preference_personal_access_tokens_account">Token Name</string>
-    <string name="preference_personal_access_tokens_secret_key">Token Secret</string>
     <string name="pref_key_personal_access_tokens_account" translatable="false">token_account</string>
     <string name="pref_key_personal_access_tokens_secret_key" translatable="false">token_secret_key</string>
     <string name="pref_key_manage_ssh_keys" translatable="false">manage_ssh_keys</string>
@@ -204,6 +202,8 @@
     <string name="pref_key_webdav_home_dir" translatable="false">webdav_home_dir</string>
     <string name="pref_key_webdav_user" translatable="false">webdav_user</string>
     <string name="pref_key_webdav_password" translatable="false">webdav_password</string>
+    <string name="dialog_credential_pick_title">Select Credential</string>
+    <string name="credential_picker_manual">Enter Credential Manually</string>
 
     <!-- Credential Manager -->
     <string name="dialog_credential_new_title">New credential</string>
@@ -226,6 +226,7 @@
     <string name="credential_account_duplicate">This account name is already used by another credential. Please use a different account name.</string>
     <string name="credential_secret_edit_hint">Leave blank to keep unchanged</string>
     <string name="credential_secret_keep_hint">Token / Password (leave blank to keep unchanged)</string>
+    <string name="credential_input_required">Account and password cannot be empty</string>
 
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit error - gathering data to email a crash report</string>

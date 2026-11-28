@@ -36,16 +36,6 @@ public class Profile {
         return getProfileSharedPreference(context).getString(userEmailPrefKey, "");
     }
 
-    public static String getTokenAccount(Context context) {
-        String tokenAccount = context.getString(R.string.pref_key_personal_access_tokens_account);
-        return getProfileSharedPreference(context).getString(tokenAccount, "");
-    }
-
-    public static String getTokenSecretKey(Context context) {
-        String tokenSecretKey = context.getString(R.string.pref_key_personal_access_tokens_secret_key);
-        return getProfileSharedPreference(context).getString(tokenSecretKey, "");
-    }
-
     public static boolean hasLastCloneFailed() {
         return sHasLastCloneFail;
     }

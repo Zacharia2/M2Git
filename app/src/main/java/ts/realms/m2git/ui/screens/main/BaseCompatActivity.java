@@ -34,10 +34,13 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
 import ts.realms.m2git.R;
+import ts.realms.m2git.core.models.Credential;
+import ts.realms.m2git.local.database.RepoDbManager;
 import ts.realms.m2git.local.preference.Profile;
 import ts.realms.m2git.ui.components.dialogs.DummyDialogListener;
 import ts.realms.m2git.ui.viewModels.PermissionsHelper;
@@ -45,10 +48,63 @@ import ts.realms.m2git.utils.AvatarDownloader;
 import ts.realms.m2git.utils.BasicFunctions;
 
 public class BaseCompatActivity extends AppCompatActivity {
-
     private static final int MGIT_PERMISSIONS_REQUEST = 123;
     private static final int SIZE = 100 << 20;
     private ImageLoader mImageLoader;
+
+    /**
+     * 认证失败重试：列已有凭证 + 手动输入
+     */
+    public void promptForCredential(OnCredentialEntered listener, int errorId) {
+        promptForCredential(listener, getString(errorId));
+    }
+
+    public void promptForCredential(OnCredentialEntered listener, String errorInfo) {
+        runOnUiThread(() -> promptForCredentialInner(listener, errorInfo));
+    }
+
+    private void promptForCredentialInner(OnCredentialEntered listener, String errorInfo) {
+        if (isFinishing() || isDestroyed()) return;
+        // 凭证表通常仅个位数行，为避免弹窗流程异步化，有意在主线程同步查询
+        List<Credential> creds = RepoDbManager.getAllCredentials();
+
+        if (creds.isEmpty()) {
+            showManualEntryDialog(listener);
+            return;
+        }
+
+        CharSequence[] labels = new CharSequence[creds.size()];
+        for (int i = 0; i < creds.size(); i++) {
+            labels[i] = creds.get(i).getDisplayName();
+        }
+
+        String title = (errorInfo != null) ? errorInfo
+            : getString(R.string.dialog_credential_pick_title);
+
+        new AlertDialog.Builder(this)
+            .setTitle(title)
+            .setItems(labels, (d, which) ->
+                listener.onCredentialPicked(creds.get(which)))
+            .setNeutralButton(R.string.credential_picker_manual, (d, w) ->
+                showManualEntryDialog(listener))
+            .setNegativeButton(R.string.label_cancel,
+                (d, w) -> listener.onCanceled())
+            .show();
+    }
+
+    private void showManualEntryDialog(OnCredentialEntered listener) {
+        promptForPassword(new OnPasswordEntered() {
+            @Override
+            public void onClicked(String u, String p, boolean save) {
+                listener.onManualEntered(u, p, save);
+            }
+
+            @Override
+            public void onCanceled() {
+                listener.onCanceled();
+            }
+        }, null);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,6 +305,7 @@ public class BaseCompatActivity extends AppCompatActivity {
 
     private void promptForPasswordInner(final OnPasswordEntered onPasswordEntered,
                                         String errorInfo) {
+        if (isFinishing() || isDestroyed()) return;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         // checkBox是针对这个仓库来的，设置一次后在仓库的生命周期中就不用再设置。
@@ -310,6 +367,14 @@ public class BaseCompatActivity extends AppCompatActivity {
             setupImageLoader();
         }
         return mImageLoader;
+    }
+
+    public interface OnCredentialEntered {
+        void onCredentialPicked(Credential c);
+
+        void onManualEntered(String username, String password, boolean save);
+
+        void onCanceled();
     }
 
     /* Switch Activity Animation End */
