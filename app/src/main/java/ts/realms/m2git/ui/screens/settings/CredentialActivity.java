@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +38,9 @@ import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
  */
 public class CredentialActivity extends BaseCompatActivity
         implements RepoDbManager.RepoDbObserver {
+
+    /** 编辑时发现重名 account 的提示（应迁移到 strings.xml）。 */
+    private static final String MSG_DUPLICATE_ACCOUNT = "该账户名已被其他凭证使用，请更换账户名";
 
     private final List<Credential> mCredentials = new ArrayList<>();
     private AccountAdapter mAdapter;
@@ -124,7 +129,9 @@ public class CredentialActivity extends BaseCompatActivity
         final Set<String> selected = new HashSet<>();
         if (existing != null) {
             editAccount.setText(existing.getTokenAccount());
-            editSecret.setText(existing.getTokenSecret());
+            // 编辑时不回填明文 secret；留空表示不修改
+            editSecret.setText("");
+            editSecret.setHint(R.string.credential_secret_keep_hint);
             String[] rel = existing.getRelRepoId();
             if (rel != null) selected.addAll(Arrays.asList(rel));
         }
@@ -150,42 +157,90 @@ public class CredentialActivity extends BaseCompatActivity
                     showToastMessage(R.string.credential_account_required);
                     return;
                 }
+                if (existing == null) {
+                    long sameAccountId = RepoDbManager.findCredentialIdByAccount(account);
+                    if (sameAccountId != -1) {
+                        confirmOverwrite(dialog, sameAccountId, account, secret, selected);
+                        return;
+                    }
+                } else {
+                    long sameAccountId = RepoDbManager.findCredentialIdByAccount(account);
+                    if (sameAccountId != -1 && sameAccountId != existing.getID()) {
+                        showToastMessage(R.string.credential_account_duplicate);
+                        return;
+                    }
+                    // if (secret.isEmpty()) {
+                    //     secret = existing.getTokenSecret();
+                    // }
+                }
                 saveCredential(existing, account, secret, selected);
                 dialog.dismiss();
             }));
         dialog.show();
     }
 
+    /**
+     * 新建时发现同名 account 的覆盖确认。
+     * 覆盖语义：更新 secret，并将本次勾选的关联仓库与旧关联取并集（不删除旧关联）。
+     */
+    private void confirmOverwrite(AlertDialog editDialog, long existingId,
+                                String account, String secret, Set<String> repoIds) {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_credential_overwrite_title)
+            .setMessage(getString(R.string.dialog_credential_overwrite_msg, account))
+            .setPositiveButton(R.string.label_overwrite, (d, w) -> {
+                String merged = String.join(",", repoIds);
+                // secret 留空表示“只合并关联，不动密码”，传 null 而非 ""
+                String newSecret = (secret == null || secret.isEmpty()) ? null : secret;
+                RepoDbManager.overwriteCredential(existingId, newSecret, merged);
+                editDialog.dismiss();
+            })
+            .setNegativeButton(R.string.label_cancel, null)
+            .show();
+    }
+
     private void saveCredential(Credential existing, String account, String secret,
                                 Set<String> repoIds) {
         if (existing == null) {
+            // 新建：secret 允许为空（公开仓库场景），产品如需禁止可在此加校验
             long cid = RepoDbManager.createCredential(account, secret);
             if (cid == -1) {
                 showToastMessage(R.string.credential_save_failed);
                 return;
             }
-            for (String rid : repoIds) {
-                RepoDbManager.relateRepoWithCredential(cid, rid);
-            }
+            // 一次性写入关联，避免逐个 relate 触发多次 notify
+            RepoDbManager.setCredentialRepos(cid, repoIds);
+        // CredentialActivity.saveCredential 编辑分支
         } else {
+            LinkedHashSet<String> ordered = new LinkedHashSet<>(repoIds);
             ContentValues values = new ContentValues();
             values.put(RepoContract.RepoCredential.COLUMN_TOKEN_ACCOUNT, account);
-            values.put(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, secret);
-            RepoDbManager.updateCredential(existing.getID(), values);
+            boolean secretChanged = false;
+            if (secret != null && !secret.isEmpty()) {
+                values.put(RepoContract.RepoCredential.COLUMN_TOKEN_SECRET, secret);
+                secretChanged = true;
+            }
+            values.put(RepoContract.RepoCredential.COLUMN_REL_REPO, String.join(",", ordered));
+            try {
+                RepoDbManager.updateCredential(existing.getID(), values);
+            } catch (android.database.sqlite.SQLiteConstraintException e) {
+                showToastMessage(R.string.credential_account_duplicate);
+                return;
+            }
+            // 同步 repo 表冗余字段
+            Set<String> oldSet = new HashSet<>();
+            if (existing.getRelRepoId() != null) oldSet.addAll(Arrays.asList(existing.getRelRepoId()));
 
-            Set<String> old = new HashSet<>();
-            if (existing.getRelRepoId() != null) {
-                old.addAll(Arrays.asList(existing.getRelRepoId()));
-            }
-            for (String rid : repoIds) {
-                if (!old.contains(rid)) {
-                    RepoDbManager.relateRepoWithCredential(existing.getID(), rid);
+            // 被移除关联的 repo：清空冗余凭证
+            for (String rid : oldSet) {
+                if (!ordered.contains(rid)) {
+                    RepoDbManager.clearRepoCredential(Long.parseLong(rid));
                 }
             }
-            for (String rid : old) {
-                if (!repoIds.contains(rid)) {
-                    RepoDbManager.unrelateRepoWithCredential(existing.getID(), rid);
-                }
+            // 仍然关联的 repo：刷新为新 account / secret
+            String effectiveSecret = secretChanged ? secret : existing.getTokenSecret();
+            for (String rid : ordered) {
+                RepoDbManager.setRepoCredential(Long.parseLong(rid), account, effectiveSecret);
             }
         }
     }
@@ -215,8 +270,7 @@ public class CredentialActivity extends BaseCompatActivity
             return;
         }
 
-        // 关键修复：用 draft 副本接收勾选，取消时不影响原 selected，
-        // 只有点"确定"才写回。原实现直接改 selected 导致取消无效。
+        // 用 draft 副本接收勾选，取消时不影响原 selected
         final Set<String> draft = new HashSet<>(selected);
         CharSequence[] labels = new CharSequence[repos.size()];
         boolean[] checked = new boolean[repos.size()];

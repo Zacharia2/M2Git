@@ -201,6 +201,12 @@
     <string name="credential_account_hint">账号 / 用户名</string>
     <string name="credential_secret_hint">Token / 密码</string>
     <string name="credential_rel_repos">关联仓库</string>
+    <string name="dialog_credential_overwrite_title">同名账号</string>
+    <string name="dialog_credential_overwrite_msg">已存在同名账号「%1$s」，是否用新 secret 覆盖旧记录？\n关联仓库将取并集，不会删除旧的关联。</string>
+    <string name="label_overwrite">覆盖</string>
+    <string name="credential_account_duplicate">该账户名已被其他凭证使用，请更换账户名</string>
+    <string name="credential_secret_edit_hint">留空表示不修改</string>
+    <string name="credential_secret_keep_hint">Token / 密码（留空则不修改）</string>
 
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit 发生错误 - 正在获取用于崩溃报告的数据</string>

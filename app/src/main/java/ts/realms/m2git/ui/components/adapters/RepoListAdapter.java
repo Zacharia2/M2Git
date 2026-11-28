@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,14 +47,18 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
     private static final int QUERY_TYPE_QUERY = 1;
     private static final String TAG = RepoListAdapter.class.getSimpleName();
     private final DateFormat mCommitDateFormatter;
-    private final RepoListActivity mActivity;
+    /**
+     * 修复：原实现持有 Activity 强引用，且从不反注册观察者，导致泄漏 + 无效查询。
+     * 改用 WeakReference，并在 notifyChanged 中自愈式反注册。
+     */
+    private final WeakReference<RepoListActivity> mActivityRef;
     private int mQueryType = QUERY_TYPE_QUERY;
     private String mSearchQueryString;
 
     public RepoListAdapter(Context context) {
         super(context, 0);
         RepoDbManager.registerDbObserver(RepoContract.RepoEntry.TABLE_NAME, this);
-        mActivity = (RepoListActivity) context;
+        mActivityRef = new WeakReference<>((RepoListActivity) context);
         mCommitDateFormatter = android.text.format.DateFormat.getDateFormat(context);
     }
 
@@ -78,9 +83,18 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
                 cursor = RepoDbManager.queryAllRepo();
                 break;
         }
-        List<Repo> repo = Repo.getRepoList(cursor);
+        if (cursor == null) {
+            clear();
+            notifyDataSetChanged();
+            return;
+        }
+        List<Repo> repo;
+        try {
+            repo = Repo.getRepoList(cursor);
+        } finally {
+            cursor.close();
+        }
         Collections.sort(repo);
-        cursor.close();
         clear();
         addAll(repo);
         notifyDataSetChanged();
@@ -147,18 +161,26 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
 
     @Override
     public void notifyChanged() {
-        mActivity.runOnUiThread(this::requery);
+        RepoListActivity activity = mActivityRef.get();
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
+            // 自愈：Activity 已销毁，反注册避免后续无谓回调与泄漏
+            RepoDbManager.unregisterDbObserver(RepoContract.RepoEntry.TABLE_NAME, this);
+            return;
+        }
+        activity.runOnUiThread(this::requery);
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        RepoListActivity activity = mActivityRef.get();
+        if (activity == null) return;
         Repo repo = getItem(position);
-        if (repo.isExternal() && mActivity.checkAndRequestAccessAllFilesPermission(0)) {
+        if (repo.isExternal() && activity.checkAndRequestAccessAllFilesPermission(0)) {
             return;
         }
-        Intent intent = new Intent(mActivity, RepoDetailActivity.class);
+        Intent intent = new Intent(activity, RepoDetailActivity.class);
         intent.putExtra(Repo.TAG, repo);
-        mActivity.startActivity(intent);
+        activity.startActivity(intent);
     }
 
     @Override
@@ -279,5 +301,4 @@ public class RepoListAdapter extends ArrayAdapter<Repo> implements RepoDbManager
         public TextView progressMsg;
         public ImageView cancelBtn;
     }
-
 }

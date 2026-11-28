@@ -48,6 +48,7 @@ public class RepoDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(RepoContract.REPO_ENTRY_CREATE);
         sqLiteDatabase.execSQL(RepoContract.REPO_CREDENTIALS_CREATE);
+        sqLiteDatabase.execSQL(RepoContract.REPO_CREDENTIALS_TOKEN_ACCOUNT_INDEX);
     }
 
     @Override

@@ -220,6 +220,12 @@
     <string name="credential_account_hint">Account / Username</string>
     <string name="credential_secret_hint">Token / Password</string>
     <string name="credential_rel_repos">Associated repositories</string>
+    <string name="dialog_credential_overwrite_title">Duplicate Account</string>
+    <string name="dialog_credential_overwrite_msg">An account named \"%1$s\" already exists. Overwrite the old record with the new secret?\nLinked repositories will be merged; existing links will not be removed.</string>
+    <string name="label_overwrite">Overwrite</string>
+    <string name="credential_account_duplicate">This account name is already used by another credential. Please use a different account name.</string>
+    <string name="credential_secret_edit_hint">Leave blank to keep unchanged</string>
+    <string name="credential_secret_keep_hint">Token / Password (leave blank to keep unchanged)</string>
 
     <!-- Crash reporting via ACRA -->
     <string name="crash_toast_text">MGit error - gathering data to email a crash report</string>

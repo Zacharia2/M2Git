@@ -60,10 +60,13 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.VH> {
         return mData.size();
     }
 
-    /** 显示时对 secret 做掩码，避免明文暴露。 */
+    /**
+     * 显示时对 secret 做掩码，避免明文暴露。
+     * 修复：短 secret 统一用固定长度掩码，不泄露实际长度。
+     */
     private static String mask(String s) {
         if (s == null || s.isEmpty()) return "—";
-        if (s.length() <= 8) return "••••••";
+        if (s.length() < 12) return "••••••••";     // 统一固定长度，不泄露长度
         return s.substring(0, 4) + "••••" + s.substring(s.length() - 4);
     }
 

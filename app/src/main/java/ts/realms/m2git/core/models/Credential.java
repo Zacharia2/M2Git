@@ -17,7 +17,7 @@ public class Credential {
         mRelRepo = RepoContract.getOneRelReop(cursor);
     }
 
-    public int getID() {
+    public long getID() {
         return mID;
     }
 

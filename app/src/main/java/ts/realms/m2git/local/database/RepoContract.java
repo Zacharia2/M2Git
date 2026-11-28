@@ -38,6 +38,17 @@ public final class RepoContract {
             + RepoCredential.COLUMN_TOKEN_SECRET + TEXT_TYPE + COMMA_SEP
             + RepoCredential.COLUMN_REL_REPO + TEXT_TYPE
             + ")";
+    /**
+     * credentials.token_account 唯一索引。
+     * 使用显式命名索引而非列级 UNIQUE 约束，便于后续维护与排查
+     * （SQLite 里 UNIQUE 约束本质也是建唯一索引）。
+     * 注意：SQLite 的 UNIQUE 索引允许多个 NULL，因此如需强制非空唯一，
+     * 还要在业务层保证 token_account 不为 null，或改成 NOT NULL。
+     */
+    public static final String REPO_CREDENTIALS_TOKEN_ACCOUNT_INDEX =
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_credentials_token_account ON "
+            + RepoCredential.TABLE_NAME
+            + " (" + RepoCredential.COLUMN_TOKEN_ACCOUNT + ")";
 
     public RepoContract() {
     }
