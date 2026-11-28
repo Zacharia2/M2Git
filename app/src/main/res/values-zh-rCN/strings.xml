@@ -200,13 +200,13 @@
     <string name="credential_secret_hint">Token / 密码</string>
     <string name="credential_rel_repos">关联仓库</string>
     <string name="dialog_credential_overwrite_title">同名账号</string>
-    <string name="dialog_credential_overwrite_msg">已存在同名账号「%1$s」，是否用新 secret 覆盖旧记录？\n关联仓库将取并集，不会删除旧的关联。</string>
+    <string name="dialog_credential_overwrite_msg">账号「%1$s」已有保存的凭证，但密码/Token 与本次输入不同。\n是否更新为本次输入的值？所有该凭证关联的仓库，更新后它们都会改用新值。</string>
     <string name="label_overwrite">覆盖</string>
     <string name="credential_account_duplicate">该账户名已被其他凭证使用，请更换账户名</string>
     <string name="credential_secret_edit_hint">留空表示不修改</string>
     <string name="credential_secret_keep_hint">Token / 密码（留空则不修改）</string>
     <string name="dialog_credential_pick_title">选择凭证</string>
-    <string name="credential_picker_manual">手动输入凭证</string>
+    <string name="credential_picker_manual">手动输入凭证…</string>
     <string name="credential_input_required">账号和密码不能为空</string>
 
     <!-- Crash reporting via ACRA -->

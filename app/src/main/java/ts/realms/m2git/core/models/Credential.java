@@ -5,7 +5,7 @@ import android.database.Cursor;
 import ts.realms.m2git.local.database.RepoContract;
 
 public class Credential {
-    private final int mID;
+    private final long mID;
     private final String mTokenAccount;
     private final String mTokenSecret;
     private final String[] mRelRepo;

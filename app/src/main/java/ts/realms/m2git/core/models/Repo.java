@@ -600,7 +600,6 @@ public class Repo implements Comparable<Repo>, Serializable {
             && secret != null && !secret.isEmpty()) {
             mUsername = account;
             mPassword = secret;
-            Timber.tag("Repo").i("token from credential table: %s", account);
         } else {
             mUsername = null;   // 显式清空，避免旧缓存残留
             mPassword = null;

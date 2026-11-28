@@ -23,7 +23,7 @@
         android:autofillHints="password"
         android:hint="@string/credential_secret_hint"
         android:importantForAutofill="no"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:textColor="?android:attr/textColorPrimary" />
 
     <LinearLayout

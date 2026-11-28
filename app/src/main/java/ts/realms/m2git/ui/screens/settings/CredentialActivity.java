@@ -35,12 +35,8 @@ import ts.realms.m2git.ui.screens.main.BaseCompatActivity;
  * 功能：列表 / 新建 / 编辑 / 删除 / 关联仓库。
  * 数据变更由 RepoDbObserver 驱动，回调可能来自后台线程，统一切主线程。
  */
-public class CredentialActivity extends BaseCompatActivity
-    implements RepoDbManager.RepoDbObserver {
+public class CredentialActivity extends BaseCompatActivity implements RepoDbManager.RepoDbObserver {
 
-    /**
-     * 编辑时发现重名 account 的提示（应迁移到 strings.xml）。
-     */
     private final List<Credential> mCredentials = new ArrayList<>();
     private AccountAdapter mAdapter;
 

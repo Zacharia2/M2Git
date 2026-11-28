@@ -65,32 +65,31 @@ public class BaseCompatActivity extends AppCompatActivity {
 
     private void promptForCredentialInner(OnCredentialEntered listener, String errorInfo) {
         if (isFinishing() || isDestroyed()) return;
-        // 凭证表通常仅个位数行，为避免弹窗流程异步化，有意在主线程同步查询
         List<Credential> creds = RepoDbManager.getAllCredentials();
 
-        if (creds.isEmpty()) {
-            showManualEntryDialog(listener);
-            return;
-        }
-
-        CharSequence[] labels = new CharSequence[creds.size()];
-        for (int i = 0; i < creds.size(); i++) {
+        // 已有凭证在前，最后一项固定为手动输入；空列表时天然只剩手动项
+        final int manualIndex = creds.size();
+        CharSequence[] labels = new CharSequence[manualIndex + 1];
+        for (int i = 0; i < manualIndex; i++) {
             labels[i] = creds.get(i).getDisplayName();
         }
+        labels[manualIndex] = getString(R.string.credential_picker_manual);
 
         String title = (errorInfo != null) ? errorInfo
             : getString(R.string.dialog_credential_pick_title);
-
         new AlertDialog.Builder(this)
             .setTitle(title)
-            .setItems(labels, (d, which) ->
-                listener.onCredentialPicked(creds.get(which)))
-            .setNeutralButton(R.string.credential_picker_manual, (d, w) ->
-                showManualEntryDialog(listener))
-            .setNegativeButton(R.string.label_cancel,
-                (d, w) -> listener.onCanceled())
+            .setItems(labels, (d, which) -> {
+                if (which == manualIndex) {
+                    showManualEntryDialog(listener);
+                } else {
+                    listener.onCredentialPicked(creds.get(which));
+                }
+            })
+            .setNegativeButton(R.string.label_cancel, (d, w) -> listener.onCanceled())
             .show();
     }
+
 
     private void showManualEntryDialog(OnCredentialEntered listener) {
         promptForPassword(new OnPasswordEntered() {
